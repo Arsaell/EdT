@@ -1,9 +1,14 @@
 import java.util.HashMap;
 
-public class Group extends People	{
+public class Group {
+
+	private String name;
 
 	protected int effectif;
 	private HashMap<Field, Character/*, Time*/> classes;
+
+	private Group parent;
+	private Group[] children;
 	
 	public Group(char aID, int aEff)	{
 		
@@ -13,7 +18,6 @@ public class Group extends People	{
 	}
 	
 	public String getMail()	{
-	
 		return "pcg" + Integer.toString((int)this.ID + 1) + "@insa-lyon.fr";
 	}
 	
