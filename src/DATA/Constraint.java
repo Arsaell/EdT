@@ -11,15 +11,16 @@ public class Constraint	{
 		this.object = o;
 		this.subject = s;
 	}
-	/*
-	public boolean canApply(object o, subject s)	{
 	
-		switch (this.type)	{
+	public boolean canApply(Object o, Object s)	{
+	
+		//if (o instanceof object && s instanceof subject)	{
+			switch (this.type)	{
 		
-			default :
-				return true;
-				break;
-		}
+				default :
+					return true;
+			}
+		//}
+		//return true;
 	}
-	*/
 }
