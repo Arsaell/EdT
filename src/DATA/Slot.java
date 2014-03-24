@@ -14,4 +14,20 @@ public class Slot	{
 	
 		return this.end.substract(this.begin);
 	}
+	
+	public Time getBegin()	{
+		return this.begin;
+	}
+	
+	public Time getEnd()	{
+		return this.end;
+	}
+	
+	public void setBegin(Time aBegin)	{
+		this.begin = aBegin;
+	}
+	
+	public void setEnd(Time aEnd)	{
+		this.end = aEnd;
+	}
 }

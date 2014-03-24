@@ -11,7 +11,7 @@ public class Constraint	{
 		this.object = o;
 		this.subject = s;
 	}
-	
+	/*
 	public boolean canApply(object o, subject s)	{
 	
 		switch (this.type)	{
@@ -21,4 +21,5 @@ public class Constraint	{
 				break;
 		}
 	}
+	*/
 }

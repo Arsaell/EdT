@@ -55,4 +55,8 @@ public class Lesson	{
 		
 		return res;
 	}
+	
+	public Slot getSlot()	{
+		return this.slot;
+	}
 }
