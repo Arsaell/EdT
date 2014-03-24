@@ -1,6 +1,6 @@
 
 
-public class WeekTable	{
+public class WeekTable implements Timeable	{
 
 	private Lesson[][] slots;
 	private People owner;
@@ -11,13 +11,17 @@ public class WeekTable	{
 	
 	}
 	
+	public WeekTable(WeekTable source)	{
+		
+	}
+	
 	public void setSlot (Lesson aSlot)	{
 	
 		//Changer la deusième dimension pour bien correspondre au slot (une méthode timeToSlot() ?)
 		this.slots[aSlot.getSlot().getBegin().getDay()][aSlot.getSlot().getBegin().getHour()] = aSlot;
 	}
 	
-	public Slot getNextFreeSlot(Time duration)	{
+	public Slot getNextFreeSlot(Time start, Time duration)	{
 	
 		return null;
 	}
@@ -32,7 +36,7 @@ public class WeekTable	{
 		defaultWeek = aDefault;
 	}
 	
-	public WeekTable getDefault()	{
+	public static WeekTable getDefault()	{
 	
 		return defaultWeek;
 	}

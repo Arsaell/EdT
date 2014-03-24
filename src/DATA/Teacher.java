@@ -1,7 +1,8 @@
+import java.util.HashMap;
 
+public class Teacher implements People, Timeable	{
 
-public class Teacher extends People	{
-
+	private char ID;
 	private String name;
 	private Field[] fields;
 	
@@ -14,8 +15,8 @@ public class Teacher extends People	{
 	
 	public boolean canTeach(Field aField)	{
 	
-		for (Field f : this.fields)
-			if (f == aField)
+		for (int i = 0 ; i < this.fields.length ; i++)
+			if (this.fields[i] == aField)
 				return true;
 		
 		return false;
@@ -29,4 +30,15 @@ public class Teacher extends People	{
 	public String toString()	{
 		return this.name;
 	}
+	
+	public Slot getNextFreeSlot(Time start, Time duration)	{
+	
+		return null;
+	}
+	
+	public Slot[] getAllFreeSlots(Time duration)	{
+	
+		return null;
+	}
+	
 }

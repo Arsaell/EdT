@@ -1,7 +1,8 @@
 import java.util.HashMap;
 
-public class Group {
+public class Group implements Timeable, People	{
 
+	private char ID;
 	private String name;
 
 	protected int effectif;
@@ -18,10 +19,21 @@ public class Group {
 	}
 	
 	public String getMail()	{
-		return "pcg" + Integer.toString((int)this.ID + 1) + "@insa-lyon.fr";
+		return "pcg" ;//+ Integer.toString((int)this.ID + 1) + "@insa-lyon.fr";
 	}
 	
 	public int getEffectif()	{
 		return this.effectif;
 	}
+	
+	public Slot getNextFreeSlot(Time start, Time duration)	{
+	
+		return null;
+	}
+	
+	public Slot[] getAllFreeSlots(Time duration)	{
+	
+		return null;
+	}
+	
 }

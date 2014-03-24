@@ -1,11 +1,12 @@
 import java.util.HashMap;
 
-public class Classroom	{
+public class Classroom implements Timeable	{
 
 	private char ID;
 	private char type;
 	private String name;
 	private int effectif;
+	private WeekTable timeTable;
 	private static HashMap<Character, String> types;	//Les noms des types de salle
 	
 	
@@ -38,4 +39,16 @@ public class Classroom	{
 	public int getEffectif()	{
 		return this.effectif;
 	}
+	
+	
+	public Slot getNextFreeSlot(Time start, Time duration)	{
+	
+		return null;
+	}
+	
+	public Slot[] getAllFreeSlots(Time duration)	{
+	
+		return null;
+	}
+	
 }
