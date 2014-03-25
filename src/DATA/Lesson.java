@@ -31,7 +31,7 @@ public class Lesson	{
 			res = false;
 		}
 		
-		if (!this.teacher.canTeach(this.field))	{
+		if (!this.teacher.canTeach(this.field, this.students))	{
 		
 			if (res)
 				System.out.println("Lesson.check() : incoherent data ");

@@ -21,4 +21,51 @@ public class Filler	{
 		
 	}
 	
+	private void attributeTeachers()	{
+	
+		boolean end = false;
+		
+		while (!end)	{
+		
+			end = true;
+			for (Group g : groups)	{
+			
+				Field f = g.getNextUnattributedClass();
+				
+				if (f != null)	{
+				
+					end = false;
+					boolean fieldDone = false;
+					
+					while (!fieldDone)	{
+					
+						Teacher teach = null;
+						for (Teacher t : this.teachers)	{
+							if (t.canTeach(f, g))	{
+								teach = t;
+								break;
+							}
+						}
+					
+						fieldDone = g.setTeacher(teach, f);
+					}
+				}
+			}
+		}
+	}
+	
+	private void computeConstraints()	{
+	
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

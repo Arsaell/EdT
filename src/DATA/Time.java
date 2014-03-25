@@ -24,16 +24,19 @@ public class Time	{
 			System.out.println("Error while attempting t create a time from : " + s);
 	}
 	
-	public void add(Time t)	{
+	public Time add(Time t)	{
 	
-		this.min += t.getMin();
-		this.hour += t.getHour() + (byte)(int)(this.min / 60);
-		this.min = (byte)(this.min % 60);
-		this.day += t.getDay() + (byte)(int)(this.hour / 24);
-		this.hour = (byte)(this.hour % 24);
-		if (this.day > 6)
-			System.out.println("Time.add() : changed week" + this + " " + t);
-		this.day = (byte)(this.day % 7);
+		Time temp = new Time(this.day, this.hour, this.min);
+		temp.min += t.getMin();
+		temp.hour += t.getHour() + (byte)(int)(temp.min / 60);
+		temp.min = (byte)(temp.min % 60);
+		temp.day += t.getDay() + (byte)(int)(temp.hour / 24);
+		temp.hour = (byte)(temp.hour % 24);
+		if (temp.day > 6)
+			System.out.println("Time.add() : changed week" + temp + " " + t);
+		temp.day = (byte)(temp.day % 7);
+		
+		return temp;
 	}
 	
 	public Time substract(Time t)	{
@@ -47,6 +50,14 @@ public class Time	{
 		temp.day = (byte)(this.day % 7);
 		
 		return temp;
+	}
+	
+	public boolean isLessThan(Time t)	{
+		return ((1440 * this.day + 60 * this.hour + this.min) < (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
+	}
+	
+	public boolean isMoreThan(Time t)	{
+		return ((1440 * this.day + 60 * this.hour + this.min) > (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
 	}
 	
 	public String toString()	{
