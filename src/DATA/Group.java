@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Group implements Timeable, Constrainable, People	{
 
-	private char ID;
+	private int ID;
 	private String name;
 
 	protected int effectif;
@@ -14,7 +14,7 @@ public class Group implements Timeable, Constrainable, People	{
 	private Group parent;
 	private Group[] children;
 	
-	public Group(char aID, int aEff)	{
+	public Group(int aID, int aEff)	{
 		
 		this.ID = aID;
 		this.effectif = aEff;

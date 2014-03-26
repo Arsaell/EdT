@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Field implements Constrainable	{
 
-	private char ID;
+	private int ID;
 	private char type;
 	private HashMap<Character, Double> constraints;
 	private static HashMap<Character, Slot> times;		//Associer un type à un slot (minTime, maxTime)
@@ -17,7 +17,7 @@ public class Field implements Constrainable	{
 		//	[...]
 	}
 	
-	public Field(char aID, char aType, String aName)	{
+	public Field(int aID, char aType, String aName)	{
 	
 		this.ID = aID;
 		this.type = aType;

@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class Classroom implements Timeable	{
 
-	private char ID;
+	private int ID;
 	private char type;
 	private String name;
 	private int effectif;
@@ -24,7 +24,7 @@ public class Classroom implements Timeable	{
 	}
 	
 	
-	public Classroom(char aID, char aType, String aName, int aEff)	{
+	public Classroom(int aID, char aType, String aName, int aEff)	{
 	
 		this.ID = aID;
 		this.type = aType;

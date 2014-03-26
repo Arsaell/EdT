@@ -5,14 +5,14 @@ public class Filler	{
 	private List<Classroom> classrooms;
 	private List<Group> groups;
 	private List<Teacher> teachers;
-	private List<Constraint> constraints;
+	//private List<Constraint> constraints;
 	
-	public Filler(List<Classroom> aClassrooms, List<Group> aGroups, List<Teacher> aTeachers, List<Constraint> aConstraints)	{
+	public Filler(List<Classroom> aClassrooms, List<Group> aGroups, List<Teacher> aTeachers/*, List<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
 		this.groups = aGroups;
 		this.teachers = aTeachers;
-		this.constraints = aConstraints;
+		//this.constraints = aConstraints;
 	}
 	
 	public void fill()	{
@@ -54,8 +54,14 @@ public class Filler	{
 		}
 	}
 	
-	private void computeConstraints()	{
-	
+	private Constrainable[] computeConstraints()	{
+		
+		List<Double> constraints = new List<Double>();
+		
+		for (Group g : groups)
+			constraints.addAll(g.getConstraint().set());
+		
+		return null;
 	}
 }
 

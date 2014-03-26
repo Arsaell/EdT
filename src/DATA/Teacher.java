@@ -3,14 +3,14 @@ import java.util.List;
 
 public class Teacher implements People, Timeable, Constrainable	{
 
-	private char ID;
+	private int ID;
 	private String name;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
 	private Field[] fields;
 	private HashMap<Group, Field> students;
 	private HashMap<Field, Double> constraints;
 	
-	public Teacher(char aID, String aName, Field[] aFields)	{
+	public Teacher(int aID, String aName, Field[] aFields)	{
 	
 		this.ID = aID;
 		this.name = aName;
