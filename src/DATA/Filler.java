@@ -1,13 +1,14 @@
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Filler	{
 
-	private List<Classroom> classrooms;
-	private List<Group> groups;
-	private List<Teacher> teachers;
+	private ArrayList<Classroom> classrooms;
+	private ArrayList<Group> groups;
+	private ArrayList<Teacher> teachers;
 	//private List<Constraint> constraints;
 	
-	public Filler(List<Classroom> aClassrooms, List<Group> aGroups, List<Teacher> aTeachers/*, List<Constraint> aConstraints*/)	{
+	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
 		this.groups = aGroups;
@@ -17,19 +18,24 @@ public class Filler	{
 	
 	public void fill()	{
 	
-		//attributeTeachers();
+		this.attributeTeachers();
+		this.computeConstraints();
 		
 	}
 	
-	private void attributeTeachers()	{
+	public void attributeTeachers()	{
 	
+		//System.out.println("Filler.attributeTeachers()");
+		
 		boolean end = false;
 		
 		while (!end)	{
 		
 			end = true;
-			for (Group g : groups)	{
 			
+			for (int i = 0 ; i < this.groups.size() ; i ++)	{
+			
+				Group g = this.groups.get(i);
 				Field f = g.getNextUnattributedClass();
 				
 				if (f != null)	{
@@ -40,10 +46,13 @@ public class Filler	{
 					while (!fieldDone)	{
 					
 						Teacher teach = null;
-						for (Teacher t : this.teachers)	{
+						for (int j = 0 ; j < this.teachers.size() ; j++)	{
+						
+							Teacher t = this.teachers.get(j);
+							//System.out.println("Filler.attributeTeachers()#FindSuitableTeacher : " + t);
 							if (t.canTeach(f, g))	{
 								teach = t;
-								break;
+								j = this.teachers.size();
 							}
 						}
 					
@@ -54,13 +63,23 @@ public class Filler	{
 		}
 	}
 	
-	private Constrainable[] computeConstraints()	{
+	public Constrainable[] computeConstraints()	{
 		
-		List<Double> constraints = new List<Double>();
+		/*
+			Retourne un tableau des objets les plus contraints, dans l'ordre
+			
+			Contraintes à considérer :
+				#1	nombre d'heures de cours / nombre de salles (ex TP)
+				#2	nombre d'heures de cours / nombre d'heures de prof dispo
+				#3	
+		*/
+		
+		Constrainable[] res = new Constrainable[this.groups.size() + this.teachers.size() + this.classrooms.size()];
+		ArrayList<Double> constraints = new ArrayList<Double>();
 		
 		for (Group g : groups)
-			constraints.addAll(g.getConstraint().set());
-		
+			//constraints.addAll(g.getConstraint().Set());
+			break;
 		return null;
 	}
 }

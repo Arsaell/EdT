@@ -10,22 +10,35 @@ public class Teacher implements People, Timeable, Constrainable	{
 	private HashMap<Group, Field> students;
 	private HashMap<Field, Double> constraints;
 	
-	public Teacher(int aID, String aName, Field[] aFields)	{
+	public Teacher(int aID, String aName, Field[] aFields, Time aMWWH)	{
 	
 		this.ID = aID;
 		this.name = aName;
 		this.fields = aFields;
+		this.maxWeekWorkedHours = aMWWH;
+		
+		this.students = new HashMap<Group, Field>();
+		this.constraints = new HashMap<Field, Double>();
+		this.currentWeekWorkedHours = new Time((byte) 0, (byte) 0, (byte) 0);
 	}
 	
 	public boolean canTeach(Field aField, Group aGroup)	{
 	
+		//System.out.println("Teacher.canTeach() : " + this + " " + aField + " " + aGroup);
+		
 		boolean res = false;
+		
+		if (aGroup.getClasses().get(aField).add(this.currentWeekWorkedHours).isMoreThan((this.maxWeekWorkedHours)))
+			return false;
+		
 		for (int i = 0 ; i < this.fields.length ; i++)
 			if (this.fields[i] == aField)
 				res = true;
 		
-		if (!(res && aGroup.getClasses().get(aField).add(this.currentWeekWorkedHours).isLessThan((this.maxWeekWorkedHours))))
-			res = false;
+		if (res)
+			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(aGroup.getClasses().get(aField));
+		
+		//System.out.println("Res (Teacher.canTeach()) : --> " + res);
 		
 		return res;
 	}

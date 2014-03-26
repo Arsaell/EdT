@@ -9,23 +9,34 @@ public class Time	{
 		this.day = d;
 		this.hour = h;
 		this.min = m;
+		
+		if (this.day > 6 || this.hour > 23 || this.min > 59)
+			System.out.println("Error while creating a Time : " + this);
+		//System.out.println("New Time : " + this);
 	}
 	
 	public Time (String s)	{
 	
-		if (s.length() >= 3)	{
+		this ((byte)0, (byte)0, (byte)0);
 		
+		if (s.length() >= 3)	{
 			this.day = (byte) s.charAt(0);
 			this.hour = (byte) s.charAt(1);
 			this.min = (byte) s.charAt(2);
 		}
 		
+		else
+			System.out.println("Error while creating Time from string : " + s);
+		//System.out.println("New Time : " + this);
+		
 		if (this.day > 6 || this.hour > 23 || this.min > 59 || s.length() < 3)
-			System.out.println("Error while attempting t create a time from : " + s);
+			System.out.println("Error while attempting to create a Time from : " + s);
 	}
 	
 	public Time add(Time t)	{
 	
+		//System.out.println("Time.add() : " + this + " " + t);
+		
 		Time temp = new Time(this.day, this.hour, this.min);
 		temp.min += t.getMin();
 		temp.hour += t.getHour() + (byte)(int)(temp.min / 60);
