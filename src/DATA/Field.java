@@ -8,7 +8,7 @@ public class Field implements Constrainable	{
 	private HashMap<Character, Double> constraints;
 	private static HashMap<Character, Slot> times;				//Associer un type à un slot (minTime, maxTime)
 	private static HashMap<Character, String> names;			//Associer un type à un nom (TD, TP, amphi ...)
-	private static HashMap<Character, Character> classrooms		//Associer un type de cours à un type de salle
+	private static HashMap<Character, Character> classrooms;		//Associer un type de cours à un type de salle
 	
 	static	{
 	
