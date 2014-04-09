@@ -1,21 +1,24 @@
 package DATA;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Filler	{
 
 	private ArrayList<Classroom> classrooms;
+	private ArrayList<ClassType> types;
 	private ArrayList<Group> groups;
 	private ArrayList<Teacher> teachers;
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
 	//private List<Constraint> constraints;
 	
-	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
+	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
 		this.groups = aGroups;
 		this.teachers = aTeachers;
+		this.types = aTypes;
 		this.MWWH = aMWWH;
 		//this.constraints = aConstraints;
 	}
@@ -85,13 +88,13 @@ public class Filler	{
 		 * count the available hours in classrooms
 		 * ratio must be under 1.0
 		 */
-
-		Time[] durationsNeeded = new Time[Classroom.types.size()];
-		Time[] durationsAvailable = new Time[Classroom.types.size()];
 		
-		for (int i = 0 ; i < durationsNeeded.length ; i++)	{
-			durationsNeeded[i] = new Time();
-			durationsAvailable[i] = new Time();
+		HashMap<ClassType, Time> roomTimeNeeded = new HashMap<ClassType, Time>();
+		HashMap<ClassType, Time> roomTimeAvailable = new HashMap<ClassType, Time>();
+		
+		for (int i = 0 ; i < this.types.size(); i++)	{
+			roomTimeNeeded.put(this.types.get(i), new Time());
+			roomTimeAvailable.put(this.types.get(i), new Time());
 		}
 		
 		Group g;
@@ -102,12 +105,12 @@ public class Filler	{
 			
 			for (Field f : g.classes.keySet())	{
 				
-				//System.out.println("Filler.computeConstraints() # classHours : " + durationsNeeded + " # " + durationsNeeded.length + " # " + f + " # " + (int)f.getType() + " # " + durationsNeeded[(int)f.getType()] + " # " + g + " # " + g.classes.size());
-				/*
-				if (durationsNeeded[(int)f.getType()] == null)
-					durationsNeeded[(int)f.getType()] = new Time();
-				*/
-				durationsNeeded[(int)f.getType()] = durationsNeeded[(int)f.getType()].add(g.classes.get(f));
+				//System.out.println("Filler.computeConstraints() #classrooms Time Needed 1 : # " + f + " # " + f.getType() + " # " + g + " # " + g.classes.get(f) + " # " + roomTimeNeeded.get(f.getType()));
+				
+				Time t = roomTimeNeeded.get(f.getType()).add(g.classes.get(f));
+				roomTimeNeeded.put(f.getType(), t);
+
+				//System.out.println("Filler.computeConstraints() #classrooms Time Needed 2 : " + g + " # " + f + " # " + f.getType() + t + " # " + roomTimeNeeded.get(f.getType()));
 			}
 		}
 		
@@ -115,19 +118,20 @@ public class Filler	{
 		
 		for (int i = 0 ; i < this.classrooms.size() ; i++)	{
 			c = this.classrooms.get(i);
-			if (durationsAvailable[c.getType()] == null)
-				durationsAvailable[c.getType()] = new Time();
-			durationsAvailable[c.getType()] = durationsAvailable[c.getType()].add(this.MWWH);
+			Time t = roomTimeAvailable.get(c.getType()).add(this.MWWH);
+			roomTimeAvailable.put(c.getType(), t);
+			
+			//System.out.println("Filler.computeConstraints() #classrooms Time Available : " + c + " " + t + roomTimeAvailable.get(c.getType()));
 		}
 		
 		boolean failed = false;
 		
-		for (int i = 0 ; i < durationsAvailable.length ; i++)	{
+		for (int i = 0 ; i < this.types.size() ; i++)	{
 			
 			//System.out.println("Filler.computeConstraints() #classHours : " + i + " " + (this.classrooms.size() > i ? this.classrooms.get(i) : "null") + " " + durationsNeeded[i] + " / " + durationsAvailable[i]);
 			
-			if (durationsAvailable[i] == null && durationsNeeded[i] != null || durationsAvailable[i] != null && durationsNeeded[i] != null && durationsNeeded[i].isMoreThan(durationsAvailable[i]) )	{
-				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough classrooms ! " + Classroom.types.get(i));
+			if (roomTimeAvailable.get(this.types.get(i)) != null  && roomTimeNeeded.get(this.types.get(i)) != null && roomTimeNeeded.get(this.types.get(i)).isMoreThan(roomTimeAvailable.get(this.types.get(i))) )	{
+				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough classrooms ! " + this.types.get(i));
 				failed = true;
 			}
 		}
@@ -139,24 +143,26 @@ public class Filler	{
 		
 	// BEGIN : ration hours / teachers
 
-		Time[] hoursNeeded = new Time[Field.names.size()];
-		Time[] hoursAvailable= new Time[Field.names.size()];
+		HashMap<ClassType, Time> teachTimeNeeded = new HashMap<ClassType, Time>();
+		HashMap<ClassType, Time> teachTimeAvailable = new HashMap<ClassType, Time>();
 
-		for (int i = 0 ; i < hoursNeeded.length ; i++)	{
-			hoursNeeded[i] = new Time();
-			hoursAvailable[i] = new Time();
+		for (int i = 0 ; i < this.types.size() ; i++)	{
+			teachTimeNeeded.put(this.types.get(i), new Time());
+			teachTimeAvailable.put(this.types.get(i), new Time());
 		}
 		
 		//Hours needed by students
 		for (int i = 0 ; i < this.groups.size() ; i++)	{
 			g = this.groups.get(i);
 			for (Field f : g.classes.keySet())	{
-				hoursNeeded[f.getType()] = hoursNeeded[f.getType()].add(g.classes.get(f));
+				Time t = teachTimeNeeded.get(f.getType()).add(g.classes.get(f));
+				teachTimeNeeded.put(f.getType(), t);
 			}
 		}
 		
 		Teacher t;
 		Field f;
+		
 		for (int i = 0 ; i < this.teachers.size() ; i++)	{
 			t = this.teachers.get(i);
 			
@@ -169,12 +175,15 @@ public class Filler	{
 		
 		failed = false;
 		for (int i = 0 ; i < hoursAvailable.length ; i++)	{
-			System.out.println(i + " Filler.computeConstraints() #TeachersHours : " + Field.names.get((char)i) + " " + hoursNeeded[i] + " / " + hoursAvailable[i]);
+			//System.out.println(i + " Filler.computeConstraints() #TeachersHours : " + Field.names.get((char)i) + " " + hoursNeeded[i] + " / " + hoursAvailable[i]);
 			if (hoursNeeded[i].isMoreThan(hoursAvailable[i]))	{
 				failed = true;
 				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! " + Field.names.get(i));
 			}
 		}
+		
+		if (!failed)
+			System.out.println("Filler.computeConstraints() says : There are enough teachers.");
 		
 	// END : ratio hours / teachers
 		
@@ -190,7 +199,12 @@ public class Filler	{
 
 
 
-
+/*
+ * La méthode computeContraints() renvoie des hashmap<> de constrainables avec leurs contraintes
+ * Implémenter une méthode private Constrainable[] sortKeysByValues(HashMap<Constrainable, double>)
+ * qui renvoie un tableau où les constrainables sont classés pas ordre de contrainte
+ * Par la suite, il suffit de faire un méthode qui fill chaque constrainable en suivant l'ordre du tableau !
+ */
 
 
 

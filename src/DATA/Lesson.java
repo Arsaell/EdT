@@ -2,16 +2,16 @@ package DATA;
 
 
 
-public class Lesson	{
+public class Lesson	/*extends Slot*/{
 	
-	private char type;
+	private ClassType type;
 	private Teacher teacher;
 	private Group students;
 	private Field field;
 	private Classroom place;
 	private Slot slot;
 	
-	public Lesson (char aType, Teacher aTeacher, Group aGroup, Field aField, Classroom aPlace, Slot aSlot)	{
+	public Lesson (ClassType aType, Teacher aTeacher, Group aGroup, Field aField, Classroom aPlace, Slot aSlot)	{
 	
 		this.type = aType;
 		this.teacher = aTeacher;

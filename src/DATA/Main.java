@@ -10,26 +10,32 @@ public class Main	{
 		ArrayList<Classroom> classrooms= new ArrayList<Classroom>();
 		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
 		ArrayList<Group> groups = new ArrayList<Group>();
+		ArrayList<ClassType> types = new ArrayList<ClassType>();
+
+		types.add(0, new ClassType("Cours", "Amphithéâtre"));
+		types.add(1, new ClassType("TD", "TD"));
+		types.add(2, new ClassType("TP Physique", "TP"));
+		types.add(3, new ClassType("TP Chimie", "Labo chimie"));
+		types.add(4, new ClassType("TP Construction", "TP"));
+		types.add(5, new ClassType("TD Conception", "TD"));
+		types.add(6, new ClassType("TD Info", "TD"));
+		types.add(7, new ClassType("Sport", "Gymnase"));
 		
+		classrooms.add(new Classroom(0, types.get(1), "C9", 25));
+		classrooms.add(new Classroom(1, types.get(0), "Vannier", 100));
+		classrooms.add(new Classroom(2, types.get(2), "Optique", 16));
+		classrooms.add(new Classroom(3, types.get(3), "1", 16));
+		classrooms.add(new Classroom(4, types.get(4), "Usinage", 32));
+		classrooms.add(new Classroom(5, types.get(5), "Est", 25));
+		classrooms.add(new Classroom(6, types.get(6), "Archie", 25));
+		classrooms.add(new Classroom(7, types.get(7), "Piscine", 150));
 		
-		classrooms.add(new Classroom(0, (char)0, "C9", 25));
-		classrooms.add(new Classroom(1, (char)1, "Vannier", 100));
-		classrooms.add(new Classroom(2, (char)2, "Optique", 16));
-		classrooms.add(new Classroom(3, (char)3, "1", 16));
-		classrooms.add(new Classroom(4, (char)4, "Usinage", 32));
-		classrooms.add(new Classroom(5, (char)5, "Est", 25));
-		classrooms.add(new Classroom(6, (char)6, "Archie", 25));
-		classrooms.add(new Classroom(7, (char)7, "Piscine", 150));
-		classrooms.add(new Classroom(8, (char)8, "PC", 900));
-		
-		Field a = (new Field(0, (char)0)).setClassroomType((char)1).setName("Amphi Maths").setTimes(new Slot(new Time(100), new Time(130)));
-		Field b = (new Field(1, (char)1)).setClassroomType((char)1).setName("Amphi Physique").setTimes(new Slot(new Time(100), new Time(130)));
-		Field c = (new Field(2, (char)2)).setClassroomType((char)0).setName("TD Maths").setTimes(new Slot(new Time(130), new Time(200)));
-		Field d = (new Field(3, (char)3)).setClassroomType((char)0).setName("TD Physique").setTimes(new Slot(new Time(130), new Time(200)));
-		Field e = (new Field(4, (char)4)).setClassroomType((char)5).setName("Conception").setTimes(new Slot(new Time(200), new Time(200)));
-		Field f = (new Field(5, (char)5)).setClassroomType((char)4).setName("TP Construction").setTimes(new Slot(new Time(400), new Time(400)));
-		
-		System.out.println("Main.main() : fields + classrooms " + Field.classrooms);
+		Field a = (new Field(0, types.get(0), "Maths")).setTimes(new Slot(new Time(100), new Time(130)));
+		Field b = (new Field(1, types.get(0), "Physique")).setTimes(new Slot(new Time(100), new Time(130)));
+		Field c = (new Field(2, types.get(1), "Maths")).setTimes(new Slot(new Time(130), new Time(200)));
+		Field d = (new Field(3, types.get(1), "Physique")).setTimes(new Slot(new Time(130), new Time(200)));
+		Field e = (new Field(4, types.get(5), "Conception")).setTimes(new Slot(new Time(200), new Time(200)));
+		Field f = (new Field(5, types.get(4), "Usinage")).setTimes(new Slot(new Time(400), new Time(400)));
 		
 		Field[] F = {a, b, c};
 		Field[] G = {b, c, d};
@@ -40,15 +46,15 @@ public class Main	{
 		
 		Time MWWH = new Time (2000);
 		
-		teachers.add(new Teacher(0, "Twilight Sparkle", F, MWWH));
-		teachers.add(new Teacher(1, "Rarity", G, MWWH));
-		teachers.add(new Teacher(2, "Apple Jack", H, MWWH));
-		teachers.add(new Teacher(3, "Rainbow Dash", I, MWWH));
-		teachers.add(new Teacher(4, "Flutter Shy", J, MWWH));
-		teachers.add(new Teacher(5, "Pinkie Pie", K, MWWH));
-		teachers.add(new Teacher(6, "Spike", F, MWWH));
-		teachers.add(new Teacher(7, "Celestia", G, MWWH));
-		teachers.add(new Teacher(8, "Princess Luna", H, MWWH));
+		teachers.add(new Teacher(0, "Twilight", "Sparkle", F, MWWH));
+		teachers.add(new Teacher(1, "Rarity", "", G, MWWH));
+		teachers.add(new Teacher(2, "Apple", "Jack", H, MWWH));
+		teachers.add(new Teacher(3, "Rainbow", "Dash", I, MWWH));
+		teachers.add(new Teacher(4, "Flutter", "Shy", J, MWWH));
+		teachers.add(new Teacher(5, "Pinkie", "Pie", K, MWWH));
+		//teachers.add(new Teacher(6, "Spike", F, MWWH));
+		//teachers.add(new Teacher(7, "Celestia", G, MWWH));
+		//teachers.add(new Teacher(8, "Princess Luna", H, MWWH));
 		//teachers.add(new Teacher(9, "Discord", F, MWWH));
 		
 		
@@ -66,10 +72,10 @@ public class Main	{
 		groups.add(new Group(0, "Lanip", 100).setClasses(null).setParent(null));
 		groups.add(new Group(1, "g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		groups.add(new Group(2, "g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		//groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
+		groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
-		Group[] gtab = {groups.get(0), groups.get(0)};
+		Group[] gtab = {groups.get(1), groups.get(2), groups.get(3), groups.get(4)};
 		groups.get(0).setChildren(gtab);
 		
 		//groups.add(new Group(3, 25).setClasses(classes));
@@ -84,11 +90,11 @@ public class Main	{
 		*/
 		System.out.println("Main.main() : Examples set.");
 		
-		Filler filler = new Filler(classrooms, groups, teachers, MWWH);
+		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3500));
 		
 		System.out.println("Main.main() : Filler built.");
 		
-		filler.attributeTeachers();
+		//filler.attributeTeachers();
 		
 		System.out.println("Main.main() : Teachers attributed to groups.");
 		

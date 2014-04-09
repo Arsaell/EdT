@@ -78,6 +78,28 @@ public class Time	{
 		return temp;
 	}
 	
+	public Time divideBy(double x)	{
+		
+		if (x == 0)
+			return null;
+		
+		Time t = new Time((byte)(this.day / x), (byte)(this.hour / x), (byte)(this.min / x));
+		
+		if (x < 1)	{
+			t.hour += t.min / 60;
+			t.min = (byte) (t.min % 60);
+			t.day += t.hour / 24;
+			t.hour = (byte) (t.hour % 24);
+			t.day = (byte) (t.day % 7);
+		}
+		
+		return t;
+	}
+	
+	public Time divideBy(Time t)	{
+		return new Time((t.getDay() == 0 ? 0 : (byte)(this.day / t.getDay())), (t.getHour() == 0 ? 0 : (byte)(this.hour / t.getHour())), (t.getMin() == 0 ? 0 : (byte)(this.min / t.getMin())));
+	}
+	
 	public boolean isLessThan(Time t)	{
 		return ((1440 * this.day + 60 * this.hour + this.min) < (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
 	}

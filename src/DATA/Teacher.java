@@ -1,24 +1,26 @@
 package DATA;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Teacher implements People, Timeable, Constrainable	{
 
 	private int ID;
-	private String name;
+	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
 	private Field[] fields;
-	private HashMap<Group, Field> students;
+	private ArrayList<Link> students;
 	private HashMap<Field, Double> constraints;
 	
-	public Teacher(int aID, String aName, Field[] aFields, Time aMWWH)	{
+	public Teacher(int aID, String aFirstName, String aLastName, Field[] aFields, Time aMWWH)	{
 	
 		this.ID = aID;
-		this.name = aName;
+		this.firstName = aFirstName;
+		this.lastName = aLastName;
 		this.fields = aFields;
 		this.maxWeekWorkedHours = aMWWH;
 		
-		this.students = new HashMap<Group, Field>();
+		this.students = new ArrayList<Link>();
 		this.constraints = new HashMap<Field, Double>();
 		this.currentWeekWorkedHours = new Time((byte) 0, (byte) 0, (byte) 0);
 	}
@@ -44,6 +46,20 @@ public class Teacher implements People, Timeable, Constrainable	{
 		return res;
 	}
 	
+	public boolean linkGroup(Group g, Field f)	{
+		return this.linkGroup(new Link(this, g, f));
+	}
+	
+	private boolean linkGroup(Link link) {
+		
+		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
+		if (link.getTeach() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getTeachers().get(link.getField()) == null)	{
+			this.students.add(link);
+			return true;
+		}
+		return false;
+	}
+
 	public HashMap<Field, Double> getConstraint()	{
 	
 		this.updateConstraint();
@@ -73,7 +89,7 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	public String getMail()	{
 	
-		return (this.name.toLowerCase().replace(' ', '.') + "@insa-lyon.fr");
+		return (this.firstName.toLowerCase() + "." + this.lastName + "@insa-lyon.fr");
 	}
 	
 	public Slot getNextFreeSlot(Time start, Time duration)	{
@@ -87,9 +103,7 @@ public class Teacher implements People, Timeable, Constrainable	{
 	}
 	
 	public String toString()	{
-		return this.name;
-	}
-
-	
+		return this.firstName + " " + this.lastName;
+	}	
 	
 }

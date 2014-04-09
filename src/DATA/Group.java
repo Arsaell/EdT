@@ -144,6 +144,10 @@ public class Group implements Timeable, Constrainable, People	{
 		return res;
 	}
 
+	public Group[] getChildren()	{
+		return this.children;
+	}
+	
 	public Group setChildren(Group[] aChildren) {
 		this.children = aChildren;
 		return this;

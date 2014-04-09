@@ -66,7 +66,7 @@ public class TeacherWindow {
 		initialize();
 		Teacher[] teacherss = new Teacher[5];
 		
-		Teacher[] teachers = new Teacher(1, "test", , new Time(2,2,2);
+		teacherss[0]= new Teacher(1, "test", null, new Time(2500));
 		
 	}
 
