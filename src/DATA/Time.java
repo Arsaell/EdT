@@ -33,18 +33,31 @@ public class Time	{
 			System.out.println("Error while attempting to create a Time from : " + s);
 	}
 	
-	public Time add(Time t)	{
+	public Time(int i)	{
+		this((byte)(i/10000), (byte)((i%10000)/100), (byte)(i%100));
+		//ex : new Time(52359);
+		//			   5d 23h 59min
+	}
+ 	
+	public Time ()	{
+		this(0);
+	}
+	
+	public Time add (Time t)	{
 	
 		//System.out.println("Time.add() : " + this + " " + t);
 		
 		Time temp = new Time(this.day, this.hour, this.min);
+		
 		temp.min += t.getMin();
 		temp.hour += t.getHour() + (byte)(int)(temp.min / 60);
 		temp.min = (byte)(temp.min % 60);
 		temp.day += t.getDay() + (byte)(int)(temp.hour / 24);
 		temp.hour = (byte)(temp.hour % 24);
+		
 		if (temp.day > 6)
 			System.out.println("Time.add() : changed week" + temp + " " + t);
+		
 		temp.day = (byte)(temp.day % 7);
 		
 		return temp;
@@ -73,7 +86,7 @@ public class Time	{
 	
 	public String toString()	{
 	
-		return ("Time : " + (this.day == 0 ? "Mon " : (this.day == 1 ? "Tue " : (this.day == 2 ? "Wed " : (this.day == 3 ? "Thu " : (this.day == 4 ? "Fri " : (this.day == 5 ? "Sat " : (this.day == 6 ? "Sun " : "Unknown "))))))) + (int)this.hour + "h" + (int)this.min + "m");												
+		return ("Time : " + (this.day == 0 ? "Mon " : (this.day == 1 ? "Tue " : (this.day == 2 ? "Wed " : (this.day == 3 ? "Thu " : (this.day == 4 ? "Fri " : (this.day == 5 ? "Sat " : (this.day == 6 ? "Sun " : "Unknown " + this.day + " "))))))) + (int)this.hour + "h" + (int)this.min + "m");												
 	}
 	
 	public byte getMin()	{

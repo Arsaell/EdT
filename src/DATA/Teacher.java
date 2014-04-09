@@ -1,5 +1,4 @@
 package DATA;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +59,18 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	}
 	
+	public Field[] getFields()	{
+		return this.fields;
+	}
+
+	public Time getMWWH() {
+		return this.maxWeekWorkedHours;
+	}
+	
+	public Time getCWWH()	{
+		return this.currentWeekWorkedHours;
+	}
+	
 	public String getMail()	{
 	
 		return (this.name.toLowerCase().replace(' ', '.') + "@insa-lyon.fr");
@@ -78,5 +89,7 @@ public class Teacher implements People, Timeable, Constrainable	{
 	public String toString()	{
 		return this.name;
 	}
+
+	
 	
 }

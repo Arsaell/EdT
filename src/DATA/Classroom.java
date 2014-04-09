@@ -1,3 +1,5 @@
+package DATA;
+
 import java.util.HashMap;
 
 public class Classroom implements Timeable	{
@@ -7,7 +9,7 @@ public class Classroom implements Timeable	{
 	private String name;
 	private int effectif;
 	private WeekTable timeTable;
-	private static HashMap<Character, String> types;	//Les noms des types de salle
+	public static HashMap<Character, String> types;	//Les noms des types de salle
 	
 	
 	static	{
@@ -17,10 +19,12 @@ public class Classroom implements Timeable	{
 		types.put((char)0, "TD");
 		types.put((char)1, "Amphithéâtre");
 		types.put((char)2, "TP Physique");
-		types.put((char)3, "TP Chimie");
+		types.put((char)3, "Labo Chimie");
 		types.put((char)4, "TP Construction");
-		types.put((char)5, "Salle Informatique");
-		types.put((char)6, "Gymnase");
+		types.put((char)5, "Salle Conception");
+		types.put((char)6, "Salle Informatique");
+		types.put((char)7, "Gymnase");
+		types.put((char)8, "Glandouille pelouse");
 	}
 	
 	
@@ -40,7 +44,6 @@ public class Classroom implements Timeable	{
 		return this.effectif;
 	}
 	
-	
 	public Slot getNextFreeSlot(Time start, Time duration)	{
 	
 		return null;
@@ -51,4 +54,7 @@ public class Classroom implements Timeable	{
 		return null;
 	}
 	
+	public String toString()	{
+		return (types.get(this.type) + " " + this.name);
+	}
 }

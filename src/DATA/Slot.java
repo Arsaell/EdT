@@ -1,3 +1,5 @@
+package DATA;
+
 
 
 public class Slot	{

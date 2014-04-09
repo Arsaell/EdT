@@ -1,3 +1,5 @@
+package DATA;
+
 
 
 public interface Timeable	{
