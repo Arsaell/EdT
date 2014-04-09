@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>60</x>
+      <y>18</y>
+      <w>222</w>
+      <h>282</h>
+    </coordinates>
+    <panel_attributes>DATA::Group
+--
+-ID: int
+-name: String
+#effectif: int
++teachers: HashMap&lt;Field, Teacher&gt;
++classes: HashMap&lt;Field, Time&gt;
+-constraints: HashMap&lt;Field, Double&gt;
+-parent: Group
+-children: Group[]
+--
++Group(int aID, String aName, int aEff): ctor
++getNextUnattributedClass(): Field
++setTeacher(Teacher teach, Field f): boolean
++getConstraint(): HashMap&lt;Field, Double&gt;
++getConstraint(List source): HashMap&lt;Field, Double&gt;
+-updateConstraint(): void
++getMail(): String
++getEffectif(): int
++getTeachers(): HashMap&lt;Field, Teacher&gt;
++getClasses(): HashMap&lt;Field, Time&gt;
++getNextFreeSlot(Time start, Time duration): Slot
++getAllFreeSlots(Time duration): Slot[]
++setClasses(HashMap&lt;Field, Time&gt; aClasses): Group
++setParent(Group aParent): Group
++toString(): String
++setChildren(Group[] aChildren): Group
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>288</x>
+      <y>18</y>
+      <w>276</w>
+      <h>222</h>
+    </coordinates>
+    <panel_attributes>DATA::Teacher
+--
+-ID: int
+-name: String
+-maxWeekWorkedHours, currentWeekWorkedHours: Time
+-fields: Field[]
+-students: HashMap&lt;Group, Field&gt;
+-constraints: HashMap&lt;Field, Double&gt;
+--
++Teacher(int aID, String aName, Field[] aFields, Time aMWWH): ctor
++canTeach(Field aField, Group aGroup): boolean
++getConstraint(): HashMap&lt;Field, Double&gt;
++getConstraint(List source): HashMap&lt;Character, Double&gt;
+-updateConstraint(): void
++getFields(): Field[]
++getMWWH(): Time
++getCWWH(): Time
++getMail(): String
++getNextFreeSlot(Time start, Time duration): Slot
++getAllFreeSlots(Time duration): Slot[]
++toString(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>570</x>
+      <y>18</y>
+      <w>240</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>DATA::Field
+--
+-ID: int
+-type: ClassType
+-name: String
+-times: Slot
+-constraints: HashMap&lt;Character, Double&gt;
+--
++Field(int aID, ClassType aType, String aName): ctor
++getType(): ClassType
++getConstraint(): HashMap&lt;Character, Double&gt;
++getConstraint(List source): HashMap&lt;Character, Double&gt;
+-updateConstraint(): void
++setName(String aName): Field
++setTimes(Slot aTimes): Field
++toString(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>816</x>
+      <y>18</y>
+      <w>150</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>DATA::Time
+--
+-day, hour, min: byte
+--
++Time(byte d, byte h, byte m): ctor
++Time(String s): ctor
++Time(int i): ctor
++Time(): ctor
++add(Time t): Time
++substract(Time t): Time
++isLessThan(Time t): boolean
++isMoreThan(Time t): boolean
++toString(): String
++getMin(): byte
++getHour(): byte
++getDay(): byte
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>60</x>
+      <y>306</y>
+      <w>234</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>DATA::Classroom
+--
+-ID: int
+-type: ClassType
+-name: String
+-effectif: int
+-timeTable: WeekTable
+--
++Classroom(int aID, ClassType aType, String aName, int aEff): ctor
++getType(): ClassType
++getEffectif(): int
++getNextFreeSlot(Time start, Time duration): Slot
++getAllFreeSlots(Time duration): Slot[]
++toString(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>336</x>
+      <y>306</y>
+      <w>204</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>DATA::WeekTable
+--
+-slots: Lesson[][]
+-owner: People
+-defaultWeek: WeekTable
+--
++WeekTable(): ctor
++WeekTable(WeekTable source): ctor
++setSlot(Lesson aSlot): void
++getNextFreeSlot(Time start, Time duration): Slot
++getAllFreeSlots(Time duration): Slot[]
++setDefault(WeekTable aDefault): void
++getDefault(): WeekTable
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>546</x>
+      <y>306</y>
+      <w>96</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>DATA::Lesson
+--
+-type: ClassType
+-teacher: Teacher
+-students: Group
+-field: Field
+-place: Classroom
+-slot: Slot
+--
++Lesson(ClassType aType, Teacher aTeacher, Group aGroup, Field aField, Classroom aPlace, Slot aSlot): ctor
+-check(): boolean
++getSlot(): Slot
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>654</x>
+      <y>312</y>
+      <w>192</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>DATA::Filler
+--
+-classrooms: ArrayList&lt;Classroom&gt;
+-groups: ArrayList&lt;Group&gt;
+-teachers: ArrayList&lt;Teacher&gt;
+-MWWH: Time
+--
++Filler(ArrayList&lt;Classroom&gt; aClassrooms, ArrayList&lt;Group&gt; aGroups, ArrayList&lt;Teacher&gt; aTeachers, Time aMWWH): ctor
++fill(): void
++attributeTeachers(): void
++computeConstraints(): Constrainable[]
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>60</x>
+      <y>462</y>
+      <w>120</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>DATA::Slot
+--
+-begin, end: Time
+--
++Slot(Time b, Time e): ctor
++duration(): Time
++getBegin(): Time
++getEnd(): Time
++setBegin(Time aBegin): void
++setEnd(Time aEnd): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>186</x>
+      <y>462</y>
+      <w>216</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>DATA::ClassType
+--
+-name, shortName: String
+--
++ClassType(String aName, String aShortName): ctor
++getName(): String
++getShortName(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>408</x>
+      <y>462</y>
+      <w>192</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>DATA::Constraint
+--
+-type: char
+-object, subject: Class
+--
++Constraint(char aType, Class o, Class s): ctor
++canApply(Object o, Object s): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>606</x>
+      <y>462</y>
+      <w>210</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+DATA::Timeable
+--
+~timeTable = WeekTable.getDefault(): WeekTable
+--
++getNextFreeSlot(Time start, Time duration): Slot
++getAllFreeSlots(Time duration): Slot[]
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>822</x>
+      <y>462</y>
+      <w>162</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+DATA::Constrainable
+--
+--
++getConstraint(): HashMap
++getConstraint(List source): HashMap
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>846</x>
+      <y>540</y>
+      <w>72</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+DATA::People
+--
+--
++getMail(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>138</x>
+      <y>576</y>
+      <w>114</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>DATA::Main
+--
+--
++main(String[] args): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

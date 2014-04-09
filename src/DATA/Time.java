@@ -1,7 +1,5 @@
 package DATA;
 
-
-
 public class Time	{
 
 	private  byte day, hour, min;

@@ -50,4 +50,8 @@ public class Field implements Constrainable	{
 	public String toString()	{
 		return (this.type.getShortName() + " " + this.name);
 	}
+	
+	public String getName() {
+		return this.name;
+	}
 }

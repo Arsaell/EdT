@@ -2,4 +2,5 @@
 .classpath
 .metadata/
 *.class
-*bin/
+bin/
+.metadata/
