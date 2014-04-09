@@ -1,5 +1,6 @@
 package GUI;
 
+import DATA.DataStore;
 import DATA.Field;
 import DATA.Teacher;
 import DATA.Time;
@@ -21,9 +22,13 @@ import javax.swing.JTabbedPane;
 
 import java.awt.Insets;
 
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
@@ -36,12 +41,21 @@ import javax.swing.JMenuItem;
 
 import java.awt.Color;
 
+import javax.swing.JTable;
+import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
+
 public class TeacherWindow {
 
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	private JTable table;
+	
+	private DataStore dataStore;
 
 	/**
 	 * Launch the application.
@@ -65,9 +79,7 @@ public class TeacherWindow {
 	public TeacherWindow() {
 		initialize();
 		Teacher[] teacherss = new Teacher[5];
-		
-		Teacher[] teachers = new Teacher(1, "test", , new Time(2,2,2);
-		
+		this.dataStore = new DataStore();
 	}
 
 	/**
@@ -97,7 +109,7 @@ public class TeacherWindow {
 		gbc_lblListeDesEnseignants.gridy = 0;
 		teacherListPanel.add(lblListeDesEnseignants, gbc_lblListeDesEnseignants);
 		
-		JList list = new JList();
+		JList<Teacher> list = new JList<Teacher>(new TeacherListModel(dataStore.getTeachers()));
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.insets = new Insets(0, 0, 5, 0);
 		gbc_list.fill = GridBagConstraints.BOTH;
@@ -189,6 +201,11 @@ public class TeacherWindow {
 		
 		JPanel fieldPanel = new JPanel();
 		teacherTabbedPane.addTab("Matières enseignées", null, fieldPanel, null);
+		fieldPanel.setLayout(new BorderLayout(0, 0));
+		
+		JTable table = getJTableField();
+		fieldPanel.add(new JScrollPane(table));
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.LIGHT_GRAY);
@@ -210,5 +227,80 @@ public class TeacherWindow {
 		mntmQuitter.setBackground(Color.WHITE);
 		mnFichier.add(mntmQuitter);
 	}
+	
+	private JTable getJTableField() {
+		String[] columnNames = {"Matière", "Groupe"};
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem("Maths amphi");
+		comboBox.addItem("Maths TD");
+		comboBox.addItem("Physique amphi");
+		comboBox.addItem("Physique TD");
+		comboBox.addItem("Physique TP");
+		Object[][] data = {{" ", " "}};
+		JTable table = new JTable(new FieldTableModel());
+		/*table.setRowSelectionAllowed(false);
+		table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        table.setFillsViewportHeight(true);
+		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));*/
+		return table;
+	}
 
+	
+	public class TeacherListModel extends AbstractListModel<Teacher> {
+
+		private Teacher[] data;
+		
+		public TeacherListModel(Teacher[] teachers) {
+			this.data = teachers;
+		}
+		
+		public int getSize() {
+			// TODO Auto-generated method stub
+			return data.length;
+		}
+
+		public Teacher getElementAt(int index) {
+			// TODO Auto-generated method stub
+			return this.data[index];
+		}
+		
+	}
+	
+	public class FieldTableModel extends AbstractTableModel {
+	    private final Field[] fields;
+	 
+	    private final String[] entetes = {"Matière", "Groupe"};
+	 
+	    public FieldTableModel() {
+	        super();
+	 
+	        fields = new Field[]{
+	                new Field(1, 't', "Physique TD")
+	        };
+	    }
+	 
+	    public int getRowCount() {
+	        return fields.length;
+	    }
+	 
+	    public int getColumnCount() {
+	        return entetes.length;
+	    }
+	 
+	    public String getColumnName(int columnIndex) {
+	        return entetes[columnIndex];
+	    }
+	 
+	    public Object getValueAt(int rowIndex, int columnIndex) {
+	        switch(columnIndex){
+	            case 0:
+	                return fields[rowIndex].getName();
+	            default:
+	                return null; //Ne devrait jamais arriver
+	        }
+	    }
+	}
 }
+
+

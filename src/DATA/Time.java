@@ -1,4 +1,4 @@
-
+package DATA;
 
 public class Time	{
 

@@ -1,3 +1,5 @@
+package DATA;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -5,6 +7,7 @@ public class Field implements Constrainable	{
 
 	private int ID;
 	private char type;
+	private String name;
 	private HashMap<Character, Double> constraints;
 	private static HashMap<Character, Slot> times;				//Associer un type à un slot (minTime, maxTime)
 	private static HashMap<Character, String> names;			//Associer un type à un nom (TD, TP, amphi ...)
@@ -23,6 +26,7 @@ public class Field implements Constrainable	{
 		this.ID = aID;
 		this.type = aType;
 		this.names.put(this.type, aName);
+		this.name = aName;
 	}
 	
 	public HashMap<Character, Double> getConstraint()	{
@@ -42,5 +46,9 @@ public class Field implements Constrainable	{
 	
 	public String toString()	{
 		return this.names.get(this.type);
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 }
