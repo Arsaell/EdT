@@ -46,6 +46,13 @@ public class Teacher implements People, Timeable, Constrainable	{
 		return res;
 	}
 	
+	public boolean knows(Field aField)	{
+		for (int i = 0 ; i < this.fields.length ; i++)
+			if (this.fields[i] == aField)
+				return true;
+		return false;
+	}
+	
 	public boolean linkGroup(Group g, Field f)	{
 		return this.linkGroup(new Link(this, g, f));
 	}

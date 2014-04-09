@@ -76,7 +76,7 @@ public class Filler	{
 			Retourne un tableau des objets les plus contraints, dans l'ordre
 			
 			Contraintes à considérer :
-				#1	nombre d'heures de cours / nombre de salles (ex TP)
+				#1	nombre d'heures de cours / nombre de salles (ex TP au PC)
 				#2	nombre d'heures de cours / nombre d'heures de prof dispo
 				#3	
 		*/
@@ -86,7 +86,7 @@ public class Filler	{
 		/* Method :
 		 * count the hours for each classtype
 		 * count the available hours in classrooms
-		 * ratio must be under 1.0
+		 * ratio must be under 1.00
 		 */
 		
 		HashMap<ClassType, Time> roomTimeNeeded = new HashMap<ClassType, Time>();
@@ -143,52 +143,63 @@ public class Filler	{
 		
 	// BEGIN : ration hours / teachers
 
-		HashMap<ClassType, Time> teachTimeNeeded = new HashMap<ClassType, Time>();
-		HashMap<ClassType, Time> teachTimeAvailable = new HashMap<ClassType, Time>();
-
-		for (int i = 0 ; i < this.types.size() ; i++)	{
-			teachTimeNeeded.put(this.types.get(i), new Time());
-			teachTimeAvailable.put(this.types.get(i), new Time());
-		}
+		HashMap<Field, Time> teachTimeNeeded = new HashMap<Field, Time>();
+		HashMap<Field, Time> teachTimeAvailable = new HashMap<Field, Time>();
 		
 		//Hours needed by students
 		for (int i = 0 ; i < this.groups.size() ; i++)	{
 			g = this.groups.get(i);
 			for (Field f : g.classes.keySet())	{
-				Time t = teachTimeNeeded.get(f.getType()).add(g.classes.get(f));
-				teachTimeNeeded.put(f.getType(), t);
+				
+				if (!teachTimeNeeded.containsKey(f))	{
+					teachTimeNeeded.put(f, new Time());
+					teachTimeAvailable.put(f,  new Time());
+				}
+				
+				Time t = teachTimeNeeded.get(f).add(g.classes.get(f));
+				teachTimeNeeded.put(f, t);
 			}
 		}
-		
-		Teacher t;
-		Field f;
-		
-		for (int i = 0 ; i < this.teachers.size() ; i++)	{
-			t = this.teachers.get(i);
-			
-			for (int j = 0 ; j < t.getFields().length ; j++)	{
-				f = t.getFields()[j];
-				//System.out.println(i + " " + j + " Filler.computeConstraints() #teachersHours : " + t + " " + t.getCWWH() + " / " + t.getMWWH() + " " + f);
-				hoursAvailable[f.getType()] = hoursAvailable[f.getType()].add(t.getMWWH());
-			}
-		}
-		
-		failed = false;
-		for (int i = 0 ; i < hoursAvailable.length ; i++)	{
-			//System.out.println(i + " Filler.computeConstraints() #TeachersHours : " + Field.names.get((char)i) + " " + hoursNeeded[i] + " / " + hoursAvailable[i]);
-			if (hoursNeeded[i].isMoreThan(hoursAvailable[i]))	{
-				failed = true;
-				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! " + Field.names.get(i));
-			}
-		}
-		
-		if (!failed)
-			System.out.println("Filler.computeConstraints() says : There are enough teachers.");
 		
 	// END : ratio hours / teachers
+
+	// BEGIN : ratio hours / teachers ADVANCED (teachers' side of the problem)
 		
-		Constrainable[] res = new Constrainable[this.groups.size() + this.teachers.size() + this.classrooms.size()];
-		ArrayList<Double> constraints = new ArrayList<Double>();
+		//On stocke les horaires des profs, pour réinitialiser plus tard.
+		HashMap<Teacher, Time> cwwhs = new HashMap<Teacher, Time>();
+		for (int i = 0 ; i < this.teachers.size() ; i++)
+			cwwhs.put(this.teachers.get(i), this.teachers.get(i).getCWWH().clone());
+		
+		/*
+		 * Méthode :
+		 * On parcourt les Field
+		 * pour chacun, on cherche les profs qui peuvent l'enseigner
+		 * pour chacun de ces profs, on ajoute la durée maximale d'un créneau
+		 * jusqu'à couvrir le besoin des étudiants.
+		 * */
+		
+		for (Field f : teachTimeAvailable.keySet()){
+			while (teachTimeAvailable.get(f).isLessThan(teachTimeNeeded.get(f)))	{
+				for (Teacher teach : this.teachers)	{
+					if (teach.knows(f))	{
+						
+						Time t = f.getDuration().getEnd();
+						Time left = teachTimeNeeded.get(f).substract(teachTimeAvailable.get(f));
+						
+//Ici, il faut réfléchir à un moyen d'être sûrs de bien retomber sur le bon Time en ajoutant quelques Times...
+//J'ai la flemme de faire ça ce soir, Léo si tu vois ça, Tu te tais ou JE te tais !
+						
+						if (t.multiplyBy(3.0).isMoreThan(left))	{
+							
+							t = f.getDuration().getBegin();
+						}
+					}
+				}
+				break;
+			}
+		}
+		
+	// END : ratio hours / teachers ADVANCED
 		
 		return null;
 	}

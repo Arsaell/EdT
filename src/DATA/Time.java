@@ -10,8 +10,12 @@ public class Time	{
 		this.hour = h;
 		this.min = m;
 		
+		/*
 		if (this.day > 6 || this.hour > 23 || this.min > 59)
 			System.out.println("Error while creating a Time : " + this);
+		*/
+		
+		this.format();
 		//System.out.println("New Time : " + this);
 	}
 	
@@ -28,9 +32,6 @@ public class Time	{
 		else
 			System.out.println("Error while creating Time from string : " + s);
 		//System.out.println("New Time : " + this);
-		
-		if (this.day > 6 || this.hour > 23 || this.min > 59 || s.length() < 3)
-			System.out.println("Error while attempting to create a Time from : " + s);
 	}
 	
 	public Time(int i)	{
@@ -47,13 +48,9 @@ public class Time	{
 	
 		//System.out.println("Time.add() : " + this + " " + t);
 		
-		Time temp = new Time(this.day, this.hour, this.min);
+		Time temp = new Time((byte)(this.day + t.getDay()), (byte)(this.hour + t.hour), this.min);
 		
-		temp.min += t.getMin();
-		temp.hour += t.getHour() + (byte)(int)(temp.min / 60);
-		temp.min = (byte)(temp.min % 60);
-		temp.day += t.getDay() + (byte)(int)(temp.hour / 24);
-		temp.hour = (byte)(temp.hour % 24);
+		temp.format();
 		
 		if (temp.day > 6)
 			System.out.println("Time.add() : changed week" + temp + " " + t);
@@ -67,13 +64,13 @@ public class Time	{
 	
 		Time temp = new Time((byte)(this.min - t.min), (byte)(this.hour - t.hour - this.min / 59 + 1), (byte)(this.day - t.day - this.hour / 24 + 1));
 		
-		temp.min = (byte)(this.min % 60);
-		temp.hour = (byte)(this.hour % 24);
-		if (temp.day < 0)
-			System.out.println("Time.substract() : changed week (==> negative result)");
-		temp.day = (byte)(this.day % 7);
+		temp.format();
 		
 		return temp;
+	}
+	
+	public Time multiplyBy(double x)	{
+		return new Time((int)((this.day * 1440 + this.hour * 60 + this.min) * x));
 	}
 	
 	public Time divideBy(double x)	{
@@ -81,15 +78,10 @@ public class Time	{
 		if (x == 0)
 			return null;
 		
-		Time t = new Time((byte)(this.day / x), (byte)(this.hour / x), (byte)(this.min / x));
+		Time t = new Time((int)((this.day * 1440 + this.hour * 60 + this.min) / x));
 		
-		if (x < 1)	{
-			t.hour += t.min / 60;
-			t.min = (byte) (t.min % 60);
-			t.day += t.hour / 24;
-			t.hour = (byte) (t.hour % 24);
-			t.day = (byte) (t.day % 7);
-		}
+		if (x < 1)
+			t.format();
 		
 		return t;
 	}
@@ -106,9 +98,22 @@ public class Time	{
 		return ((1440 * this.day + 60 * this.hour + this.min) > (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
 	}
 	
+	public Time clone()	{
+		return new Time(this.day, this.hour, this.min);
+	}
+	
+	//Gère les exceptions du type 25h --> 1day 1hour ; 92min --> 1h32min
+	private void format()	{
+		this.hour += this.min / 60;
+		this.min = (byte) (this.min % 60);
+		this.day += this.hour / 24;
+		this.hour = (byte) (this.hour % 24);
+		this.day = (byte) (this.day % 7);
+	}
+	
 	public String toString()	{
 	
-		return ("Time : " + (this.day == 0 ? "Mon " : (this.day == 1 ? "Tue " : (this.day == 2 ? "Wed " : (this.day == 3 ? "Thu " : (this.day == 4 ? "Fri " : (this.day == 5 ? "Sat " : (this.day == 6 ? "Sun " : "Unknown " + this.day + " "))))))) + (int)this.hour + "h" + (int)this.min + "m");												
+		return ((this.day == 0 ? "Mon " : (this.day == 1 ? "Tue " : (this.day == 2 ? "Wed " : (this.day == 3 ? "Thu " : (this.day == 4 ? "Fri " : (this.day == 5 ? "Sat " : (this.day == 6 ? "Sun " : "Unknown " + this.day + " "))))))) + (int)this.hour + "h" + (int)this.min + "m");												
 	}
 	
 	public byte getMin()	{

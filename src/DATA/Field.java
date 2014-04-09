@@ -8,7 +8,7 @@ public class Field implements Constrainable	{
 	private int ID;
 	private ClassType type;
 	private String name;
-	private Slot times;				//Associer un type à un slot (minTime, maxTime)
+	private Slot duration;				//Associer un type à un slot (minTime, maxTime)
 	private HashMap<Character, Double> constraints;
 	
 	public Field(int aID, ClassType aType, String aName)	{
@@ -16,6 +16,7 @@ public class Field implements Constrainable	{
 		this.ID = aID;
 		this.type = aType;
 		this.name = aName;
+		this.duration = this.type.getDuration();
 	}
 	
 	public ClassType getType() {
@@ -43,15 +44,19 @@ public class Field implements Constrainable	{
 	}
 	
 	public Field setTimes (Slot aTimes)	{
-		this.times = aTimes;
+		this.duration = aTimes;
 		return this;
 	}
 	
 	public String toString()	{
-		return (this.type.getShortName() + " " + this.name);
+		return (this.type.getName() + " " + this.name);
 	}
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public Slot getDuration()	{
+		return this.duration;
 	}
 }

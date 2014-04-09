@@ -12,7 +12,7 @@ public class DataStore {
 	}
 	
 	public void addFixtures() {
-		this.teachers = new Teacher[]{ new Teacher(1, "Un test", new Field[]{}, new Time((byte)1, (byte)1, (byte)1))};
+		this.teachers = new Teacher[]{ new Teacher(1, "Un", "test", new Field[]{}, new Time((byte)1, (byte)1, (byte)1))};
 	}
 	
 	public Teacher[] getTeachers() {

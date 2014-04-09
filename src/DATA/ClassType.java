@@ -3,11 +3,13 @@ package DATA;
 public class ClassType {
 	
 	private String name, shortName;
+	private Slot duration;
 	
-	public ClassType(String aName, String aShortName)	{
+	public ClassType(String aName, String aShortName, Slot aDuration)	{
 		
 		this.name = aName;
 		this.shortName = aShortName;
+		this.duration = aDuration;
 	}
 
 	public String getName()	{
@@ -18,7 +20,11 @@ public class ClassType {
 		return this.shortName;
 	}
 	
+	public Slot getDuration() {
+		return duration;
+	}
+
 	public String toString()	{
-		return this.name + " (" + this.shortName + ")";
+		return  "[" + this.shortName + "] " + this.name;
 	}
 }
