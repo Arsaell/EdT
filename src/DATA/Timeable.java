@@ -1,5 +1,6 @@
 
 
+
 public interface Timeable	{
 
 	WeekTable timeTable = WeekTable.getDefault();//.copy();

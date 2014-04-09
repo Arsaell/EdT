@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="15" version="2.0">
+<workbench progressCount="18" version="2.0">
 <workbenchAdvisor/>
 <window height="766" maximized="true" width="1020" x="0" y="0">
 <fastViewData fastViewLocation="1024"/>
@@ -30,14 +30,79 @@
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="1"/>
+<part id="2"/>
+<part id="13"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
 <part id="0"/>
+<part id="7"/>
+<part id="8"/>
+<part id="9"/>
+<part id="10"/>
+<part id="11"/>
+<part id="12"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Main.java" partName="Main.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Main.java" title="Main.java" tooltip="src/DATA/Main.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Main.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1425" selectionTopPixel="107"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Constrainable.java" partName="Constrainable.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Constrainable.java" title="Constrainable.java" tooltip="src/DATA/Constrainable.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Constrainable.java"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Constraint.java" partName="Constraint.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Constraint.java" title="Constraint.java" tooltip="src/DATA/Constraint.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Constraint.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Field.java" partName="Field.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Field.java" title="Field.java" tooltip="src/DATA/Field.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Field.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1308" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Filler.java" partName="Filler.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Filler.java" title="Filler.java" tooltip="src/DATA/Filler.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Filler.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4694" selectionTopPixel="1389"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Group.java" partName="Group.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Group.java" title="Group.java" tooltip="src/DATA/Group.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Group.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="214" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Lesson.java" partName="Lesson.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Lesson.java" title="Lesson.java" tooltip="src/DATA/Lesson.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Lesson.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="People.java" partName="People.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/People.java" title="People.java" tooltip="src/DATA/People.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/People.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Slot.java" partName="Slot.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Slot.java" title="Slot.java" tooltip="src/DATA/Slot.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Slot.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Teacher.java" partName="Teacher.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Teacher.java" title="Teacher.java" tooltip="src/DATA/Teacher.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Teacher.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1516" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Time.java" partName="Time.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Time.java" title="Time.java" tooltip="src/DATA/Time.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Time.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="936" selectionTopPixel="56"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Timeable.java" partName="Timeable.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Timeable.java" title="Timeable.java" tooltip="src/DATA/Timeable.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Timeable.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="WeekTable.java" partName="WeekTable.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/WeekTable.java" title="WeekTable.java" tooltip="src/DATA/WeekTable.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/WeekTable.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Classroom.java" partName="Classroom.java" path="/home/arsaell/Documents/Info/EdT/src/DATA/Classroom.java" title="Classroom.java" tooltip="src/DATA/Classroom.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/src/DATA/Classroom.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="164" selectionOffset="508" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -47,6 +112,8 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
+<category IMemento.internal.id="Warnings (25 items)"/>
+<category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="149" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
@@ -225,6 +292,7 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.jdt.ui.SourceView"/>
@@ -235,12 +303,14 @@
 <info folder="true" part="left">
 <folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.junit.ResultView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
@@ -251,8 +321,8 @@
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.32373387" ratioLeft="326" ratioRight="681" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.942097" ratioLeft="602" ratioRight="37" relationship="4" relative="org.eclipse.ui.editorss">
+<info part="org.eclipse.ui.editorss" ratio="0.16605166" ratioLeft="225" ratioRight="1130" relationship="2" relative="left"/>
+<info folder="true" part="bottom" ratio="0.69953054" ratioLeft="447" ratioRight="192" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
@@ -271,7 +341,6 @@
 </info>
 <info folder="true" part="right" ratio="0.74934036" ratioLeft="568" ratioRight="190" relationship="2" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.eclipse.ui.texteditor.TemplatesView" label="LabelNotFound"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
@@ -284,125 +353,160 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Classroom.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Main.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Lesson.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Constrainable.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Constraint.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Field.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Filler.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Group.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/WeekTable.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Timeable.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Time.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Field.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Teacher.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Slot.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/People.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/GUI/MainWindow.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/GUI/MainFrame.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/src/DATA/Main.java"/>
 </editors>
-<item historyLabel="Classroom.java" index="0">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Main.java" index="1">
-<position info="not_deleted" x="784" y="0"/>
-</item>
-<item historyLabel="Classroom.java" index="0">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Classroom.java" index="0">
-<position info="not_deleted" x="174" y="9"/>
-</item>
-<item historyLabel="Classroom.java" index="0">
-<position info="not_deleted" x="228" y="5"/>
-</item>
-<item historyLabel="Main.java" index="1">
-<position info="not_deleted" x="784" y="0"/>
-</item>
-<item historyLabel="Classroom.java" index="0">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Lesson.java" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Constrainable.java" index="3">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Constraint.java" index="4">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Field.java" index="5">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Filler.java" index="6">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Constrainable.java" index="3">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Group.java" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Filler.java" index="6">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Field.java" index="5">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Constraint.java" index="4">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Lesson.java" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="WeekTable.java" index="8">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Timeable.java" index="9">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Time.java" index="10">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Teacher.java" index="11">
+<item historyLabel="Filler.java" index="1">
 <position/>
 </item>
-<item historyLabel="Teacher.java" index="11">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1128" y="0"/>
 </item>
-<item historyLabel="Slot.java" index="12">
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="183" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1309" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="807" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="183" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1309" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1164" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1189" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1196" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1254" y="0"/>
+</item>
+<item historyLabel="Field.java" index="2">
+<position info="not_deleted" x="1308" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="807" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="908" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="957" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="940" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1425" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="183" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4307" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4335" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4461" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4405" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4454" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4899" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4572" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
 <position/>
 </item>
-<item historyLabel="People.java" index="13">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Teacher.java" index="3">
+<position info="not_deleted" x="737" y="0"/>
 </item>
-<item historyLabel="MainWindow.java" index="14">
+<item historyLabel="Teacher.java" index="3">
+<position info="not_deleted" x="1531" y="0"/>
+</item>
+<item historyLabel="Teacher.java" index="3">
+<position info="not_deleted" x="1704" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4629" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4895" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4890" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4653" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4836" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4890" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4877" y="1"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4888" y="0"/>
+</item>
+<item historyLabel="Teacher.java" index="3">
+<position info="not_deleted" x="1588" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4888" y="0"/>
+</item>
+<item historyLabel="Teacher.java" index="3">
+<position info="not_deleted" x="1516" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="5313" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1425" y="0"/>
+</item>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4157" y="31"/>
+</item>
+<item historyLabel="Filler.java" index="1">
 <position/>
 </item>
-<item historyLabel="MainFrame.java" index="15">
+<item historyLabel="Filler.java" index="1">
 <position/>
 </item>
-<item historyLabel="MainWindow.java" index="14">
+<item historyLabel="Filler.java" index="1">
 <position/>
 </item>
-<item historyLabel="Main.java" index="16">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Filler.java" index="1">
+<position/>
 </item>
-<item historyLabel="MainFrame.java" index="15">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4683" y="0"/>
 </item>
-<item historyLabel="MainWindow.java" index="14">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Filler.java" index="1">
+<position info="not_deleted" x="4694" y="0"/>
 </item>
-<item historyLabel="MainFrame.java" index="15">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="MainWindow.java" index="14">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item active="true" historyLabel="Main.java" index="16">
-<position info="not_deleted" x="0" y="0"/>
+<item active="true" historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1425" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -410,6 +514,9 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
@@ -417,36 +524,34 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainWindow.java" tooltip="src/GUI/MainWindow.java">
-<persistable path="/src/GUI/MainWindow.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Classroom.java" tooltip="src/DATA/Classroom.java">
+<persistable path="/src/DATA/Classroom.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainFrame.java" tooltip="src/GUI/MainFrame.java">
-<persistable path="/src/GUI/MainFrame.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Main.java" tooltip="src/DATA/Main.java">
-<persistable path="/src/DATA/Main.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="People.java" tooltip="src/DATA/People.java">
-<persistable path="/src/DATA/People.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Slot.java" tooltip="src/DATA/Slot.java">
-<persistable path="/src/DATA/Slot.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Teacher.java" tooltip="src/DATA/Teacher.java">
-<persistable path="/src/DATA/Teacher.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Time.java" tooltip="src/DATA/Time.java">
-<persistable path="/src/DATA/Time.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="WeekTable.java" tooltip="src/DATA/WeekTable.java">
+<persistable path="/src/DATA/WeekTable.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Timeable.java" tooltip="src/DATA/Timeable.java">
 <persistable path="/src/DATA/Timeable.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="WeekTable.java" tooltip="src/DATA/WeekTable.java">
-<persistable path="/src/DATA/WeekTable.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Time.java" tooltip="src/DATA/Time.java">
+<persistable path="/src/DATA/Time.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Teacher.java" tooltip="src/DATA/Teacher.java">
+<persistable path="/src/DATA/Teacher.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Slot.java" tooltip="src/DATA/Slot.java">
+<persistable path="/src/DATA/Slot.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="People.java" tooltip="src/DATA/People.java">
+<persistable path="/src/DATA/People.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Lesson.java" tooltip="src/DATA/Lesson.java">
+<persistable path="/src/DATA/Lesson.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Group.java" tooltip="src/DATA/Group.java">
 <persistable path="/src/DATA/Group.java"/>
@@ -463,8 +568,11 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Constrainable.java" tooltip="src/DATA/Constrainable.java">
 <persistable path="/src/DATA/Constrainable.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Lesson.java" tooltip="src/DATA/Lesson.java">
-<persistable path="/src/DATA/Lesson.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainWindow.java" tooltip="src/GUI/MainWindow.java">
+<persistable path="/src/GUI/MainWindow.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainFrame.java" tooltip="src/GUI/MainFrame.java">
+<persistable path="/src/GUI/MainFrame.java"/>
 </file>
 </mruList>
 </workbench>

@@ -1,5 +1,6 @@
 
 
+
 public class Lesson	{
 	
 	private char type;

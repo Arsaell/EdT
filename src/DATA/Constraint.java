@@ -1,5 +1,6 @@
 
 
+
 public class Constraint	{
 
 	private char type;

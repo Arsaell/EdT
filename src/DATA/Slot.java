@@ -1,5 +1,6 @@
 
 
+
 public class Slot	{
 
 	private Time begin, end;

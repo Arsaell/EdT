@@ -1,5 +1,6 @@
 
 
+
 public class WeekTable implements Timeable	{
 
 	private Lesson[][] slots;
