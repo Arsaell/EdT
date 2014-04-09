@@ -1,3 +1,4 @@
+package DATA;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -161,13 +162,18 @@ public class Filler	{
 			
 			for (int j = 0 ; j < t.getFields().length ; j++)	{
 				f = t.getFields()[j];
-				System.out.println(i + " " + j + " Filler.computeConstraints() #teachersHours : " + t + " " + t.getCWWH() + " / " + t.getMWWH() + " " + f);
-				durationsAvailable[f.getType()] = durationsAvailable[f.getType()].add(t.getMWWH());
+				//System.out.println(i + " " + j + " Filler.computeConstraints() #teachersHours : " + t + " " + t.getCWWH() + " / " + t.getMWWH() + " " + f);
+				hoursAvailable[f.getType()] = hoursAvailable[f.getType()].add(t.getMWWH());
 			}
 		}
 		
+		failed = false;
 		for (int i = 0 ; i < hoursAvailable.length ; i++)	{
-			System.out.println(i + " Filler.computeConstraints() #TeachersHours : " + hoursNeeded[i] + " / " + hoursAvailable[i]);
+			System.out.println(i + " Filler.computeConstraints() #TeachersHours : " + Field.names.get((char)i) + " " + hoursNeeded[i] + " / " + hoursAvailable[i]);
+			if (hoursNeeded[i].isMoreThan(hoursAvailable[i]))	{
+				failed = true;
+				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! " + Field.names.get(i));
+			}
 		}
 		
 	// END : ratio hours / teachers

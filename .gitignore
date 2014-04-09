@@ -1,10 +1,5 @@
 .project
 .classpath
+.metadata/
 *.class
-<<<<<<< HEAD
 *bin/
-
-=======
-*.metadata
-bin
->>>>>>> 735cd26994510f96d4d3a27f4e46b96b4725f67f

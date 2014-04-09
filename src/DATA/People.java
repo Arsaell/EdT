@@ -1,3 +1,4 @@
+package DATA;
 
 public interface People	{
 
