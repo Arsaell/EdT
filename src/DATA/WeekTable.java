@@ -4,6 +4,8 @@ package DATA;
 
 public class WeekTable implements Timeable	{
 
+	private static Time minDelta = new Time(1);
+	
 	private Lesson[][] slots;
 	private People owner;
 	
@@ -41,5 +43,13 @@ public class WeekTable implements Timeable	{
 	public static WeekTable getDefault()	{
 	
 		return defaultWeek;
+	}
+
+	public static void setMinDelta(Time aMD)	{
+		minDelta = aMD != null ? aMD : new Time();
+	}
+	
+	public Time getMinDelta()	{
+		return minDelta;
 	}
 }

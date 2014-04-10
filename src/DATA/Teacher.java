@@ -94,6 +94,17 @@ public class Teacher implements People, Timeable, Constrainable	{
 		return this.currentWeekWorkedHours;
 	}
 	
+	public Teacher setCWWH(Time aCWWH)	{
+		this.currentWeekWorkedHours = aCWWH == null ? new Time() : aCWWH;
+		return this;
+	}
+	
+	public Teacher addToCWWH (Time t)	{
+		if (t!= null)
+			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(t);
+		return this;
+	}
+	
 	public String getMail()	{
 	
 		return (this.firstName.toLowerCase() + "." + this.lastName + "@insa-lyon.fr");
@@ -111,6 +122,6 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	public String toString()	{
 		return this.firstName + " " + this.lastName;
-	}	
+	}
 	
 }

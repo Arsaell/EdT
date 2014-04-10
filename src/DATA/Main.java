@@ -30,49 +30,49 @@ public class Main	{
 		classrooms.add(new Classroom(6, types.get(6), "Archie", 25));
 		classrooms.add(new Classroom(7, types.get(7), "Piscine", 150));
 		
-		Field a = (new Field(0, types.get(0), "Maths"));
-		Field b = (new Field(1, types.get(0), "Physique"));
-		Field c = (new Field(2, types.get(1), "Maths"));
-		Field d = (new Field(3, types.get(1), "Physique"));
-		Field e = (new Field(4, types.get(5), "Conception"));
-		Field f = (new Field(5, types.get(4), "Usinage"));
+		Field mathsa = (new Field(0, types.get(0), "Maths"));
+		Field physiquea = (new Field(1, types.get(0), "Physique"));
+		Field mathst = (new Field(2, types.get(1), "Maths"));
+		Field physiquet = (new Field(3, types.get(1), "Physique"));
+		Field concept = (new Field(4, types.get(5), "Conception"));
+		Field contrucp = (new Field(5, types.get(4), "Usinage"));
 		
-		Field[] F = {a, b, c};
-		Field[] G = {b, c, d};
-		Field[] H = {c, d, e};
-		Field[] I = {d, e, f};
-		Field[] J = {e, f, a};
-		Field[] K = {f, a, b};
+		Field[] MaPaMt = {mathsa, physiquea, mathst};
+		Field[] GPaMtPt = {physiquea, mathst, physiquet};
+		Field[] MtPtCt = {mathst, physiquet, concept};
+		Field[] PtCtCp = {physiquet, concept, contrucp};
+		Field[] CtCpMa = {concept, contrucp, mathsa};
+		Field[] CpMaPa = {contrucp, mathsa, physiquea};
 		
 		Time MWWH = new Time (2500);
 		
-		teachers.add(new Teacher(0, "Twilight", "Sparkle", F, MWWH));
-		teachers.add(new Teacher(1, "Rarity", "", G, MWWH));
-		teachers.add(new Teacher(2, "Apple", "Jack", H, MWWH));
-		teachers.add(new Teacher(3, "Rainbow", "Dash", I, MWWH));
-		teachers.add(new Teacher(4, "Flutter", "Shy", J, MWWH));
-		teachers.add(new Teacher(5, "Pinkie", "Pie", K, MWWH));
-		teachers.add(new Teacher(6, "Spike", "", F, MWWH));
-		//teachers.add(new Teacher(7, "Celestia", "", G, MWWH));
-		//teachers.add(new Teacher(8, "Princess", "Luna", H, MWWH));
-		//teachers.add(new Teacher(9, "Discord", "", F, MWWH));
+		teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPaMt, MWWH));
+		teachers.add(new Teacher(1, "Rarity", "", GPaMtPt, MWWH));
+		teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
+		teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
+		teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
+		//teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
+		//teachers.add(new Teacher(6, "Spike", "", MaPaMt, MWWH));
+		//teachers.add(new Teacher(7, "Celestia", "", GPaMtPt, MWWH));
+		//teachers.add(new Teacher(8, "Princess", "Luna", MtPtCt, MWWH));
+		//teachers.add(new Teacher(9, "Discord", "", MaPaMt, MWWH));
 		
 		
 		HashMap<Field, Time> classes = new HashMap<Field, Time>();
 		
-		classes.put(a, new Time(300));
-		classes.put(b, new Time(300));
-		classes.put(c, new Time(330));
-		classes.put(d, new Time(330));
-		classes.put(e, new Time(200));
-		classes.put(f, new Time(400));
+		classes.put(mathsa, new Time(300));
+		classes.put(physiquea, new Time(300));
+		classes.put(mathst, new Time(330));
+		classes.put(physiquet, new Time(330));
+		classes.put(concept, new Time(200));
+		classes.put(contrucp, new Time(400));
 		
 		//System.out.println("Main.main() : classes " + classes);
 		
 		groups.add(new Group(0, "Lanip", 100).setClasses(null).setParent(null));
 		groups.add(new Group(1, "g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		groups.add(new Group(2, "g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		//groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
+		groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
 		Group[] gtab = {groups.get(1), groups.get(2), groups.get(3)};
@@ -89,7 +89,7 @@ public class Main	{
 		groups.add(new Group(10, 16).setClasses(classes));
 		*/
 		System.out.println("Main.main() : Examples set :");
-		System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + a + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
+		System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
 		
 		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3500));
 		

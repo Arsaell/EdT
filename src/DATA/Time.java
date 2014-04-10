@@ -44,6 +44,10 @@ public class Time	{
 		this(0);
 	}
 	
+	public Time clone()	{
+		return new Time(this.day, this.hour, this.min);
+	}
+	
 	public Time add (Time t)	{
 	
 		//System.out.println("Time.add() : " + this + " " + t);
@@ -62,7 +66,10 @@ public class Time	{
 	
 	public Time substract(Time t)	{
 	
-		Time temp = new Time((byte)(this.min - t.min), (byte)(this.hour - t.hour - this.min / 59 + 1), (byte)(this.day - t.day - this.hour / 24 + 1));
+
+		int min = this.toMin() - t.toMin();
+		
+		Time temp = new Time((byte)(min / 1440), (byte)(min % 1440 / 60), (byte)(min % 60));
 		
 		temp.format();
 		
@@ -70,15 +77,24 @@ public class Time	{
 	}
 	
 	public Time multiplyBy(double x)	{
-		return new Time((int)((this.day * 1440 + this.hour * 60 + this.min) * x));
+
+		int min = (int)(this.toMin() * x);
+		
+		Time t = new Time((byte)(min / 1440), (byte)(min % 1440 / 60), (byte)(min % 60));
+		
+		t.format();
+		
+		return t;
 	}
 	
 	public Time divideBy(double x)	{
 		
 		if (x == 0)
 			return null;
+
+		int min = (int)(this.toMin() / x);
 		
-		Time t = new Time((int)((this.day * 1440 + this.hour * 60 + this.min) / x));
+		Time t = new Time((byte)(min / 1440), (byte)(min % 1440 / 60), (byte)(min % 60));
 		
 		if (x < 1)
 			t.format();
@@ -86,20 +102,24 @@ public class Time	{
 		return t;
 	}
 	
-	public Time divideBy(Time t)	{
-		return new Time((t.getDay() == 0 ? 0 : (byte)(this.day / t.getDay())), (t.getHour() == 0 ? 0 : (byte)(this.hour / t.getHour())), (t.getMin() == 0 ? 0 : (byte)(this.min / t.getMin())));
+	public double divideBy(Time t)	{
+		if (t.equals(new Time()))
+			return (Double) null;
+		return this.toMin() / t.toMin();
 	}
 	
 	public boolean isLessThan(Time t)	{
-		return ((1440 * this.day + 60 * this.hour + this.min) < (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
+		return (this.toMin() < t.toMin());
 	}
 	
 	public boolean isMoreThan(Time t)	{
-		return ((1440 * this.day + 60 * this.hour + this.min) > (1440 * t.getDay() + 60 * t.getHour() + t.getMin()));
+		return (this.toMin() > t.toMin());
 	}
 	
-	public Time clone()	{
-		return new Time(this.day, this.hour, this.min);
+	public boolean equals (Time t)	{
+		this.format();
+		t.format();
+		return this.day == t.day && this.hour == t.hour && this.min == t.min;
 	}
 	
 	//Gère les exceptions du type 25h --> 1day 1hour ; 92min --> 1h32min
@@ -109,6 +129,17 @@ public class Time	{
 		this.day += this.hour / 24;
 		this.hour = (byte) (this.hour % 24);
 		this.day = (byte) (this.day % 7);
+	}
+	
+	//Renvoie l'équivalent de this en minutes.
+	private int toMin()	{
+		return this.day * 1440 + this.hour * 60 + this.min;
+	}
+	
+	//Renvoie this dans le format utilisé par le constructeur new Time(int i);
+	
+	private int toInt()	{
+		return this.day * 10000 + this.hour * 100 + this.min;
 	}
 	
 	public String toString()	{

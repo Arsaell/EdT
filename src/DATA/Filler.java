@@ -162,7 +162,7 @@ public class Filler	{
 		}
 		
 	// END : ratio hours / teachers
-
+		
 	// BEGIN : ratio hours / teachers ADVANCED (teachers' side of the problem)
 		
 		//On stocke les horaires des profs, pour réinitialiser plus tard.
@@ -178,26 +178,69 @@ public class Filler	{
 		 * jusqu'à couvrir le besoin des étudiants.
 		 * */
 		
-		for (Field f : teachTimeAvailable.keySet()){
+		for (Field f : teachTimeAvailable.keySet())	{
+			
+			//System.out.println("Filler.computeConstraints() #teachersTime : #0 " + f);
+			
 			while (teachTimeAvailable.get(f).isLessThan(teachTimeNeeded.get(f)))	{
+			
 				for (Teacher teach : this.teachers)	{
+					
+					//System.out.println(" #1 " + teach);
+					
 					if (teach.knows(f))	{
 						
-						Time t = f.getDuration().getEnd();
-						Time left = teachTimeNeeded.get(f).substract(teachTimeAvailable.get(f));
+						Time available = teach.getMWWH().substract(teach.getCWWH()); 				//Le temps "libre" du prof
+						Time needed = teachTimeNeeded.get(f).substract(teachTimeAvailable.get(f));	//La quantité restante à attribuer.
+
+						//System.out.println(" #2 " + teach.getCWWH() + " " + teach.getMWWH() + " " + available + " #3 " + needed);
 						
-//Ici, il faut réfléchir à un moyen d'être sûrs de bien retomber sur le bon Time en ajoutant quelques Times...
-//J'ai la flemme de faire ça ce soir, Léo si tu vois ça, Tu te tais ou JE te tais !
+						//Il faut pour chaque prof attribuer toutes les heures d'une matière d'un groupe, et non pas juste le temps d'un TD
+						Time t;
 						
-						if (t.multiplyBy(3.0).isMoreThan(left))	{
+						for (Group group : this.groups)	{
 							
-							t = f.getDuration().getBegin();
+							//System.out.println(" #4 " + group);
+							
+							if (group.classes.containsKey(f))	{
+								
+								t = group.classes.get(f);
+								
+								//System.out.println(" #5 " + t);
+								
+								if (t.isLessThan(available) && t.isLessThan(needed))	{
+								
+									//System.out.println(" #6");
+									
+									teachTimeAvailable.put (f, teachTimeAvailable.get(f).add(t));
+									
+									teach.addToCWWH(t);
+									
+									//System.out.println("#7 Filler.computeConstraints() : " + f + " #8 " + teachTimeAvailable.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
+									
+									available = teach.getMWWH().substract(teach.getCWWH());
+								}
+							}
 						}
 					}
 				}
-				break;
 			}
 		}
+		
+		
+		System.out.println("Filler.computeConstraints() #teachers : ");
+		
+		for (Field f : teachTimeNeeded.keySet())	{
+			if (teachTimeNeeded.get(f).isMoreThan(teachTimeAvailable.get(f)))	{
+				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! ");
+				System.out.println(f + " --> time needed : " + teachTimeNeeded.get(f) + " ; time available : " + teachTimeAvailable.get(f));
+			}
+		}
+		
+		//On réinitialise les horaires des profs.
+		for (Teacher teach : cwwhs.keySet())
+			teach.setCWWH(cwwhs.get(teach));
+		
 		
 	// END : ratio hours / teachers ADVANCED
 		
