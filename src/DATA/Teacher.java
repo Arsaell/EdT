@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Teacher implements People, Timeable, Constrainable	{
+public class Teacher implements People, Timeable, Constrainable, Comparable<Teacher>	{
 
 	private int ID;
 	private String firstName, lastName;
@@ -82,6 +82,10 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	}
 	
+	public String getName() {
+		return this.name;
+	}
+	
 	public Field[] getFields()	{
 		return this.fields;
 	}
@@ -122,6 +126,10 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	public String toString()	{
 		return this.firstName + " " + this.lastName;
+	}
+
+	public int compareTo(Teacher t) {
+		return this.name.compareTo(t.getName());
 	}
 	
 }
