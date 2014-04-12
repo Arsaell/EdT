@@ -10,9 +10,9 @@ public class Field implements Constrainable	{
 	private String name;
 	private Slot duration;				//Associer un type à un slot (minTime, maxTime)
 	private HashMap<Character, Double> constraints;
-	
+
 	public Field(int aID, ClassType aType, String aName)	{
-	
+
 		this.ID = aID;
 		this.type = aType;
 		this.name = aName;

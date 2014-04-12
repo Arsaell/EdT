@@ -40,20 +40,28 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
 
-public class TeacherWindow {
+
+public class TeacherWindow implements ListSelectionListener{
 
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTable table;
+	
+	private TeacherListModel teacherListModel;
 	
 	private DataStore dataStore;
 
@@ -77,12 +85,9 @@ public class TeacherWindow {
 	 * Create the application.
 	 */
 	public TeacherWindow() {
-		initialize();
-		Teacher[] teacherss = new Teacher[5];
-		
-		//teacherss[0]= new Teacher(1, "test", null, new Time(2500));
-		
 		this.dataStore = new DataStore();
+		this.teacherListModel = new TeacherListModel(this.dataStore.getTeachers());
+		initialize();
 	}
 
 	/**
@@ -112,7 +117,9 @@ public class TeacherWindow {
 		gbc_lblListeDesEnseignants.gridy = 0;
 		teacherListPanel.add(lblListeDesEnseignants, gbc_lblListeDesEnseignants);
 		
-		JList<Teacher> list = new JList<Teacher>(new TeacherListModel(dataStore.getTeachers()));
+		JList<Teacher> list = new JList<Teacher>(this.teacherListModel);
+		teacherListModel.sort();
+		list.addListSelectionListener(this);
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.insets = new Insets(0, 0, 5, 0);
 		gbc_list.fill = GridBagConstraints.BOTH;
@@ -252,22 +259,26 @@ public class TeacherWindow {
 	
 	public class TeacherListModel extends AbstractListModel<Teacher> {
 
-		private Teacher[] data;
+		private ArrayList<Teacher> teachers;
 		
-		public TeacherListModel(Teacher[] teachers) {
-			this.data = teachers;
+		public TeacherListModel(ArrayList<Teacher> teachers) {
+			this.teachers = teachers;
 		}
 		
 		public int getSize() {
 			// TODO Auto-generated method stub
-			return data.length;
+			return this.teachers.size();
 		}
 
 		public Teacher getElementAt(int index) {
 			// TODO Auto-generated method stub
-			return this.data[index];
+			return this.teachers.get(index);
 		}
 		
+		public void sort() {
+		    Collections.sort(teachers);
+		    fireContentsChanged(this, 0, teachers.size());
+		}
 	}
 	
 	public class FieldTableModel extends AbstractTableModel {
@@ -278,9 +289,7 @@ public class TeacherWindow {
 	    public FieldTableModel() {
 	        super();
 	 
-	        fields = new Field[]{
-	                new Field(1, 't', "Physique TD")
-	        };
+	        fields = new Field[]{ };
 	    }
 	 
 	    public int getRowCount() {
@@ -303,6 +312,11 @@ public class TeacherWindow {
 	                return null; //Ne devrait jamais arriver
 	        }
 	    }
+	}
+
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
