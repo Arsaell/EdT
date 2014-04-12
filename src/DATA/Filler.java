@@ -1,6 +1,7 @@
 package DATA;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -25,47 +26,60 @@ public class Filler	{
 	
 	public void fill()	{
 	
-		this.attributeTeachers();
 		this.computeConstraints();
+		this.attributeTeachers();
 		
 	}
 	
 	public void attributeTeachers()	{
 	
+		
+		/*
+		Method :
+			For each group
+				for each field in this group
+					for each teacher
+						if (teacher.canTeach())
+							group.setTeacher(field, teacher);
+		
+		*/
+		
 		//System.out.println("Filler.attributeTeachers()");
 		
-		boolean end = false;
+		boolean fieldDone = false;
+		Field f;
+		Teacher teach = null;
 		
-		while (!end)	{
-		
-			end = true;
+		for (Group g : this.groups)	{
 			
-			for (int i = 0 ; i < this.groups.size() ; i ++)	{
+			//System.out.println("#1 " + g);
+			f = g.getNextUnattributedClass();
 			
-				Group g = this.groups.get(i);
-				Field f = g.getNextUnattributedClass();
+			while (f != null)	{
+			
+				fieldDone = false;
+				//System.out.println(" #2 " + f);
 				
-				if (f != null)	{
+				while (!fieldDone)	{
 				
-					end = false;
-					boolean fieldDone = false;
+					teach = null;
 					
-					while (!fieldDone)	{
+					for (int j = 0 ; j < this.teachers.size() ; j++)	{
 					
-						Teacher teach = null;
-						for (int j = 0 ; j < this.teachers.size() ; j++)	{
+						Teacher t = this.teachers.get(j);
+						//System.out.println("  #3 " + t);
+						//System.out.println("Filler.attributeTeachers() #FindSuitableTeacher : " + g + " # " + f + " # " + t);
 						
-							Teacher t = this.teachers.get(j);
-							//System.out.println("Filler.attributeTeachers()#FindSuitableTeacher : " + t);
-							if (t.canTeach(f, g))	{
-								teach = t;
-								j = this.teachers.size();
-							}
+						if (t.canTeach(f, g))	{
+							teach = t;
+							//System.out.println("   #5 " + teach.getCWWH());
+							break;
 						}
-					
-						fieldDone = g.setTeacher(teach, f);
 					}
+					fieldDone = g.setTeacher(teach, f);
+					//System.out.println("    #6 " + teach.getCWWH());
 				}
+				f = g.getNextUnattributedClass();
 			}
 		}
 	}
@@ -227,24 +241,113 @@ public class Filler	{
 			}
 		}
 		
-		
-		System.out.println("Filler.computeConstraints() #teachers : ");
+		boolean okay = true;
+		//System.out.println("Filler.computeConstraints() #Teachers : ");
 		
 		for (Field f : teachTimeNeeded.keySet())	{
+		
+			//System.out.println("\t" + f + " --> " + teachTimeNeeded.get(f) + " / " + teachTimeAvailable.get(f));
+			
 			if (teachTimeNeeded.get(f).isMoreThan(teachTimeAvailable.get(f)))	{
 				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! ");
 				System.out.println(f + " --> time needed : " + teachTimeNeeded.get(f) + " ; time available : " + teachTimeAvailable.get(f));
+				okay = false;
 			}
 		}
+		
+		if (okay)
+			System.out.println("Filler.ComputeConstraints() says : There are enough Teachers.");
+		
+	// END : ratio hours / teachers ADVANCED
+		
+//Eh bah non ! En fait, pour vraiment déterminer la contrainte, il faut après avoir fait tout ça déterminer le nombre d'heures disponibles restantes dans chaque matière, et le diviser par le nombre d'heures nécessaires dans cette matière.
+		
+		HashMap<Field, Time> teachTimeSpare = new HashMap<Field, Time>();
+		
+		for (Teacher teach : this.teachers)	{
+			for (Field f : teach.getFields())	{
+				teachTimeSpare.put(f,  teach.getMWWH().substract(teach.getCWWH()).divideBy(teach.getFields().length));
+			}
+		}
+		
+		/*
+		État des lieux en ce point du code :
+			On a des HashMaps roomTimeNeeded/Available, teachTimeNeeded/Available
+			On affiche des message d'erreur dans la console en cas de problème --> Possibilité de popup des fenêtres plus tard.
+			
+			Il nous faut définir des contraintes pour chaque champ, en l'occurence timeNeeded.divideBy(timeAvailable)	//Division entre Times divise le nombre de minutes de chaque, puis renvoie un double.
+			Puis retourner un tableau de champs ordonnés par contrainte.
+		*/
+		
+		HashMap<Constrainable, Double> roomConstraints = new HashMap<Constrainable, Double>();
+		HashMap<Constrainable, Double> teacherConstraints = new HashMap<Constrainable, Double>();
+		
+		for (ClassType type : roomTimeNeeded.keySet())
+			roomConstraints.put(type, roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
+		
+		for (Field field : teachTimeNeeded.keySet())
+			teacherConstraints.put(field, teachTimeNeeded.get(field).divideBy(teachTimeAvailable.get(field).add(teachTimeSpare.get(field))));
+		//			constraint	=				Needed					/		(Available					+		spare)
+		
+		Constrainable[] res = this.orderByValues(roomConstraints, teacherConstraints);
 		
 		//On réinitialise les horaires des profs.
 		for (Teacher teach : cwwhs.keySet())
 			teach.setCWWH(cwwhs.get(teach));
 		
 		
-	// END : ratio hours / teachers ADVANCED
+		return res;
+	}
+	
+	private Constrainable[] orderByValues(HashMap<Constrainable, Double> constraints1, HashMap<Constrainable, Double> constraints2)	{
+	
+		LinkedList<Constrainable> temp = new LinkedList<Constrainable>();
+		System.out.println("Filler.orderByValues() #0 : \n" + constraints1 + "\n" + constraints2);
 		
-		return null;
+		//On insère un premier élément dans la liste.
+		temp.add((Constrainable) constraints1.keySet().toArray()[0]);
+		
+		for (Constrainable c : constraints1.keySet())	{
+			
+			for (int i = 0 ; i < temp.size() ; i++)	{
+			
+				if ((double) constraints1.get(c) >= constraints1.get(temp.get(i)))
+					temp.add(i, c);
+				
+				else if (i++ >= temp.size())
+					temp.add(i, c);
+			}
+		}
+		
+		for (Constrainable c : constraints2.keySet())	{
+			
+			for (int i = 0 ; i < temp.size() ; i++)	{
+			
+				
+				if (i == temp.size())	{
+					temp.add(i, c);
+					break;
+				}
+				
+				else if ((double) constraints2.get(c) >= constraints2.get(temp.get(i)))
+					temp.add(i, c);
+				
+				System.out.println("#" + c + " " + constraints2.get(c) + " " + temp.get(i) + " " + constraints2.get(temp.get(i)));
+				
+			}
+		}
+
+		Constrainable[] res = new Constrainable[temp.size()];
+		
+		for (int i = 0 ; i < temp.size() ; i++)	{
+		
+			res[i] = temp.get(i);
+		}
+		
+		for (Constrainable c : res)
+			System.out.println("Filler.orderByValues : " + c);
+		
+		return res;
 	}
 }
 

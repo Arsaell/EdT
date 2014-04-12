@@ -10,33 +10,13 @@ public class Group implements Timeable, Constrainable, People	{
 	private String name;
 
 	protected int effectif;
-	public HashMap<Field, Teacher> teachers;
+	public HashMap<Field, Link> links;
 	public HashMap<Field, Time> classes;
 	private HashMap<Field, Double> constraints;
 
 	private Group parent;
 	private Group[] children;
 	
-	/*
-	static	{
-		types.put((char)0, "PC");
-		types.put((char)1, "PC1A");
-		types.put((char)2, "PC2A");
-		types.put((char)3, "PCC1A");
-		types.put((char)4, "PCC2A");
-		types.put((char)5, "Eur1A");
-		types.put((char)6, "Eur2A");
-		types.put((char)7, "Amer1A");
-		types.put((char)8, "Amer2A");
-		types.put((char)9, "As1A");
-		types.put((char)10, "As2A");
-		types.put((char)11, "LanIP1A");
-		types.put((char)12, "LanIP2A");
-		types.put((char)13, "FAS1A");
-		types.put((char)14, "FAS2A");
-		
-	}
-	*/
 	
 	public Group(int aID,String aName, int aEff)	{
 		
@@ -44,7 +24,7 @@ public class Group implements Timeable, Constrainable, People	{
 		this.name = aName;
 		this.effectif = aEff;
 		this.classes = null;	//Implement
-		this.teachers = new HashMap<Field, Teacher>();
+		this.links = new HashMap<Field, Link>();
 		this.classes = new HashMap<Field, Time>();
 		this.constraints = new HashMap<Field, Double>();
 	}
@@ -62,7 +42,7 @@ public class Group implements Timeable, Constrainable, People	{
 		while (iter.hasNext())	{
 			
 			f = iter.next();		
-			if (!this.teachers.containsKey(f))
+			if (!this.links.containsKey(f))
 				return f;
 		}
 		
@@ -73,11 +53,18 @@ public class Group implements Timeable, Constrainable, People	{
 	
 		//System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f);
 		
-		if (teach != null && !this.teachers.containsKey(f) && teach.canTeach(f, this))	{
-			this.teachers.put(f, teach);
+		if (teach != null && !this.links.containsKey(f) && teach.canTeach(f, this))	{
+			this.links.put(f, new Link(teach, this, f));
 			return true;
 		}
-		
+		return false;
+	}
+	
+	public boolean addLink(Link l)	{
+		if (this.classes.containsKey(l.getField()) && this == l.getGroup() && this.links.containsKey(l.getField()))	{
+			this.links.put(l.getField(), l);
+			return true;
+		}
 		return false;
 	}
 	
@@ -104,8 +91,8 @@ public class Group implements Timeable, Constrainable, People	{
 		return this.effectif;
 	}
 	
-	public HashMap<Field, Teacher> getTeachers()	{
-		return this.teachers;
+	public HashMap<Field, Link> getLinks()	{
+		return this.links;
 	}
 	
 	public HashMap<Field, Time> getClasses()	{

@@ -1,6 +1,8 @@
 package DATA;
+import java.util.HashMap;
+import java.util.List;
 
-public class ClassType {
+public class ClassType implements Constrainable {
 	
 	private String name, shortName;
 	private Slot duration;
@@ -26,5 +28,13 @@ public class ClassType {
 
 	public String toString()	{
 		return  "[" + this.shortName + "] " + this.name;
+	}
+	
+	public HashMap getConstraint()	{
+		return null;
+	}
+	
+	public HashMap getConstraint(List source)	{
+		return null;
 	}
 }

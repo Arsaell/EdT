@@ -27,7 +27,7 @@ public class Teacher implements People, Timeable, Constrainable	{
 	
 	public boolean canTeach(Field aField, Group aGroup)	{
 	
-		//System.out.println("Teacher.canTeach() : " + this + " " + aField + " " + aGroup);
+		//System.out.println("Teacher.canTeach() : " + this + " " + aField + " " + aGroup + " " + this.maxWeekWorkedHours.substract(this.currentWeekWorkedHours) + " " + aGroup.classes.get(aField));
 		
 		boolean res = false;
 		
@@ -60,7 +60,7 @@ public class Teacher implements People, Timeable, Constrainable	{
 	private boolean linkGroup(Link link) {
 		
 		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
-		if (link.getTeach() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getTeachers().get(link.getField()) == null)	{
+		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().get(link.getField()) == null)	{
 			this.students.add(link);
 			return true;
 		}
