@@ -302,41 +302,67 @@ public class Filler	{
 	private Constrainable[] orderByValues(HashMap<Constrainable, Double> constraints1, HashMap<Constrainable, Double> constraints2)	{
 	
 		LinkedList<Constrainable> temp = new LinkedList<Constrainable>();
-		System.out.println("Filler.orderByValues() #0 : \n" + constraints1 + "\n" + constraints2);
+		//System.out.println("\nFiller.orderByValues() #0 : \n" + constraints1 + "\n" + constraints2);
 		
 		//On insère un premier élément dans la liste.
-		temp.add((Constrainable) constraints1.keySet().toArray()[0]);
+		temp.add((Constrainable) constraints1.keySet().toArray()[constraints1.size() - 1]);
 		
 		for (Constrainable c : constraints1.keySet())	{
 			
-			for (int i = 0 ; i < temp.size() ; i++)	{
-			
-				if ((double) constraints1.get(c) >= constraints1.get(temp.get(i)))
-					temp.add(i, c);
-				
-				else if (i++ >= temp.size())
-					temp.add(i, c);
-			}
-		}
-		
-		for (Constrainable c : constraints2.keySet())	{
+			//System.out.println("#0 : " + c);
 			
 			for (int i = 0 ; i < temp.size() ; i++)	{
-			
 				
-				if (i == temp.size())	{
+				double con = constraints1.get(c);
+				Constrainable current = temp.get(i);
+				
+				//System.out.println(" #1 : "+ i + " " + current + " : " + con + " / " + constraints1.get(current));
+				
+				//On retire l'élément inséré en trop lors de l'initialisation.
+				if (i == 1)
+					temp.remove((Constrainable) constraints1.keySet().toArray()[constraints1.size() - 1]);
+				
+				if (con > constraints1.get(current))	{
+					//System.out.println("  Fits here " + temp.size());
 					temp.add(i, c);
 					break;
 				}
 				
-				else if ((double) constraints2.get(c) >= constraints2.get(temp.get(i)))
-					temp.add(i, c);
-				
-				System.out.println("#" + c + " " + constraints2.get(c) + " " + temp.get(i) + " " + constraints2.get(temp.get(i)));
-				
+				else if (i == temp.size() - 1)	{
+					//System.out.println("  End of List : " + temp.size());
+					temp.add(i++, c);
+				}
 			}
 		}
-
+		
+		//System.out.println("res1 : "+ temp.size() + " " + constraints1.size() + " " + temp);
+		
+		
+		for (Constrainable c : constraints2.keySet())	{
+			
+			//System.out.println("0 : " + c);
+			
+			for (int i = 0 ; i < temp.size() ; i++)	{
+				
+				Constrainable co = temp.get(i);
+				double cons = constraints2.get(co) != null ? constraints2.get(co) : constraints1.get(co);
+				
+				//System.out.println(" 1 : [" + i + "] " + co + " # " + cons + " " + constraints2.get(c));
+				
+				if (constraints2.get(c) > cons)	{
+					//System.out.println("  2 : " + temp.indexOf(co));
+					temp.add(temp.indexOf(co), c);
+					break;
+				}
+				
+				else if (i == temp.size() - 1)	{
+					temp.addLast(c);
+					break;
+				}
+			}
+		}
+		
+		
 		Constrainable[] res = new Constrainable[temp.size()];
 		
 		for (int i = 0 ; i < temp.size() ; i++)	{
@@ -344,8 +370,15 @@ public class Filler	{
 			res[i] = temp.get(i);
 		}
 		
+		/*
 		for (Constrainable c : res)
 			System.out.println("Filler.orderByValues : " + c);
+		*/
+		
+		/*
+		 * Pour l'instant problème aux bornes, il manque les deux dernières classType dans le tableau.
+		 * Aussi, les fields sont tous classés dans l'ordre, mais après les classTypes.
+		 * */
 		
 		return res;
 	}

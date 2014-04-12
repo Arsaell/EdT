@@ -83,7 +83,7 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 	}
 	
 	public String getName() {
-		return this.name;
+		return this.firstName + " " + this.lastName;
 	}
 	
 	public Field[] getFields()	{
@@ -129,7 +129,7 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 	}
 
 	public int compareTo(Teacher t) {
-		return this.name.compareTo(t.getName());
+		return this.getName().compareTo(t.getName());
 	}
 	
 }
