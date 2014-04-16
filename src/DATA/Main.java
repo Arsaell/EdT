@@ -25,23 +25,21 @@ public class Main	{
 		
 		System.out.println("Main.main() : Filler built.");
 		
-		Constrainable[] constraints = filler.computeConstraints();
+		Constrainable[] constraints = filler.computeConstraints(true);
 		
 		System.out.println("Main.main() : Constraints computed");
 		
+		/*
 		ArrayList<Field> temp = new ArrayList<Field>();
 		
 		for (Constrainable c : constraints)
 			if (c instanceof Field)
 				temp.add((Field)c);
 		
-		Field[] f = new Field[temp.size()];
+		filler.attributeTeachers(temp);
+		*/
 		
-		for (int i = 0 ; i < temp.size() ; i++)
-			f[i] = temp.get(i);
-		
-		filler.attributeTeachers(f);
-		
+		//System.out.print("This is gonna be a lie ! --> ");
 		System.out.println("Main.main() : Teachers attributed to groups.");
 		
 		/*

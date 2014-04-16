@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class LinksList extends ArrayList<Link> {
 	
+	/*
+	 * Jusqu'à présent, cette classe n'a pas été utilisée.
+	 * Ne pourrait-on pas s'en débarasser ?
+	 * 	-- Rémi, entre les commit n°8 et 9.
+	 */
+	
 	public LinksList()	{
 		super();
 	}

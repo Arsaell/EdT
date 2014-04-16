@@ -38,6 +38,6 @@ public class Link {
 		
 		public String toString()	{
 		
-			return "Link : " + this.teach + " " + this.group + " " + this.field;
+			return "Link : " + this.teach + " " + this.group + " " + this.field + "\n";
 		}
 }
