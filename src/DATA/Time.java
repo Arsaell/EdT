@@ -92,9 +92,15 @@ public class Time	{
 		if (x == 0)
 			return null;
 
+		//System.out.print("Time.divideBy(double x) : " + this + " / " + x);
+		
 		int min = (int)(this.toMin() / x);
 		
+		//System.out.print(" --> " + this.toMin() + " ; " + min);
+		
 		Time t = new Time((byte)(min / 1440), (byte)(min % 1440 / 60), (byte)(min % 60));
+		
+		//System.out.println(" ==> " + t);
 		
 		if (x < 1)
 			t.format();
@@ -103,9 +109,12 @@ public class Time	{
 	}
 	
 	public double divideBy(Time t)	{
+		
+		//System.out.println("Time.divideBy(Time t) : " + this + " / " + t + " --> " + this.toMin() + " / " + t.toMin() + " = " + (double)this.toMin() / t.toMin());
+		
 		if (t.equals(new Time()))
 			return (Double) null;
-		return this.toMin() / t.toMin();
+		return (double)(this.toMin()) / t.toMin();
 	}
 	
 	public boolean isLessThan(Time t)	{

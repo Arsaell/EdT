@@ -12,11 +12,11 @@ public class Link {
 			this.field = aField;
 		}
 
-		public Teacher getTeach() {
+		public Teacher getTeacher() {
 			return teach;
 		}
 
-		public void setTeach(Teacher teach) {
+		public void setTeacher(Teacher teach) {
 			this.teach = teach;
 		}
 

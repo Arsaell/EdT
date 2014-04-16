@@ -37,7 +37,7 @@ public class Main	{
 		Field concept = (new Field(4, types.get(5), "Conception"));
 		Field contrucp = (new Field(5, types.get(4), "Usinage"));
 		
-		Field[] MaPaMt = {mathsa, physiquea, mathst};
+		Field[] MaPtMt = {mathsa, physiquet, mathst};
 		Field[] GPaMtPt = {physiquea, mathst, physiquet};
 		Field[] MtPtCt = {mathst, physiquet, concept};
 		Field[] PtCtCp = {physiquet, concept, contrucp};
@@ -46,13 +46,13 @@ public class Main	{
 		
 		Time MWWH = new Time (2500);
 		
-		teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPaMt, MWWH));
+		teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPtMt, MWWH));
 		teachers.add(new Teacher(1, "Rarity", "", GPaMtPt, MWWH));
 		teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
 		teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
 		teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
-		//teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
-		//teachers.add(new Teacher(6, "Spike", "", MaPaMt, MWWH));
+		teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
+		teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
 		//teachers.add(new Teacher(7, "Celestia", "", GPaMtPt, MWWH));
 		//teachers.add(new Teacher(8, "Princess", "Luna", MtPtCt, MWWH));
 		//teachers.add(new Teacher(9, "Discord", "", MaPaMt, MWWH));
@@ -88,8 +88,10 @@ public class Main	{
 		groups.add(new Group(9, 16).setClasses(classes));
 		groups.add(new Group(10, 16).setClasses(classes));
 		*/
+		
 		System.out.println("Main.main() : Examples set :");
-		System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
+		
+		//System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
 		
 		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3500));
 		
