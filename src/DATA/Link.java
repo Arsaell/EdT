@@ -16,24 +16,28 @@ public class Link {
 			return teach;
 		}
 
-		public void setTeacher(Teacher teach) {
-			this.teach = teach;
-		}
-
 		public Group getGroup() {
 			return group;
-		}
-
-		public void setGroup(Group group) {
-			this.group = group;
 		}
 
 		public Field getField() {
 			return field;
 		}
 
+		public void setGroup(Group group) {
+			this.group = group;
+		}
+
+		public void setTeacher(Teacher teach) {
+			this.teach = teach;
+		}
+
 		public void setField(Field field) {
 			this.field = field;
 		}
-
+		
+		public String toString()	{
+		
+			return "Link : " + this.teach + " " + this.group + " " + this.field;
+		}
 }

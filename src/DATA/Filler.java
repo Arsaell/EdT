@@ -24,12 +24,59 @@ public class Filler	{
 		//this.constraints = aConstraints;
 	}
 	
-	public void fill()	{
+	public void fill(Constrainable[] input)	{
 	
-		this.computeConstraints();
-		this.attributeTeachers();
+		for (Constrainable c : input)	{
 		
+			if (c instanceof Field)	{
+			
+				Field f = (Field) c;
+			}
+			
+			else if (c instanceof ClassType)	{
+			
+				ClassType ct = (ClassType) c;
+			}
+		}
 	}
+	
+	//Attribue les profs aux groupes dans l'ordre indiqué par le paramètre order (par ordre de contrainte dans l'idée)
+	public void attributeTeachers(Field[] order)	{
+	
+		/*
+			Method :
+			
+			for each field in order
+				for each group
+					if this group has the field
+						find a teacher for this {group,field}
+			
+		*/
+		
+		for (Field f : order)	{
+		
+			for (Group g : this.groups)	{
+			
+				if (g.getClasses().containsKey(f))	{
+				
+					for (Teacher teach : this.teachers)	{
+					
+						if (teach.canTeach(f, g))	{
+						
+							g.setTeacher(teach, f);
+							//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach);
+							break;
+						}
+						
+						else if (teach == this.teachers.get(this.teachers.size() - 1))
+							System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
+					}
+				}
+			}
+		}
+	}
+	
+	/*
 	
 	public void attributeTeachers()	{
 	
@@ -42,7 +89,7 @@ public class Filler	{
 						if (teacher.canTeach())
 							group.setTeacher(field, teacher);
 		
-		*/
+		/
 		
 		//System.out.println("Filler.attributeTeachers()");
 		
@@ -79,10 +126,13 @@ public class Filler	{
 					fieldDone = g.setTeacher(teach, f);
 					//System.out.println("    #6 " + teach.getCWWH());
 				}
+				
 				f = g.getNextUnattributedClass();
 			}
 		}
 	}
+	
+	*/
 	
 	public Constrainable[] computeConstraints()	{
 		
@@ -92,7 +142,9 @@ public class Filler	{
 			Contraintes à considérer :
 				#1	nombre d'heures de cours / nombre de salles (ex TP au PC)
 				#2	nombre d'heures de cours / nombre d'heures de prof dispo
-				#3	
+				#3	Profs : CWWH / MWWH
+				#4	Élèves : sum(Classes.hours) / MWWH
+				#5	
 		*/
 		
 	// BEGIN : ratio hours / Classroom
@@ -181,6 +233,7 @@ public class Filler	{
 		
 		//On stocke les horaires des profs, pour réinitialiser plus tard.
 		HashMap<Teacher, Time> cwwhs = new HashMap<Teacher, Time>();
+		
 		for (int i = 0 ; i < this.teachers.size() ; i++)
 			cwwhs.put(this.teachers.get(i), this.teachers.get(i).getCWWH().clone());
 		
@@ -272,91 +325,155 @@ public class Filler	{
 		
 		/*
 		État des lieux en ce point du code :
-			On a des HashMaps roomTimeNeeded/Available, teachTimeNeeded/Available
-			On affiche des message d'erreur dans la console en cas de problème --> Possibilité de popup des fenêtres plus tard.
+			On a des HashMaps roomTimeNeeded/Available, teachTimeNeeded/Available contenant les temps considérés
+			On affiche des message d'erreur dans la console en cas de problème (<=> contrainte supérieure à 1) --> Possibilité de popup des avertissements plus tard.
 			
-			Il nous faut définir des contraintes pour chaque champ, en l'occurence timeNeeded.divideBy(timeAvailable)	//Division entre Times divise le nombre de minutes de chaque, puis renvoie un double.
+			Il nous faut définir des contraintes pour chaque champ, en l'occurence timeNeeded.divideBy(timeAvailable)	//Division entre Times divise l'équivalent en minutes de chaque, puis renvoie un double.
 			Puis retourner un tableau de champs ordonnés par contrainte.
 		*/
 		
-		HashMap<Constrainable, Double> roomConstraints = new HashMap<Constrainable, Double>();
-		HashMap<Constrainable, Double> teacherConstraints = new HashMap<Constrainable, Double>();
+		HashMap<ClassType, Double> roomConstraints = new HashMap<ClassType, Double>();
+		HashMap<Field, Double> teachingConstraints = new HashMap<Field, Double>();
 		
 		for (ClassType type : roomTimeNeeded.keySet())
 			roomConstraints.put(type, roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
+		//			constraint =			Needed				  /			Available
 		
 		for (Field field : teachTimeNeeded.keySet())
-			teacherConstraints.put(field, teachTimeNeeded.get(field).divideBy(teachTimeAvailable.get(field).add(teachTimeSpare.get(field))));
+			teachingConstraints.put(field, teachTimeNeeded.get(field).divideBy(teachTimeAvailable.get(field).add(teachTimeSpare.get(field))));
 		//			constraint	=				Needed					/		(Available					+		spare)
 		
-		Constrainable[] res = this.orderByValues(roomConstraints, teacherConstraints);
+		//System.out.println("Filler.computeConstraints() #orderByValues : " + roomConstraints.size() + " " + teacherConstraints.size());
+		
+		
+	//BEGIN : # 3 each teacher's constraints
+		
+		HashMap<Teacher, Double> teachersConstraints = new HashMap<Teacher, Double>();
+		
+		for (Teacher teach : this.teachers)	{
+			teachersConstraints.put(teach, teach.getCWWH().divideBy(teach.getMWWH()));
+		}
+		
+	//END : #3
+		
+		
+	//BEGIN : #4 Overloaded groups
+		
+		HashMap<Group, Double> groupConstraints = new HashMap<Group, Double>();
+		
+		for (Group group : this.groups)	{
+			Time t = new Time();
+			for (Field f : group.classes.keySet())
+				t = t.add(group.classes.get(f));
+			groupConstraints.put(group, t.divideBy(this.MWWH));
+		}
+		
+	//END : #4
 		
 		//On réinitialise les horaires des profs.
 		for (Teacher teach : cwwhs.keySet())
 			teach.setCWWH(cwwhs.get(teach));
 		
+		Constrainable[] res = this.orderByValues(roomConstraints, teachingConstraints, teachersConstraints, groupConstraints);
 		
 		return res;
 	}
 	
-	private Constrainable[] orderByValues(HashMap<Constrainable, Double> constraints1, HashMap<Constrainable, Double> constraints2)	{
+	private Constrainable[] orderByValues(HashMap<ClassType, Double> roomConstraints, HashMap<Field, Double> teachingConstraints, HashMap<Teacher, Double> teachersConstraints, HashMap<Group, Double> groupConstraints)	{
 	
 		LinkedList<Constrainable> temp = new LinkedList<Constrainable>();
-		//System.out.println("\nFiller.orderByValues() #0 : \n" + constraints1 + "\n" + constraints2);
+		//System.out.println("\nFiller.orderByValues() #0 : \n" + constraints1.keySet() + "\n\n\n" + constraints2.keySet());
 		
 		//On insère un premier élément dans la liste.
-		temp.add((Constrainable) constraints1.keySet().toArray()[constraints1.size() - 1]);
+		temp.add((Constrainable) roomConstraints.keySet().toArray()[roomConstraints.size() - 1]);
 		
-		for (Constrainable c : constraints1.keySet())	{
+		for (ClassType ct : roomConstraints.keySet())	{
 			
 			//System.out.println("#0 : " + c);
 			
 			for (int i = 0 ; i < temp.size() ; i++)	{
 				
-				double con = constraints1.get(c);
-				Constrainable current = temp.get(i);
+				double con = roomConstraints.get(ct);
+				Constrainable c = temp.get(i);
 				
 				//System.out.println(" #1 : "+ i + " " + current + " : " + con + " / " + constraints1.get(current));
 				
-				//On retire l'élément inséré en trop lors de l'initialisation.
-				if (i == 1)
-					temp.remove((Constrainable) constraints1.keySet().toArray()[constraints1.size() - 1]);
-				
-				if (con > constraints1.get(current))	{
+				if (con > roomConstraints.get(c))	{
 					//System.out.println("  Fits here " + temp.size());
-					temp.add(i, c);
+					temp.add(i, ct);
 					break;
 				}
 				
 				else if (i == temp.size() - 1)	{
 					//System.out.println("  End of List : " + temp.size());
-					temp.add(i++, c);
+					temp.add(i++, ct);
 				}
+				
+				//On retire l'élément inséré en trop lors de l'initialisation.
+				if (ct == roomConstraints.keySet().toArray()[0])
+					temp.remove((Constrainable) roomConstraints.keySet().toArray()[roomConstraints.size() - 1]);
 			}
 		}
 		
 		//System.out.println("res1 : "+ temp.size() + " " + constraints1.size() + " " + temp);
 		
 		
-		for (Constrainable c : constraints2.keySet())	{
+		for (Field f : teachingConstraints.keySet())	{
 			
 			//System.out.println("0 : " + c);
 			
 			for (int i = 0 ; i < temp.size() ; i++)	{
 				
-				Constrainable co = temp.get(i);
-				double cons = constraints2.get(co) != null ? constraints2.get(co) : constraints1.get(co);
+				Constrainable c = temp.get(i);
+				double cons = teachingConstraints.get(c) != null ? teachingConstraints.get(c) : roomConstraints.get(c);
 				
 				//System.out.println(" 1 : [" + i + "] " + co + " # " + cons + " " + constraints2.get(c));
 				
-				if (constraints2.get(c) > cons)	{
+				if (teachingConstraints.get(f) > cons)	{
 					//System.out.println("  2 : " + temp.indexOf(co));
-					temp.add(temp.indexOf(co), c);
+					temp.add(temp.indexOf(c), f);
 					break;
 				}
 				
 				else if (i == temp.size() - 1)	{
-					temp.addLast(c);
+					temp.addLast(f);
+					break;
+				}
+			}
+		}
+		
+		for (Teacher t : teachersConstraints.keySet())	{
+			
+			for (int i = 0 ; i < temp.size(); i++)	{
+				Constrainable c = temp.get(i);
+				double con = (roomConstraints.get(c) != null ? roomConstraints.get(c) : (teachingConstraints.get(c) != null ? teachingConstraints.get(c) : teachersConstraints.get(c)));
+				
+				if (teachersConstraints.get(t) > con)	{
+					temp.add(i, t);
+					break;
+				}
+				
+				else if (i == temp.size() - 1)	{
+					temp.addLast(t);
+					break;
+				}
+			}
+		}
+		
+		for (Group g : groupConstraints.keySet())	{
+			
+			for (int i = 0 ; i < temp.size(); i++){
+				
+				Constrainable c = temp.get(i);
+				double con = (roomConstraints.get(c) != null ? roomConstraints.get(c) : (teachingConstraints.get(c) != null ? teachingConstraints.get(c) : (teachersConstraints.get(c) != null ? teachersConstraints.get(c) : groupConstraints.get(c))));
+				
+				if (groupConstraints.get(g) > con)	{
+					temp.add(i, g);
+					break;
+				}
+				
+				else if (i == temp.size() - 1)	{
+					temp.addLast(g);
 					break;
 				}
 			}
@@ -372,13 +489,8 @@ public class Filler	{
 		
 		/*
 		for (Constrainable c : res)
-			System.out.println("Filler.orderByValues : " + c);
+			System.out.println("Filler.orderByValues : " + c + "\t" + (roomConstraints.get(c) != null ? roomConstraints.get(c) : (teachingConstraints.get(c) != null ? teachingConstraints.get(c) : (teachersConstraints.get(c) != null ? teachersConstraints.get(c) : groupConstraints.get(c)))));
 		*/
-		
-		/*
-		 * Pour l'instant problème aux bornes, il manque les deux dernières classType dans le tableau.
-		 * Aussi, les fields sont tous classés dans l'ordre, mais après les classTypes.
-		 * */
 		
 		return res;
 	}

@@ -8,6 +8,7 @@ public class Group implements Timeable, Constrainable, People	{
 
 	private int ID;
 	private String name;
+	private int level;
 
 	protected int effectif;
 	public HashMap<Field, Link> links;
@@ -126,9 +127,7 @@ public class Group implements Timeable, Constrainable, People	{
 	
 	public String toString()	{
 		
-		String res = this.parent == null ? "" : this.parent.toString();
-		res += " " + this.name;
-		return res;
+		return (this.parent == null ? "" : (this.parent.toString() + " ")) + this.name;
 	}
 
 	public Group[] getChildren()	{
