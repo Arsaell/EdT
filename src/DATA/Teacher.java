@@ -109,11 +109,31 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 		return this;
 	}
 	
-	public String getMail()	{
-	
-		return (this.firstName.toLowerCase() + "." + this.lastName + "@insa-lyon.fr");
+	public String getFirstName()	{
+		
+		return this.firstName;
 	}
 	
+	public String getLastName()	{
+		
+		return this.lastName;
+	}
+	
+	public String getMail()	{
+		
+		return (this.firstName.toLowerCase() + "." + this.lastName.toLowerCase() + "@insa-lyon.fr");
+	}
+	
+	public Teacher setFirstName(String firstName) {
+		this.firstName = firstName;
+		return this;
+	}
+	
+	public Teacher setLastName(String lastName) {
+		this.lastName = lastName;
+		return this;
+	}
+		
 	public Slot getNextFreeSlot(Time start, Time duration)	{
 	
 		return null;
@@ -129,7 +149,7 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 	}
 
 	public int compareTo(Teacher t) {
-		return this.getName().compareTo(t.getName());
+		return this.getName().toLowerCase().compareTo(t.getName().toLowerCase());
 	}
 	
 }
