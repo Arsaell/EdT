@@ -73,6 +73,8 @@ public class Time	{
 		
 		temp.format();
 		
+		//System.out.println("Time.substract() : " + this + " - " + t + " = " + temp);
+		
 		return temp;
 	}
 	
@@ -117,12 +119,24 @@ public class Time	{
 		return (double)(this.toMin()) / t.toMin();
 	}
 	
+	public Time modulo(Time t)	{
+		return this.multiplyBy((this.divideBy(t) % 1));
+	}
+	
 	public boolean isLessThan(Time t)	{
 		return (this.toMin() < t.toMin());
+	}
+
+	public boolean isntMoreThan(Time t)	{
+		return this.toMin() <= t.toMin();
 	}
 	
 	public boolean isMoreThan(Time t)	{
 		return (this.toMin() > t.toMin());
+	}
+	
+	public boolean isntLessThan(Time t)	{
+		return this.toMin() >= t.toMin();
 	}
 	
 	public boolean equals (Time t)	{

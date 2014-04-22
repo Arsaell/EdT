@@ -1,8 +1,10 @@
 package DATA;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class Classroom implements Timeable	{
+public class Classroom extends Timeable	{
 
 	private int ID;
 	private ClassType type;
@@ -12,6 +14,7 @@ public class Classroom implements Timeable	{
 	
 	public Classroom(int aID, ClassType aType, String aName, int aEff)	{
 	
+		super();
 		this.ID = aID;
 		this.type = aType;
 		this.name = aName;
@@ -24,16 +27,6 @@ public class Classroom implements Timeable	{
 	
 	public int getEffectif()	{
 		return this.effectif;
-	}
-	
-	public Slot getNextFreeSlot(Time start, Time duration)	{
-	
-		return null;
-	}
-	
-	public Slot[] getAllFreeSlots(Time duration)	{
-	
-		return null;
 	}
 	
  	public String toString()	{

@@ -1,9 +1,8 @@
 package DATA;
 
 import java.util.HashMap;
-import java.util.List;
 
-public class Field implements Constrainable	{
+public class Field extends Constrainable	{
 
 	private int ID;
 	private ClassType type;
@@ -24,21 +23,6 @@ public class Field implements Constrainable	{
 		return this.type;
 	}
 
-	public HashMap<Character, Double> getConstraint()	{
-	
-		this.updateConstraint();
-		return this.constraints;
-	}
-	
-	public HashMap<Character, Double> getConstraint(List source)	{
-	
-		return null;
-	}
-	
-	private void updateConstraint()	{
-	
-	}
-	
 	public Field setName(String aName)	{
 		this.name = aName;
 		return this;

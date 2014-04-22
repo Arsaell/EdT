@@ -1,10 +1,11 @@
 package DATA;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
 
-public class Group implements Timeable, Constrainable, People	{
+public class Group extends Timeable implements People	{
 
 	private int ID;
 	private String name;
@@ -14,6 +15,7 @@ public class Group implements Timeable, Constrainable, People	{
 	public HashMap<Field, Link> links;
 	public HashMap<Field, Time> classes;
 	private HashMap<Field, Double> constraints;
+	private HashMap<Field, Boolean> done;
 
 	private Group parent;
 	private Group[] children;
@@ -28,6 +30,7 @@ public class Group implements Timeable, Constrainable, People	{
 		this.links = new HashMap<Field, Link>();
 		this.classes = new HashMap<Field, Time>();
 		this.constraints = new HashMap<Field, Double>();
+		this.done = new HashMap<Field, Boolean>();
 	}
 	
 		//Renvoie la première matière dans classes qui n'est pas attribuée dans teachers
@@ -54,11 +57,18 @@ public class Group implements Timeable, Constrainable, People	{
 	
 		//System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f);
 		
-		if (teach != null && !this.links.containsKey(f) && teach.canTeach(f, this))	{
+		if (teach != null && f != null && !this.links.containsKey(f) && teach.canTeach(f, this))	{
 			this.links.put(f, new Link(teach, this, f));
 			return true;
 		}
+		
+		System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f + " " + this.links.get(f) + " " + teach.canTeach(f, this));
+		
 		return false;
+	}
+	
+	public Teacher getTeacher(Field f)	{
+		return this.links.get(f).getTeacher();
 	}
 	
 	public boolean addLink(Link l)	{
@@ -67,21 +77,6 @@ public class Group implements Timeable, Constrainable, People	{
 			return true;
 		}
 		return false;
-	}
-	
-	public HashMap<Field, Double> getConstraint()	{
-	
-		this.updateConstraint();
-		return this.constraints;
-	}
-	
-	public HashMap<Field, Double> getConstraint(List source)	{
-	
-		return null;
-	}
-	
-	private void updateConstraint()	{
-	
 	}
 	
 	public String getMail()	{
@@ -100,22 +95,17 @@ public class Group implements Timeable, Constrainable, People	{
 		return this.classes;
 	}
 	
-	public Slot getNextFreeSlot(Time start, Time duration)	{
-	
-		return null;
-	}
-	
-	public Slot[] getAllFreeSlots(Time duration)	{
-	
-		return null;
-	}
-	
 	public Group setClasses(HashMap<Field, Time> aClasses)	{
 		
 		//System.out.println("Group.setClasses() : " + this + " " + aClasses);
 		
 		if (aClasses != null)
 			this.classes = aClasses;
+		
+		for (Field f : this.classes.keySet())
+			if (!this.done.containsKey(f))
+				this.done.put(f, false);
+		
 		return this;
 	}
 	

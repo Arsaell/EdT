@@ -3,12 +3,18 @@ package DATA;
 import java.util.HashMap;
 import java.util.List;
 
-public interface Constrainable	{
+public class Constrainable	{
 
 	//public HashMap<Timeable, Double> constraints = new HashMap<Timeable, Double>();
 	
-	public HashMap getConstraint();
-	public HashMap getConstraint(List source);
+	public HashMap getConstraint()	{
+		return null;
+	}
 	
-	//private void updateConstraint();
+	public HashMap getConstraint(List source)	{
+		return null;
+	}
+	
+	
+	private void updateConstraint(){}
 }

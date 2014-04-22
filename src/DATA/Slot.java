@@ -1,5 +1,6 @@
 package DATA;
 
+import java.util.ArrayList;
 
 
 public class Slot	{
@@ -12,8 +13,17 @@ public class Slot	{
 		this.end = e;
 	}
 	
-	public Time duration()	{
+	public Slot clone()	{
+		return new Slot(this.begin.clone(), this.end.clone());
+	}
 	
+	public boolean equals(Slot s)	{
+		return (s.getBegin().equals(this.begin) && s.getEnd().equals(this.end));
+	}
+	
+	public Time getDuration()	{
+	
+		//System.out.println("Slot.getDuration() : " + this.end.substract(this.begin));
 		return this.end.substract(this.begin);
 	}
 	
@@ -31,5 +41,29 @@ public class Slot	{
 	
 	public void setEnd(Time aEnd)	{
 		this.end = aEnd;
+	}
+
+	public boolean canFitIn(ArrayList<Slot> slots) {
+		for (Slot s : slots)
+			if (this.canFitIn(s))
+				return true;
+		
+		return false;
+	}
+	
+	public boolean canFitIn(Slot s)	{
+		
+		if (this.begin.isntLessThan(s.getBegin()) && this.begin.isLessThan(s.end) && this.end.isMoreThan(s.begin) && this.end.isntMoreThan(s.end))
+			return true;
+		
+		return false;
+	}
+
+	private boolean intersects(Slot s) {
+		return this.begin.isMoreThan(s.begin) && this.begin.isLessThan(s.getEnd()) || this.end.isMoreThan(s.getBegin()) && this.end.isLessThan(s.getEnd()) || this.equals(s);
+	}
+	
+	public String toString()	{
+		return "[" + this.begin.toString() + " --> " + this.end.toString() + "]";
 	}
 }
