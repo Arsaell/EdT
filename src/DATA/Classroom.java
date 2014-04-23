@@ -30,6 +30,6 @@ public class Classroom extends Timeable	{
 	}
 	
  	public String toString()	{
-		return (this.type.getName() + " " + this.name);
+		return (this.type.getShortName() + " " + this.name);
 	}
 }

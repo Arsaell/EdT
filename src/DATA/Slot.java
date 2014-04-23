@@ -11,6 +11,7 @@ public class Slot	{
 	
 		this.begin = b;
 		this.end = e;
+		begin.getDay();
 	}
 	
 	public Slot clone()	{
@@ -59,11 +60,23 @@ public class Slot	{
 		return false;
 	}
 
-	private boolean intersects(Slot s) {
+	public boolean intersects(Slot s) {
 		return this.begin.isMoreThan(s.begin) && this.begin.isLessThan(s.getEnd()) || this.end.isMoreThan(s.getBegin()) && this.end.isLessThan(s.getEnd()) || this.equals(s);
 	}
 	
 	public String toString()	{
 		return "[" + this.begin.toString() + " --> " + this.end.toString() + "]";
+	}
+
+	public Slot intersection(Slot s) {
+		if (this.intersects(s))	{
+			if (this.begin.isntLessThan(s.getBegin()) && this.begin.isLessThan(s.getEnd()))
+				return new Slot(this.begin, s.getEnd());
+			
+			else if (this.end.isMoreThan(s.getBegin()) && this.end.isntMoreThan(s.getEnd()))
+				return new Slot(s.getBegin(), this.end);
+		}
+			
+		return null;
 	}
 }

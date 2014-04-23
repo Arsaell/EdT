@@ -69,12 +69,14 @@ public class Filler	{
 			
 			else if (c instanceof Teacher)	{		//Order : Field
 				
-				this.takeCareOf((Teacher) c, fieldsOrder);
+				this.takeCareOf((Teacher) c, fieldsOrder, groupsOrder);
 			}
 			
 			else if (c instanceof Group)	{		//Order : Field
 				//System.out.println("Filler.fill() #Group");
 				this.takeCareOf((Group) c, fieldsOrder);
+				((Group) c).printWeekTable();
+				System.out.println();
 			}
 		}
 	}
@@ -292,39 +294,38 @@ public class Filler	{
 			
 				for (Teacher teach : this.teachers)	{
 					
-					//System.out.println(" #1 " + teach);
+					//System.out.println("  #1 " + teach);
 					
 					if (teach.knows(f))	{
 						
 						Time available = teach.getMWWH().substract(teach.getCWWH()); 				//Le temps "libre" du prof
 						Time needed = teachTimeNeeded.get(f).substract(teachTimeAvailable.get(f));	//La quantité restante à attribuer.
 
-						//System.out.println(" #2 " + teach.getCWWH() + " " + teach.getMWWH() + " " + available + " #3 " + needed);
+						//System.out.println("   #2 " + teach.getCWWH() + " " + teach.getMWWH() + " " + available + " #3 " + needed);
 						
-						//Il faut pour chaque prof attribuer toutes les heures d'une matière d'un groupe, et non pas juste le temps d'un TD
 						Time t;
 						
 						for (Group group : this.groups)	{
 							
-							//System.out.println(" #4 " + group);
+							//System.out.println("    #4 " + group);
 							
 							if (group.classes.containsKey(f))	{
 								
 								t = group.classes.get(f);
 								
-								//System.out.println(" #5 " + t);
+								//System.out.println("     #5 " + t);
 								
 								if (t.isLessThan(available) && t.isLessThan(needed))	{
 								
-									//System.out.println(" #6");
+									//System.out.println("      #6");
 									
 									teachTimeAvailable.put (f, teachTimeAvailable.get(f).add(t));
 									
 									teach.addToCWWH(t);
 									
-									//System.out.println("#7 Filler.computeConstraints() : " + f + " #8 " + teachTimeAvailable.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
-									
 									available = teach.getMWWH().substract(teach.getCWWH());
+								
+									//System.out.println("       #7 : " + f + " " + teachTimeAvailable.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
 								}
 							}
 						}
@@ -560,29 +561,39 @@ public class Filler	{
 		return true;
 	}
 	
-	private boolean takeCareOf(Teacher teach, ArrayList<Field> order)	{
+	private boolean takeCareOf(Teacher teach, ArrayList<Field> fieldsOrder, ArrayList<Group> groupsOrder)	{
 		
+		ArrayList<Field> fields = new ArrayList<Field>();
+		
+		for (Field f : teach.getFields())
+			fields.add(f);
+		
+		for (Field f : fieldsOrder)	{
+			if (fields.contains(f))	{
+				
+			}
+		}
 		return true;
 	}
 	
 	private boolean takeCareOf(Group g, ArrayList<Field> order)	{
 		
-		//System.out.println("\n\n\t\t########\n\n");
+		System.out.println("\n\n\t\t########\n\n");
 		
-		//System.out.println("Filler.takeCareOf(Group) #0 : " + g);
+		System.out.println("Filler.takeCareOf(Group) #0 : " + g);
 		
 		HashMap<Field, Time> timesLeft = new HashMap<Field, Time>();
 		
 		for (Field f : g.classes.keySet())
 			timesLeft.put(f, g.classes.get(f));
 		
-		//System.out.println("Filler.takeCareOf(Group) #0.5 : Fields to process --> " + timesLeft.size());
+		System.out.println("Filler.takeCareOf(Group) #0.5 : Fields to process --> " + timesLeft.size());
 		
 		boolean lessonSet = true;
 		
 		for (Field f : order)	{
 
-			//System.out.println("Filler.takeCareOf(Group)  #1 : " + f);
+			System.out.println("Filler.takeCareOf(Group)  #1 : " + f + " ( " + f.getType().getDuration() + " )");
 			
 			if (g.classes.containsKey(f) && !this.fieldsDone.get(g).get(f))	{
 
@@ -592,30 +603,65 @@ public class Filler	{
 
 					//System.out.println("Filler.takeCareOf(Group)   #2 : " + timesLeft.get(f) + " (time left)");
 					
-					Time t = (timesLeft.get(f).isMoreThan(f.getDuration().getEnd()) && timesLeft.get(f).modulo(f.getDuration().getEnd()).isMoreThan(f.getDuration().getBegin())) ? f.getDuration().getEnd() : f.getDuration().getBegin();
+					Time duration = new Time();//(timesLeft.get(f).isntLessThan(f.getDuration().getEnd()) && timesLeft.get(f).modulo(f.getDuration().getEnd()).isntLessThan(f.getDuration().getBegin())) ? f.getDuration().getEnd() : f.getDuration().getBegin();
 
-					//System.out.println("Filler.takeCareOf(Group)   #3 : " + t + " (time attributed for this block)");
+					if (timesLeft.get(f).isntLessThan(f.getDuration().getBegin().add(f.getDuration().getEnd())))
+						duration = f.getDuration().getEnd();
 					
-					ArrayList<Slot> sg = g.getAllFreeSlots(t);									//Les dispos du Group
+					else if (timesLeft.get(f).isntLessThan(f.getDuration().getBegin()) && timesLeft.get(f).isntMoreThan(f.getDuration().getEnd()))
+						duration = timesLeft.get(f);
+					
+					else	{
+						System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group) failed !\n\n");
+					}
+					
+					System.out.println("Filler.takeCareOf(Group)   #3 : " + duration + " (time attributed for this block)");
+					
+					ArrayList<Slot> sg = g.getAllFreeSlots(duration);									//Les dispos du Group
 
-					//System.out.println("Filler.takeCareOf(Group)   #4 : " + g + " " + g.getLinks().get(f) + " " + f);
+					System.out.println("Filler.takeCareOf(Group)   #4 : " + g.getTeacher(f) + " (Teacher)");
 					
-					ArrayList<Slot> st = g.getLinks().get(f).getTeacher().getAllFreeSlots(t);	//Les dispos du Teacher
+					ArrayList<Slot> st = g.getTeacher(f).getAllFreeSlots(duration);					//Les dispos du Teacher
 					ArrayList<Slot> disp = new ArrayList<Slot>();								//L'intersection des deux;
 					
-					//System.out.println("Filler.takeCareOf(Group)    #5 : " + sg.size() + " " + st.size());
+					System.out.println("Filler.takeCareOf(Group)    #5 : " + sg.size() + " " + st.size());
 					
 					for (Slot s1 : sg)	{
 						for (Slot s2 : st)	{
 							//System.out.println("Filler.takeCareOf(Group)     #6 : " + s1 + " " + s2);
-							if (s2.equals(s1))	{
-								disp.add(s1);
+							if (s1.intersects(s2) && s1.intersection(s2).getDuration().isntLessThan(duration))	{
+								disp.add(s1.intersection(s2));
+								System.out.println("Filler.takeCareOf(Group)      #7 : " + s1 + " is available for both " + g + " and " + g.getTeacher(f));
 								break;
 							}
 						}
 					}
 					
-					//System.out.println("Filler.takeCareOf(Group)    #5.5 : " + disp.size());
+					System.out.println("Filler.takeCareOf(Group)      #7.5 : " + disp.size());
+					
+					//On cherche tous les slots de la durée requise inclus dans les slots disponibles à la fois pour le group et le teacher
+					for (int i = 0 ; i < disp.size() ; i++)	{
+						
+						Slot s = disp.get(i);
+						disp.remove(s);
+						
+						Time begin = s.getBegin();
+						Time end = s.getBegin().add(duration);
+						
+						disp.add(i, new Slot(begin, end));
+						i++;
+						
+						while(end.isntMoreThan(s.getEnd()))	{
+							begin = begin.add(WeekTable.getMinDelta());
+							end = end.add(WeekTable.getMinDelta());
+							if (end.isntMoreThan(s.getEnd()))	{
+								disp.add(i, new Slot(begin, end));
+								i++;
+							}
+						}
+					}
+					
+					System.out.println("Filler.takeCareOf(Group)    #8 : " + disp.size()/* + "\n" + disp*/);
 					
 					/*
 					 * En ce point, on a :
@@ -634,29 +680,34 @@ public class Filler	{
 					Slot slot = null;
 					
 					for (Slot s : disp)	{
-						place = this.findClassRoom(f.getType(),s);
-						if (place != null)	{
-							slot = s;
-							break;
+						if (!(g.getWeekTable().fieldHappensInDay(f, s.getBegin().getDay())))	{
+							place = this.findClassRoom(f.getType(), s);
+							if (place != null)	{
+								slot = s;
+								System.out.println("Filler.takeCareOf(Group)       #8 : " + slot + " (slot retained) " + place + " (Classroom)");
+								break;
+							}
 						}
 					}
 					
-					//System.out.println("Filler.takeCareOf(Group)     #6 : " + slot);
+					//System.out.println("Filler.takeCareOf(Group)     #9 : Slot choosen = " + slot);
 					
 					if (slot == null)
 						break;
 					
-					Lesson res = new Lesson(g.getLinks().get(f).getTeacher(), g, f, place, slot);
+					Lesson res = new Lesson(g.getLinks().getLinks(f).get(0).getTeacher(), g, f, place, new Slot(slot.getBegin(), slot.getBegin().add(duration)));
 					
-					//System.out.println("Filler.takeCareOf(Group)      #7 : " + res);
+					System.out.println("Filler.takeCareOf(Group)        #9 : res =\n" + res);
 					
 	// /!\ : Vérifier ici que le lessonSet finisse bien à true.
 					lessonSet = g.addLesson(res) ? true : false;
 					lessonSet = g.getTeacher(f).addLesson(res) ? lessonSet : false;
 					lessonSet = place.addLesson(res) ? lessonSet : false;
 					
-					//if (lessonSet)
+					if (lessonSet)
 						timesLeft.put(f, (timesLeft.get(f).substract(res.getDuration())));
+					else
+						System.out.println("/!\\ Filler.takeCareOf(Group) could not aggree on a slot for " + res);
 					
 					//System.out.println("\n\tPONEY ! " + lessonSet + " " + timesLeft.get(f) + " " + res.getDuration() + " " + timesLeft.get(f).substract(res.getDuration()));
 				}

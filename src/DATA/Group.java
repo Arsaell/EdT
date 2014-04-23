@@ -12,7 +12,7 @@ public class Group extends Timeable implements People	{
 	private int level;
 
 	protected int effectif;
-	public HashMap<Field, Link> links;
+	public LinksList links;
 	public HashMap<Field, Time> classes;
 	private HashMap<Field, Double> constraints;
 	private HashMap<Field, Boolean> done;
@@ -27,7 +27,7 @@ public class Group extends Timeable implements People	{
 		this.name = aName;
 		this.effectif = aEff;
 		this.classes = null;	//Implement
-		this.links = new HashMap<Field, Link>();
+		this.links = new LinksList();
 		this.classes = new HashMap<Field, Time>();
 		this.constraints = new HashMap<Field, Double>();
 		this.done = new HashMap<Field, Boolean>();
@@ -46,7 +46,7 @@ public class Group extends Timeable implements People	{
 		while (iter.hasNext())	{
 			
 			f = iter.next();		
-			if (!this.links.containsKey(f))
+			if (this.links.getLinks(f).size() == 0)
 				return f;
 		}
 		
@@ -57,23 +57,24 @@ public class Group extends Timeable implements People	{
 	
 		//System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f);
 		
-		if (teach != null && f != null && !this.links.containsKey(f) && teach.canTeach(f, this))	{
-			this.links.put(f, new Link(teach, this, f));
+		if (teach != null && f != null && (this.links.getLinks(f).size() == 0) && teach.canTeach(f, this))	{
+			this.links.add(new Link(teach, this, f));
 			return true;
 		}
 		
-		System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f + " " + this.links.get(f) + " " + teach.canTeach(f, this));
+		System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f + " " + this.links.getLinks(f) + " " + teach.canTeach(f, this));
 		
 		return false;
 	}
 	
 	public Teacher getTeacher(Field f)	{
-		return this.links.get(f).getTeacher();
+		//System.out.println("Group.getTeacher(" + f + ") " + this + " " + this.links.size() + " " + this.links.getLinks(f));
+		return (this.links.getLinks(f).size() != 0 ? this.links.getLinks(f).get(0).getTeacher() : null);
 	}
 	
 	public boolean addLink(Link l)	{
-		if (this.classes.containsKey(l.getField()) && this == l.getGroup() && this.links.containsKey(l.getField()))	{
-			this.links.put(l.getField(), l);
+		if (this.classes.containsKey(l.getField()) && this == l.getGroup() && this.links.getLinks(l.getField()).size() == 0)	{
+			this.links.add(l);
 			return true;
 		}
 		return false;
@@ -87,7 +88,7 @@ public class Group extends Timeable implements People	{
 		return this.effectif;
 	}
 	
-	public HashMap<Field, Link> getLinks()	{
+	public LinksList getLinks()	{
 		return this.links;
 	}
 	
@@ -127,5 +128,14 @@ public class Group extends Timeable implements People	{
 	public Group setChildren(Group[] aChildren) {
 		this.children = aChildren;
 		return this;
+	}
+
+	
+	public void printWeekTable() {
+		this.timeTable.print();
+	}
+
+	public WeekTable getWeekTable() {
+		return this.timeTable;
 	}
 }

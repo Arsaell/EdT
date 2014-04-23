@@ -9,7 +9,7 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
 	private Field[] fields;
-	private ArrayList<Link> students;
+	private LinksList students;
 	
 	public Teacher(int aID, String aFirstName, String aLastName, Field[] aFields, Time aMWWH)	{
 	
@@ -19,7 +19,7 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 		this.fields = aFields;
 		this.maxWeekWorkedHours = aMWWH;
 		
-		this.students = new ArrayList<Link>();
+		this.students = new LinksList();
 		this.currentWeekWorkedHours = new Time();
 	}
 	
@@ -58,7 +58,7 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	private boolean linkGroup(Link link) {
 		
 		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
-		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().get(link.getField()) == null)	{
+		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().getLinks(link.getField()) == null)	{
 			this.students.add(link);
 			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(link.getGroup().getClasses().get(link.getField()));
 			return true;

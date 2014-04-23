@@ -93,6 +93,16 @@ public class WeekTable {
 		return res;
 	}
 
+	public boolean fieldHappensInDay(Field f, byte day)	{
+		
+		for (Slot s : this.slots)	{
+			if (s instanceof Lesson && ((Lesson) s).getField().equals(f) && s.getBegin().getDay() == day)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	public boolean addLesson(Lesson l)	{
 		
 		int i = this.indexForTime(l.getBegin());
@@ -132,7 +142,7 @@ public class WeekTable {
 		int i;
 		
 		for (i = 0 ; i < this.slots.size(); i++)	{
-			if (this.slots.get(i).getBegin().isLessThan(t) && this.slots.get(i).getEnd().isMoreThan(t) || this.slots.get(i).getBegin().equals(t))
+			if (this.slots.get(i).getBegin().isLessThan(t) && this.slots.get(i).getEnd().isMoreThan(t) || this.slots.get(i).getBegin().equals(t) || this.slots.get(i).getBegin().isMoreThan(t))
 				return i;
 		}
 		return -1;
@@ -154,5 +164,24 @@ public class WeekTable {
 	
 	public static Time getMinDelta()	{
 		return minDelta;
+	}
+
+	public void print() {
+		
+		System.out.println("\n\tWeektable : " + this.owner + "\n");
+		int currentDay = 0;
+		for (Slot s : this.slots)	{
+			
+			if ((int)s.getBegin().getDay() > currentDay)	{
+				System.out.println("");
+				currentDay = (int) s.getBegin().getDay();
+			}
+			
+			if (s instanceof Lesson)	{
+				System.out.print(((Lesson)s).getSlot() + " : " + ((Lesson)s).getField() + "\t");
+			}
+			else
+				System.out.print(s + "\t");
+		}
 	}
 }

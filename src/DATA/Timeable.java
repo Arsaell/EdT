@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public abstract class Timeable extends Constrainable	{
 
-	private WeekTable timeTable;
+	protected WeekTable timeTable;
 	
 	public Timeable()	{
 		this.timeTable = new WeekTable(WeekTable.getDefault(), this);

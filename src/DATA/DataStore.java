@@ -60,7 +60,7 @@ public class DataStore {
 		Field contrucp = (new Field(5, types.get(4), "Usinage"));
 		
 		Field[] MaPtMt = {mathsa, physiquet, mathst};
-		Field[] GPaMtPt = {physiquea, mathst, physiquet};
+		Field[] PaMtPt = {physiquea, mathst, physiquet};
 		Field[] MtPtCt = {mathst, physiquet, concept};
 		Field[] PtCtCp = {physiquet, concept, contrucp};
 		Field[] CtCpMa = {concept, contrucp, mathsa};
@@ -69,15 +69,15 @@ public class DataStore {
 		Time MWWH = new Time (2500);
 		
 		this.teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPtMt, MWWH));
-		this.teachers.add(new Teacher(1, "Rarity", "", GPaMtPt, MWWH));
+		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
 		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
 		this.teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
 		this.teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
 		this.teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
 		this.teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
-		//this.teachers.add(new Teacher(7, "Celestia", "", GPaMtPt, MWWH));
-		//this.teachers.add(new Teacher(8, "Princess", "Luna", MtPtCt, MWWH));
-		//this.teachers.add(new Teacher(9, "Discord", "", MaPaMt, MWWH));
+		this.teachers.add(new Teacher(7, "Celestia", "", MaPtMt, MWWH));
+		this.teachers.add(new Teacher(8, "Princess", "Luna", MaPtMt, MWWH));
+		this.teachers.add(new Teacher(9, "Discord", "", MaPtMt, MWWH));
 		
 		
 		HashMap<Field, Time> classes = new HashMap<Field, Time>();
@@ -95,7 +95,7 @@ public class DataStore {
 		this.groups.add(new Group(1, "g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		this.groups.add(new Group(2, "g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		this.groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		this.groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
+		//this.groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
 		Group[] gtab = {groups.get(1), groups.get(2)};
 		this.groups.get(0).setChildren(gtab);

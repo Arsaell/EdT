@@ -75,6 +75,10 @@ public class Lesson	extends Slot{
 		return place;
 	}
 	
+	public Slot getSlot()	{
+		return new Slot(this.getBegin(), this.getEnd());
+	}
+	
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
 	}

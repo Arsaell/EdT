@@ -40,5 +40,13 @@ public class Main	{
 		filler.fill(constraints);
 		
 		System.out.println("Main.main() : Groups filled.");
+		System.out.println("\n\n");
+		
+		///*
+		for (Group g : groups)	{
+			g.printWeekTable();
+			System.out.println("\n\n");
 		}
+		//*/
+	}
 }
