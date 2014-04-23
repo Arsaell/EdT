@@ -52,13 +52,13 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	}
 	
 	public boolean linkGroup(Group g, Field f)	{
-		return this.linkGroup(new Link(this, g, f));
+		return this.addLink(new Link(this, g, f));
 	}
 	
-	private boolean linkGroup(Link link) {
+	public boolean addLink(Link link) {
 		
 		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
-		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().getLinks(link.getField()) == null)	{
+		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().getLinks(link.getField()).size() == 0)	{
 			this.students.add(link);
 			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(link.getGroup().getClasses().get(link.getField()));
 			return true;
@@ -74,6 +74,10 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 		return this.fields;
 	}
 
+	public LinksList getLinks()	{
+		return this.students;
+	}
+	
 	public Time getMWWH() {
 		return this.maxWeekWorkedHours;
 	}
@@ -125,4 +129,5 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	public int compareTo(Teacher t) {
 		return this.getName().toLowerCase().compareTo(t.getName().toLowerCase());
 	}
+
 }

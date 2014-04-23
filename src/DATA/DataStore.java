@@ -72,12 +72,12 @@ public class DataStore {
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
 		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
 		this.teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
-		this.teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
-		this.teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
-		this.teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
-		this.teachers.add(new Teacher(7, "Celestia", "", MaPtMt, MWWH));
-		this.teachers.add(new Teacher(8, "Princess", "Luna", MaPtMt, MWWH));
-		this.teachers.add(new Teacher(9, "Discord", "", MaPtMt, MWWH));
+		//this.teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
+		//this.teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
+		//this.teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
+		//this.teachers.add(new Teacher(7, "Celestia", "", MaPtMt, MWWH));
+		//this.teachers.add(new Teacher(8, "Princess", "Luna", MaPtMt, MWWH));
+		//this.teachers.add(new Teacher(9, "Discord", "", MaPtMt, MWWH));
 		
 		
 		HashMap<Field, Time> classes = new HashMap<Field, Time>();

@@ -22,7 +22,7 @@ public class Main	{
 		
 		//System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
 		
-		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3500));
+		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3600));
 		
 		System.out.println("Main.main() : Filler built.");
 		
@@ -30,19 +30,13 @@ public class Main	{
 		
 		System.out.println("Main.main() : Constraints computed.");
 		
-		/*
-		for (Group g : groups)
-			System.out.println("Main.main() --> Group.teachers : " + g + " " + g.getLinks().size());
-		//*/
-		
 		//System.out.println("Main.main() : Teachers attributed to groups.");
 		
 		filler.fill(constraints);
 		
 		System.out.println("Main.main() : Groups filled.");
-		System.out.println("\n\n");
 		
-		///*
+		/*
 		for (Group g : groups)	{
 			g.printWeekTable();
 			System.out.println("\n\n");

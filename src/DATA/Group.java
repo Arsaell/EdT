@@ -58,7 +58,9 @@ public class Group extends Timeable implements People	{
 		//System.out.println("Group.setTeacher() : " + this + " " + teach + " " + f);
 		
 		if (teach != null && f != null && (this.links.getLinks(f).size() == 0) && teach.canTeach(f, this))	{
-			this.links.add(new Link(teach, this, f));
+			Link l = new Link(teach, this, f);
+			this.links.add(l);
+			teach.addLink(l);
 			return true;
 		}
 		
@@ -75,6 +77,7 @@ public class Group extends Timeable implements People	{
 	public boolean addLink(Link l)	{
 		if (this.classes.containsKey(l.getField()) && this == l.getGroup() && this.links.getLinks(l.getField()).size() == 0)	{
 			this.links.add(l);
+			l.getTeacher().addLink(l);
 			return true;
 		}
 		return false;

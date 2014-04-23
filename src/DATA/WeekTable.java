@@ -75,9 +75,9 @@ public class WeekTable {
 		return res;
 	}
 	
-	public ArrayList<Slot> getSlotsConcerning(Constrainable c)	{
+	public ArrayList<Lesson> getSlotsConcerning(Constrainable c)	{
 		
-		ArrayList<Slot> res = new ArrayList<Slot>();
+		ArrayList<Lesson> res = new ArrayList<Lesson>();
 		
 		for (Slot s : this.slots)
 			if (s instanceof Lesson)	{
