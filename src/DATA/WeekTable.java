@@ -86,10 +86,11 @@ public class WeekTable {
 					res.add(l);
 				
 			}
-		
+		/*
 		for (Slot s : res)	{
 			System.out.println("WeekTable.getSlotsConcerning( " + c + " ) --> " + s);
 		}
+		*/
 		return res;
 	}
 

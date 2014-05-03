@@ -133,12 +133,4 @@ public class Group extends Timeable implements People	{
 		return this;
 	}
 
-	
-	public void printWeekTable() {
-		this.timeTable.print();
-	}
-
-	public WeekTable getWeekTable() {
-		return this.timeTable;
-	}
 }

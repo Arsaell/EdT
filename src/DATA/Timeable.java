@@ -23,4 +23,7 @@ public abstract class Timeable extends Constrainable	{
 		return this.timeTable.addLesson(l);
 	}
 	
+	public WeekTable getWeekTable()	{
+		return this.timeTable;
+	}
 }

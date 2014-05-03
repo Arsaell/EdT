@@ -18,7 +18,7 @@ public class Main	{
 		
 		WeekTable.setMinDelta(new Time(30));
 		
-		System.out.println("Main.main() : Examples set.");
+		System.out.println("Main.main() : Examples loaded.");
 		
 		//System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
 		
@@ -32,9 +32,11 @@ public class Main	{
 		
 		//System.out.println("Main.main() : Teachers attributed to groups.");
 		
-		filler.fill(constraints);
+		int errors = filler.fill(constraints);
 		
-		System.out.println("Main.main() : Groups filled.");
+		//classrooms.get(0).getWeekTable().print();
+		
+		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
 		/*
 		for (Group g : groups)	{
