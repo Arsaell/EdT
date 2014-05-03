@@ -95,11 +95,14 @@ public class WeekTable {
 
 	public boolean fieldHappensInDay(Field f, byte day)	{
 		
+		//System.out.print("WeekTable<" + this.owner + ">.fieldHappensInDay (" + f + ", " + day + ") ");
 		for (Slot s : this.slots)	{
-			if (s instanceof Lesson && ((Lesson) s).getField().equals(f) && s.getBegin().getDay() == day)
+			if (s instanceof Lesson && ((Lesson) s).getField().equals(f) && s.getBegin().getDay() == day)	{
+				//System.out.println("true.");
 				return true;
+			}
 		}
-		
+		//System.out.println("false.");
 		return false;
 	}
 	

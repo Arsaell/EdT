@@ -57,10 +57,12 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	
 	public boolean addLink(Link link) {
 		
+		//System.out.println(this + ".addLink() : " + link);
 		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
 		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().getLinks(link.getField()).size() == 0)	{
 			this.students.add(link);
 			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(link.getGroup().getClasses().get(link.getField()));
+			//System.out.println(this + " --> " + this.currentWeekWorkedHours);
 			return true;
 		}
 		return false;

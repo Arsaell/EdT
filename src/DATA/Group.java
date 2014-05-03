@@ -59,8 +59,8 @@ public class Group extends Timeable implements People	{
 		
 		if (teach != null && f != null && (this.links.getLinks(f).size() == 0) && teach.canTeach(f, this))	{
 			Link l = new Link(teach, this, f);
-			this.links.add(l);
 			teach.addLink(l);
+			this.links.add(l);
 			return true;
 		}
 		
