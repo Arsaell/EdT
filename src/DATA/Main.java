@@ -38,9 +38,9 @@ public class Main	{
 		
 		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
-		/*
+		//*
 		for (Group g : groups)	{
-			g.printWeekTable();
+			g.getWeekTable().print();
 			System.out.println("\n\n");
 		}
 		//*/

@@ -337,7 +337,7 @@ public class Filler	{
 									
 									available = teach.getMWWH().substract(teach.getCWWH());
 								
-									//System.out.println("       #7 : " + f + " " + teachTimeAvailable.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
+									//System.out.println("       #7 : " + f + " " + teachTimeAttributed.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
 								}
 							}
 						}
@@ -572,7 +572,7 @@ public class Filler	{
 				System.out.println("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : " + res[i] + "\t\t--> " + constraints.get(res[i]));
 		//*/
 		
-		//*
+		/*
 		//Boucle d'affichage uniquement, peut être passée sous commentaire
 		for (Constrainable c : res)	{
 			
@@ -648,10 +648,13 @@ public class Filler	{
 
 	private boolean takeCareOf(Group group, Field field) {
 		
+		//System.out.println("\n\n\tFiller.takeCarOf (" + group + ", " + field + ")\n\n");
+		
 		Time left = group.getClasses().get(field);
 		
 		while (left.isMoreThan(new Time()))	{
 
+			//System.out.println("#0 : time left = " + left);
 			//La durée du bloc que l'on va chercher à attribuer
 			Time duration = new Time();
 			
@@ -666,8 +669,12 @@ public class Filler	{
 				return false;
 			}
 			
+			//System.out.println("#1 : duration = " + duration);
+			
 			ArrayList<Slot> groupSlots = group.getAllFreeSlots(duration);
 			ArrayList<Slot> teachSlots = group.getTeacher(field).getAllFreeSlots(duration);
+			
+			//System.out.println("#2 : groupSlots.size() = " + groupSlots.size() + " ; teachSlots.size() = " + teachSlots.size());
 			
 			//Contiendra tous les slots disponibles pour le Teacher et le Group et de durée supérieure à duration.
 			ArrayList<Slot> slots = new ArrayList<Slot>();
@@ -677,6 +684,7 @@ public class Filler	{
 					if (s1.intersects(s2) && s1.intersection(s2).getDuration().isntLessThan(duration))
 						slots.add(s1.intersection(s2));
 			
+			//System.out.println("#3 : slots.size() = " + slots.size());
 
 			//On cherche tous les slots de la durée requise inclus dans les slots disponibles à la fois pour le group et le teacher, et on les stocke dans la liste slots
 			for (int i = 0 ; i < slots.size() ; i++)	{
@@ -700,41 +708,65 @@ public class Filler	{
 				}
 			}
 			
+			//System.out.println("#4 : slots.size() = " + slots.size());
 			
 			Classroom place = null;
 			Slot slot = null;
 			
-			//On cherche un salle disponible, en vérifiant que le group n'a pas le field dans la même journée, ni la veille ou le lendemain.
-			for (Slot s : slots)
-				if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() - 1)) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() + 1)))
+			//On cherche une salle disponible, en vérifiant que le group n'a pas le field dans la même journée, ni la veille ou le lendemain.
+			for (Slot s : slots)	{
+				
+				//System.out.println("#0 (" + slots.size() + ") " + s);
+				
+				if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() - 1)) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() + 1)))	{
+					
+					//System.out.println(" #0.5 ");
+					
 					if (this.findClassRoom(field.getType(), s) != null)	{
+						
+						//System.out.println("  #1");
 						place = this.findClassRoom(field.getType(), s);
 						slot = s;
 						break;
 					}
+				}
+			}
 			
 			//Si c'était pas possible, on restraint la contrainte au jour même
-			if (place == null || slot == null)
-				for (Slot s : slots)
-					if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()))
+			if (place == null || slot == null)	{
+				//System.out.println("#2 : " + place + " " + slot + " " + slots.size());
+				for (Slot s : slots)	{
+					//System.out.println(" #2.5 : " + s);
+					if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()))	{
+						//System.out.println("  #2.75");
 						if (this.findClassRoom(field.getType(), s) != null)	{
 							place = this.findClassRoom(field.getType(), s);
 							slot = s;
+							//System.out.println("   #3 : " + place + " " + slot);
 							break;
 						}
+					}
+				}
+			}
 			
 			//Et encore une fois, en passant cette contrainte à la trappe.
-			if (place == null || slot == null)
-				for (Slot s : slots)
+			if (place == null || slot == null)	{
+				//System.out.println("#4 : " + place + " " + slot + " " + slots.size());
+				for (Slot s : slots)	{
+					//System.out.println(" #4.5 " + s);
 					if (this.findClassRoom(field.getType(), s) != null)	{
 						place = this.findClassRoom(field.getType(), s);
 						slot = s;
+						//System.out.println("   #5 : " + place + " " + slot);
 						break;
 					}
+				}
+			}
 			
 			
 			if (place == null || slot == null)	{
-				System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a classroom !\n" + group + " " + field + " " + duration + " " + group.getTeacher(field)+ "\n\n");
+				//System.out.println("#5 : groupSlots = " + groupSlots + "\nTeachSlots = " + teachSlots);
+				System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a classroom !\n" + group + " " + field + " " + duration + " " + group.getTeacher(field) + " " + place + " " + slot + "\n\n");
 				return false;
 			}
 			
@@ -761,17 +793,17 @@ public class Filler	{
 
 	private Classroom findClassRoom(ClassType type, Slot s) {
 		
-		System.out.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
+		//System.out.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
 		
 		for (Classroom c : this.classrooms)
 			if (c.getType().equals(type))	{
-				System.out.print(c + " " + c.getAllFreeSlots(s.getDuration()).size() + " // ");
+				//System.out.print(c + " " + c.getAllFreeSlots(s.getDuration()).size() + " // ");
 				if (s.canFitIn(c.getAllFreeSlots(s.getDuration())))	{		//On vérifie ici que la salle est libre pendant le slot s
-					System.out.println(c);
+					//System.out.println(c);
 					return c;
 				}
 			}
-		System.out.println("NULL");
+		//System.out.println("NULL");
 		return null;
 	}
 	

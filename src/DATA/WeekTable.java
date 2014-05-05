@@ -103,7 +103,7 @@ public class WeekTable {
 				return true;
 			}
 		}
-		//System.out.println("false.");
+		//System.out.println("false");
 		return false;
 	}
 	
@@ -117,12 +117,14 @@ public class WeekTable {
 		if (!(s instanceof Lesson) && s.getEnd().isntLessThan(l.getEnd()))	{
 			
 			this.slots.remove(i);
+			
 			//System.out.println("WeekTable.addLesson() #1 : " + this.slots.size());
 			
 			if (!l.getBegin().equals(s.getBegin()))	{
 				Slot begin = new Slot(s.getBegin(), l.getBegin());
 				this.slots.add(i, begin);
 				i++;
+				
 				//System.out.println("WeekTable.addLesson()  #2 : " + begin);
 			}
 			
@@ -131,10 +133,12 @@ public class WeekTable {
 			if (l.getEnd().isLessThan(s.getEnd()))	{
 				Slot end = new Slot(l.getEnd(), s.getEnd());
 				this.slots.add(i + 1, end);
+				
 				//System.out.println("WeekTable.addLesson()  #3 : " + end);
 			}
 			
-			//System.out.println("WeekTable.addLesson() : Lesson added !");
+			//System.out.println("WeekTable.addLesson() : Lesson added ! " + this.slots.size());
+			
 			return true;
 		}
 		

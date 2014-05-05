@@ -45,6 +45,7 @@ public class DataStore {
 		this.classrooms.add(new Classroom(0, types.get(1), "C9", 25));
 		this.classrooms.add(new Classroom(0, types.get(1), "2.10", 25));
 		this.classrooms.add(new Classroom(1, types.get(0), "Vannier", 100));
+		this.classrooms.add(new Classroom(46, types.get(0), "Turing", 100));
 		this.classrooms.add(new Classroom(2, types.get(2), "Optique", 16));
 		this.classrooms.add(new Classroom(3, types.get(3), "1", 16));
 		this.classrooms.add(new Classroom(4, types.get(4), "Usinage", 32));
@@ -70,8 +71,8 @@ public class DataStore {
 		
 		this.teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPtMt, MWWH));
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
-		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
 		this.teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
+		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
 		//this.teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
 		//this.teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
 		//this.teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
@@ -97,7 +98,7 @@ public class DataStore {
 		this.groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		//this.groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
-		Group[] gtab = {groups.get(1), groups.get(2)};
+		Group[] gtab = {this.groups.get(1), this.groups.get(2)};
 		this.groups.get(0).setChildren(gtab);
 		
 		//this.groups.add(new Group(3, 25).setClasses(classes));
@@ -129,19 +130,23 @@ public class DataStore {
 		return types;
 	}
 
-	public void setTeachers(ArrayList<Teacher> teachers) {
+	public DataStore setTeachers(ArrayList<Teacher> teachers) {
 		this.teachers = teachers;
+		return this;
 	}
 
-	public void setClassrooms(ArrayList<Classroom> classrooms) {
+	public DataStore setClassrooms(ArrayList<Classroom> classrooms) {
 		this.classrooms = classrooms;
+		return this;
 	}
 
-	public void setGroups(ArrayList<Group> groups) {
+	public DataStore setGroups(ArrayList<Group> groups) {
 		this.groups = groups;
+		return this;
 	}
 
-	public void setTypes(ArrayList<ClassType> types) {
+	public DataStore setTypes(ArrayList<ClassType> types) {
 		this.types = types;
+		return this;
 	}
 }

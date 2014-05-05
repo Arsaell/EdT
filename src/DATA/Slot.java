@@ -61,13 +61,22 @@ public class Slot	{
 	}
 
 	public boolean intersects(Slot s) {
-		return this.begin.isMoreThan(s.begin) && this.begin.isLessThan(s.getEnd()) || this.end.isMoreThan(s.getBegin()) && this.end.isLessThan(s.getEnd()) || this.equals(s);
+		//System.out.println("Slot.intersects() : " + this + " / " + s);
+		return ( this.begin.isntLessThan(s.begin) && this.begin.isLessThan(s.getEnd()) ) || ( this.end.isMoreThan(s.getBegin()) && this.end.isntMoreThan(s.getEnd()) );
 	}
 	
 	public Slot intersection(Slot s) {
 		
 		//System.out.print("Slot.intersection() : " + this + " " + s + " --> ");
 		
+		Time begin = this.begin.isMoreThan(s.begin) ? this.begin : s.begin;
+		Time end = this.end.isLessThan(s.end) ? this.end : s.end;
+		
+		if (end.isMoreThan(begin))
+			return new Slot(begin, end);
+		
+		return null;
+		/*
 		if (this.intersects(s))	{
 			if (this.begin.isntLessThan(s.getBegin()) && this.begin.isLessThan(s.getEnd()))	{
 				Slot res = new Slot(this.begin, s.getEnd());
@@ -83,6 +92,7 @@ public class Slot	{
 		}
 		//System.out.println("null");
 		return null;
+		*/
 	}
 	
 	public String toString()	{
