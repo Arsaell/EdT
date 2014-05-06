@@ -83,7 +83,10 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 	}
 	
 	public String getName() {
-		return this.firstName + " " + this.lastName;
+		if(this.firstName.isEmpty() && this.lastName.isEmpty())
+			return "Nouvel enseignant";
+		else
+			return this.firstName + " " + this.lastName;
 	}
 	
 	public Field[] getFields()	{
