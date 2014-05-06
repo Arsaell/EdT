@@ -1,13 +1,29 @@
 package DATA;
+import java.util.ArrayList;
 
 
 
-public interface Timeable	{
+public abstract class Timeable extends Constrainable	{
 
-	WeekTable timeTable = WeekTable.getDefault();//.copy();
+	protected WeekTable timeTable;
 	
-	public Slot getNextFreeSlot(Time start, Time duration);
-	public Slot[] getAllFreeSlots(Time duration);
+	public Timeable()	{
+		this.timeTable = new WeekTable(WeekTable.getDefault(), this);
+	}
 	
+	public Slot getNextFreeSlot(Time start, Time duration)	{
+		return this.timeTable.getNextFreeSlot(start, duration);
+	}
 	
+	public ArrayList<Slot> getAllFreeSlots(Time duration)	{
+		return this.timeTable.getAllFreeSlots(duration);
+	}
+	
+	public boolean addLesson(Lesson l)	{
+		return this.timeTable.addLesson(l);
+	}
+	
+	public WeekTable getWeekTable()	{
+		return this.timeTable;
+	}
 }

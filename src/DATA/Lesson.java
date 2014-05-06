@@ -2,30 +2,27 @@ package DATA;
 
 
 
-public class Lesson	/*extends Slot*/{
+public class Lesson	extends Slot{
 	
-	private ClassType type;
 	private Teacher teacher;
 	private Group students;
 	private Field field;
 	private Classroom place;
-	private Slot slot;
 	
-	public Lesson (ClassType aType, Teacher aTeacher, Group aGroup, Field aField, Classroom aPlace, Slot aSlot)	{
+	public Lesson (Teacher aTeacher, Group aGroup, Field aField, Classroom aPlace, Slot aSlot)	{
 	
-		this.type = aType;
+		super(aSlot.getBegin(), aSlot.getEnd());
 		this.teacher = aTeacher;
 		this.students = aGroup;
 		this.field = aField;
 		this.place = aPlace;
-		this.slot = aSlot;
 	}
 	
 	private boolean check()	{
 	
 		boolean res = true;
 		
-		if (this.place.getType() != this.type)	{
+		if (this.place.getType() != this.field.getType())	{
 		
 			if (res)
 				System.out.println("Lesson.check() : incoherent data ");
@@ -58,7 +55,47 @@ public class Lesson	/*extends Slot*/{
 		return res;
 	}
 	
+	public ClassType getType() {
+		return this.field.getType();
+	}
+	
+	public Teacher getTeacher() {
+		return teacher;
+	}
+	
+	public Group getStudents() {
+		return students;
+	}
+	
+	public Field getField() {
+		return field;
+	}
+	
+	public Classroom getPlace() {
+		return place;
+	}
+	
 	public Slot getSlot()	{
-		return this.slot;
+		return new Slot(this.getBegin(), this.getEnd());
+	}
+	
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+	
+	public void setStudents(Group students) {
+		this.students = students;
+	}
+	
+	public void setField(Field field) {
+		this.field = field;
+	}
+	
+	public void setPlace(Classroom place) {
+		this.place = place;
+	}
+
+	public String toString()	{
+		return "Lesson :\n\t" + this.students + "\n\t" + this.field + "\n\t" + this.teacher + "\n\t" + this.place + "\n\t" + super.toString();
 	}
 }

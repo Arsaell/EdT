@@ -16,37 +16,33 @@ public class Main	{
 		ArrayList<Group> groups = ds.getGroups();
 		ArrayList<ClassType> types = ds.getTypes();
 		
+		WeekTable.setMinDelta(new Time(30));
 		
-		System.out.println("Main.main() : Examples set :");
+		System.out.println("Main.main() : Examples loaded.");
 		
 		//System.out.println("# ClassType : " + types.get(0) + "\n# Classroom : " + classrooms.get(0) + "\n# Field : " + mathsa + "\n# Teacher : " + teachers.get(0) + "\n# Group : " + groups.get(3));
 		
-		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3500));
+		Filler filler = new Filler(classrooms, groups, teachers, types, new Time(3600));
 		
 		System.out.println("Main.main() : Filler built.");
 		
-		Constrainable[] constraints = filler.computeConstraints();
+		Constrainable[] constraints = filler.computeConstraints(true);
 		
-		System.out.println("Main.main() : Constraints computed");
+		System.out.println("Main.main() : Constraints computed.");
 		
-		ArrayList<Field> temp = new ArrayList<Field>();
+		//System.out.println("Main.main() : Teachers attributed to groups.");
 		
-		for (Constrainable c : constraints)
-			if (c instanceof Field)
-				temp.add((Field)c);
+		int errors = filler.fill(constraints);
 		
-		Field[] f = new Field[temp.size()];
+		//classrooms.get(0).getWeekTable().print();
 		
-		for (int i = 0 ; i < temp.size() ; i++)
-			f[i] = temp.get(i);
+		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
-		filler.attributeTeachers(f);
-		
-		System.out.println("Main.main() : Teachers attributed to groups.");
-		
-		/*
-		for (Group g : groups)
-			System.out.println("Main.main() --> Group.teachers : " + g + " " + g.getLinks());
-		*/
+		//*
+		for (Group g : groups)	{
+			g.getWeekTable().print();
+			System.out.println("\n\n");
+		}
+		//*/
 	}
 }

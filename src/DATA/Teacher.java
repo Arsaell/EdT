@@ -3,14 +3,13 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Teacher implements People, Timeable, Constrainable, Comparable<Teacher>	{
+public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 
 	private int ID;
 	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
 	private Field[] fields;
-	private ArrayList<Link> students;
-	private HashMap<Field, Double> constraints;
+	private LinksList students;
 	
 	public Teacher(int aID, String aFirstName, String aLastName, Field[] aFields, Time aMWWH)	{
 	
@@ -20,9 +19,8 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 		this.fields = aFields;
 		this.maxWeekWorkedHours = aMWWH;
 		
-		this.students = new ArrayList<Link>();
-		this.constraints = new HashMap<Field, Double>();
-		this.currentWeekWorkedHours = new Time((byte) 0, (byte) 0, (byte) 0);
+		this.students = new LinksList();
+		this.currentWeekWorkedHours = new Time();
 	}
 	
 	public boolean canTeach(Field aField, Group aGroup)	{
@@ -37,10 +35,10 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 		for (int i = 0 ; i < this.fields.length ; i++)
 			if (this.fields[i] == aField)
 				res = true;
-		
-		if (res)
-			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(aGroup.getClasses().get(aField));
-		
+//		
+//		if (res)
+//			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(aGroup.getClasses().get(aField));
+//		
 		//System.out.println("Res (Teacher.canTeach()) : --> " + res);
 		
 		return res;
@@ -54,34 +52,22 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 	}
 	
 	public boolean linkGroup(Group g, Field f)	{
-		return this.linkGroup(new Link(this, g, f));
+		return this.addLink(new Link(this, g, f));
 	}
 	
-	private boolean linkGroup(Link link) {
+	public boolean addLink(Link link) {
 		
+		//System.out.println(this + ".addLink() : " + link);
 		//	Links points to this teacher	Group has the field pointed by link						group doesn't have a teacher for the field
-		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().get(link.getField()) == null)	{
+		if (link.getTeacher() == this && link.getGroup().getClasses().get(link.getField()) != null && link.getGroup().getLinks().getLinks(link.getField()).size() == 0)	{
 			this.students.add(link);
+			this.currentWeekWorkedHours = this.currentWeekWorkedHours.add(link.getGroup().getClasses().get(link.getField()));
+			//System.out.println(this + " --> " + this.currentWeekWorkedHours);
 			return true;
 		}
 		return false;
 	}
 
-	public HashMap<Field, Double> getConstraint()	{
-	
-		this.updateConstraint();
-		return this.constraints;
-	}
-	
-	public HashMap<Character, Double> getConstraint(List source)	{
-	
-		return null;
-	}
-	
-	private void updateConstraint()	{
-	
-	}
-	
 	public String getName() {
 		if(this.firstName.isEmpty() && this.lastName.isEmpty())
 			return "Nouvel enseignant";
@@ -93,6 +79,10 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 		return this.fields;
 	}
 
+	public LinksList getLinks()	{
+		return this.students;
+	}
+	
 	public Time getMWWH() {
 		return this.maxWeekWorkedHours;
 	}
@@ -136,23 +126,13 @@ public class Teacher implements People, Timeable, Constrainable, Comparable<Teac
 		this.lastName = lastName;
 		return this;
 	}
-		
-	public Slot getNextFreeSlot(Time start, Time duration)	{
-	
-		return null;
-	}
-	
-	public Slot[] getAllFreeSlots(Time duration)	{
-	
-		return null;
-	}
 	
 	public String toString()	{
 		return this.firstName + " " + this.lastName;
 	}
-
+	
 	public int compareTo(Teacher t) {
 		return this.getName().toLowerCase().compareTo(t.getName().toLowerCase());
 	}
-	
+
 }

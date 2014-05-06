@@ -52,7 +52,7 @@ public class Time	{
 	
 		//System.out.println("Time.add() : " + this + " " + t);
 		
-		Time temp = new Time((byte)(this.day + t.getDay()), (byte)(this.hour + t.hour), this.min);
+		Time temp = new Time((byte)(this.day + t.getDay()), (byte)(this.hour + t.hour), (byte)(this.min + t.getMin()));
 		
 		temp.format();
 		
@@ -73,16 +73,20 @@ public class Time	{
 		
 		temp.format();
 		
+		//System.out.println("Time.substract() : " + this + " - " + t + " = " + temp);
+		
 		return temp;
 	}
 	
 	public Time multiplyBy(double x)	{
 
-		int min = (int)(this.toMin() * x);
+		double min = (this.toMin() * x);
 		
 		Time t = new Time((byte)(min / 1440), (byte)(min % 1440 / 60), (byte)(min % 60));
 		
 		t.format();
+		
+		//System.out.println("Time.multiplyBy() : " + this + " x " + x + " = " + t);
 		
 		return t;
 	}
@@ -114,15 +118,31 @@ public class Time	{
 		
 		if (t.equals(new Time()))
 			return (Double) null;
-		return (double)(this.toMin()) / t.toMin();
+		return (double)(this.toMin()) / (double)t.toMin();
+	}
+	
+	public Time modulo(Time t)	{
+		
+		//	 res = 		this - 		(this * 		Ent(this / t)	)
+		Time res = t.substract( t.multiplyBy( (int)t.divideBy(this) ) );
+		//System.out.println("Time.modulo() : " + this + " % " + t + " = " + this.multiplyBy((this.divideBy(t) % 1)) + " // " + new Time((byte)(min / 1440), (byte)(min%1440/60), (byte)(min%60)) + " // " + res);
+		return res;
 	}
 	
 	public boolean isLessThan(Time t)	{
 		return (this.toMin() < t.toMin());
 	}
+
+	public boolean isntMoreThan(Time t)	{
+		return this.toMin() <= t.toMin();
+	}
 	
 	public boolean isMoreThan(Time t)	{
 		return (this.toMin() > t.toMin());
+	}
+	
+	public boolean isntLessThan(Time t)	{
+		return this.toMin() >= t.toMin();
 	}
 	
 	public boolean equals (Time t)	{
