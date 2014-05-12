@@ -192,4 +192,14 @@ public class WeekTable {
 				System.out.print(s + "\t");
 		}
 	}
+
+	
+	public ArrayList<Slot> getSlots() {
+		return this.slots;
+	}
+
+	
+	public Timeable getOwner() {
+		return this.owner;
+	}
 }

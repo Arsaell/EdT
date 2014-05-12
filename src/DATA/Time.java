@@ -161,7 +161,7 @@ public class Time	{
 	}
 	
 	//Renvoie l'équivalent de this en minutes.
-	private int toMin()	{
+	public int toMin()	{
 		return this.day * 1440 + this.hour * 60 + this.min;
 	}
 	

@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import DATA.WeekTable;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 
@@ -26,7 +28,7 @@ public class EdTViewerWindow {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -37,19 +39,19 @@ public class EdTViewerWindow {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public EdTViewerWindow() {
-		initialize();
+	public EdTViewerWindow(WeekTable wt) {
+		initialize(wt);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(WeekTable wt) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1056, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,8 +73,11 @@ public class EdTViewerWindow {
 		dayPanel = new EdTDayPanel();
 		timetableLayoutPanel.add(dayPanel, BorderLayout.NORTH);
 		
-		contentPanel = new EdTContentPanel();
+		contentPanel = new EdTContentPanel(wt);
 		timetableLayoutPanel.add(contentPanel, BorderLayout.CENTER);
+		
+		frame.setTitle("Emploi du temps de : " + wt.getOwner().toString());
+		frame.setVisible(true);
 	}
 	
 	private void paintComponent(Graphics g) {
