@@ -89,7 +89,7 @@ public class EdTDayPanel extends JPanel {
 		JLabel fridayLabel = new JLabel("Vendredi");
 		friday.add(fridayLabel);
 
-		System.out.println("Test");
+		//System.out.println("EdTDayPanel");
 	}
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);

@@ -3,6 +3,8 @@ package DATA;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import GUI.EdTViewerWindow;
+
 public class Main	{
 
 	public static void main(String[] args)	{
@@ -40,8 +42,11 @@ public class Main	{
 		
 		//*
 		for (Group g : groups)	{
-			g.getWeekTable().print();
-			System.out.println("\n\n");
+			
+			//g.getWeekTable().print();
+			//System.out.println("\n\n");
+			
+			EdTViewerWindow evw = new EdTViewerWindow(g.getWeekTable());
 		}
 		//*/
 	}
