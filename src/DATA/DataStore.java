@@ -12,7 +12,8 @@ public class DataStore {
 	private ArrayList<Classroom> classrooms= new ArrayList<Classroom>();
 	private ArrayList<Group> groups = new ArrayList<Group>();
 	private ArrayList<ClassType> types = new ArrayList<ClassType>();
-
+	private ArrayList<Field> fields = new ArrayList<Field>();
+	
 	public DataStore() {
 		this.addFixtures();
 	}
@@ -66,6 +67,13 @@ public class DataStore {
 		Field[] PtCtCp = {physiquet, concept, contrucp};
 		Field[] CtCpMa = {concept, contrucp, mathsa};
 		Field[] CpMaPa = {contrucp, mathsa, physiquea};
+		
+		this.fields.add(mathsa);
+		this.fields.add(mathst);
+		this.fields.add(physiquea);
+		this.fields.add(physiquet);
+		this.fields.add(concept);
+		this.fields.add(contrucp);
 		
 		Time MWWH = new Time (2500);
 		
@@ -129,6 +137,10 @@ public class DataStore {
 	public ArrayList<ClassType> getTypes() {
 		return types;
 	}
+	
+	public ArrayList<Field> getFields() {
+		return fields;
+	}
 
 	public DataStore setTeachers(ArrayList<Teacher> teachers) {
 		this.teachers = teachers;
@@ -147,6 +159,11 @@ public class DataStore {
 
 	public DataStore setTypes(ArrayList<ClassType> types) {
 		this.types = types;
+		return this;
+	}
+	
+	public DataStore setFields(ArrayList<Field> fields) {
+		this.fields = fields;
 		return this;
 	}
 }

@@ -9,6 +9,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -53,6 +54,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import java.awt.event.KeyAdapter;
@@ -77,26 +79,10 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	private DataStore dataStore;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TeacherWindow window = new TeacherWindow();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
-	public TeacherWindow() {
-		this.dataStore = new DataStore();
+	public TeacherWindow(DataStore dataStore) {
+		this.dataStore = dataStore;
 		this.teacherListModel = new TeacherListModel(this.dataStore.getTeachers());
 		initialize();
 	}
@@ -265,20 +251,12 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	}
 	
 	private JTable getJTableField() {
-		String[] columnNames = {"Matière", "Groupe"};
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("Maths amphi");
-		comboBox.addItem("Maths TD");
-		comboBox.addItem("Physique amphi");
-		comboBox.addItem("Physique TD");
-		comboBox.addItem("Physique TP");
+		
+		String[] columnNames = {"Matière"};
+		
 		Object[][] data = {{" ", " "}};
-		JTable table = new JTable(new FieldTableModel());
-		/*table.setRowSelectionAllowed(false);
-		table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        table.setFillsViewportHeight(true);
-		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));*/
+		JTable table = new JTable(new FieldTableModel(columnNames));
+		
 		return table;
 	}
 	
@@ -311,39 +289,6 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		}
 	}
 	
-	public class FieldTableModel extends AbstractTableModel {
-	    private final Field[] fields;
-	 
-	    private final String[] entetes = {"Matière", "Groupe"};
-	 
-	    public FieldTableModel() {
-	        super();
-	 
-	        fields = new Field[]{ };
-	    }
-	 
-	    public int getRowCount() {
-	        return fields.length;
-	    }
-	 
-	    public int getColumnCount() {
-	        return entetes.length;
-	    }
-	 
-	    public String getColumnName(int columnIndex) {
-	        return entetes[columnIndex];
-	    }
-	 
-	    public Object getValueAt(int rowIndex, int columnIndex) {
-	        switch(columnIndex){
-	            case 0:
-	                return fields[rowIndex].getName();
-	            default:
-	                return null; //Ne devrait jamais arriver
-	        }
-	    }
-	}
-
 	public void valueChanged(ListSelectionEvent e) {
 		// Si un élément de la liste est sélectionné.
 		if(!e.getValueIsAdjusting() && teacherList.getSelectedValuesList().size() > 0) {
@@ -357,6 +302,47 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		} else {
 			// Sinon, on affiche le message qui prie l'utilisateur de sélectionner un professeur.
 			infoPanel.add(disabledPanel, BorderLayout.CENTER);	
+		}
+	}	
+	
+	public class FieldTableModel extends AbstractTableModel {
+	    private final Field[] fields;
+	    private String[] titles;
+	    
+	    public FieldTableModel(String[] titles) {
+	        super();
+	        this.titles = titles;
+	        fields = new Field[]{ };
+	    }
+	 
+	    public int getRowCount() {
+	        return fields.length;
+	    }
+	 
+	    public int getColumnCount() {
+	        return titles.length;
+	    }
+	 
+	    public String getColumnName(int columnIndex) {
+	        return titles[columnIndex];
+	    }
+	 
+	    public Object getValueAt(int rowIndex, int columnIndex) {
+	        switch(columnIndex){
+	            case 0:
+	                return fields[rowIndex].getName();
+	            default:
+	                return null; //Ne devrait jamais arriver
+	        }
+	    }
+	}
+	
+	public class ComboRenderer extends JComboBox implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean isFocus, int row, int col) {   
+			this.addItem("Très bien");
+			this.addItem("Bien");
+			this.addItem("Mal");
+			return this;
 		}
 	}
 
@@ -383,6 +369,10 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		selectedTeacher.setFirstName(teacherFirstNameField.getText()).setLastName(teacherLastNameField.getText());
 		teacherMailLabel.setText(selectedTeacher.getMail());
 		teacherList.repaint();
+	}
+	
+	public JFrame getFrame() {
+		return this.frame;
 	}
 }
 
