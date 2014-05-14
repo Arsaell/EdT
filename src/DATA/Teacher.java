@@ -8,7 +8,7 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	private int ID;
 	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
-	private Field[] fields;
+	private ArrayList<Field> fields;
 	private LinksList students;
 	
 	public Teacher(int aID, String aFirstName, String aLastName, Field[] aFields, Time aMWWH)	{
@@ -16,7 +16,11 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 		this.ID = aID;
 		this.firstName = aFirstName;
 		this.lastName = aLastName;
-		this.fields = aFields;
+		
+		// Fields
+		this.fields = new ArrayList<Field>();
+		for (Field field : aFields)
+			this.fields.add(field);
 		this.maxWeekWorkedHours = aMWWH;
 		
 		this.students = new LinksList();
@@ -32,8 +36,8 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 		if (aGroup.getClasses().get(aField).add(this.currentWeekWorkedHours).isMoreThan((this.maxWeekWorkedHours)))
 			return false;
 		
-		for (int i = 0 ; i < this.fields.length ; i++)
-			if (this.fields[i] == aField)
+		for (int i = 0 ; i < this.fields.size() ; i++)
+			if (this.fields.get(i) == aField)
 				res = true;
 //		
 //		if (res)
@@ -45,8 +49,8 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	}
 	
 	public boolean knows(Field aField)	{
-		for (int i = 0 ; i < this.fields.length ; i++)
-			if (this.fields[i] == aField)
+		for (int i = 0 ; i < this.fields.size() ; i++)
+			if (this.fields.get(i) == aField)
 				return true;
 		return false;
 	}
@@ -67,7 +71,22 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 		}
 		return false;
 	}
+	
+	public Teacher addField(Field field) {
+		this.fields.add(field);
+		return this;
+	}
 
+	public Teacher updateFieldAt(int index, Field field) {
+		this.fields.set(index, field);
+		return this;
+	}
+	
+	public Teacher removeFieldAt(int index) {
+		this.fields.remove(index);
+		return this;
+	}
+	
 	public String getName() {
 		if(this.firstName.isEmpty() && this.lastName.isEmpty())
 			return "Nouvel enseignant";
@@ -75,7 +94,7 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 			return this.firstName + " " + this.lastName;
 	}
 	
-	public Field[] getFields()	{
+	public ArrayList<Field> getFields()	{
 		return this.fields;
 	}
 

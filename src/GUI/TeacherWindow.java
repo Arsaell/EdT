@@ -27,6 +27,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -59,6 +60,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import java.awt.event.KeyAdapter;
+import java.awt.FlowLayout;
 
 
 public class TeacherWindow implements ActionListener, KeyListener, ListSelectionListener{
@@ -72,6 +74,7 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	private JTextField teacherFirstNameField;
 	private JLabel teacherMailLabel;
 	private JTable table;
+	private JComboBox comboBox;
 	private String[] comboData;
 	private JList<Teacher> teacherList;
 	
@@ -125,7 +128,7 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		gbc_list.fill = GridBagConstraints.BOTH;
 		gbc_list.gridx = 0;
 		gbc_list.gridy = 1;
-		teacherListPanel.add(teacherList, gbc_list);
+		teacherListPanel.add(new JScrollPane(teacherList), gbc_list);
 		
 		JButton addTeacherBtn = new JButton("Ajouter un enseignant");
 		addTeacherBtn.setActionCommand("addTeacher");
@@ -228,9 +231,17 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		table = getJTableField();
 		fieldPanel.add(new JScrollPane(table));
 		
-		JButton newFieldBtn = new JButton("Nouvelle matière");
+		JPanel panel = new JPanel();
+		fieldPanel.add(panel, BorderLayout.SOUTH);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JButton newFieldBtn = new JButton("Ajouter matière");
 		newFieldBtn.addActionListener(new NewFieldListener());
-		fieldPanel.add(newFieldBtn, BorderLayout.SOUTH);
+		panel.add(newFieldBtn);
+		
+		JButton delFieldBtn = new JButton("Supprimer matière");
+		delFieldBtn.addActionListener(new DelFieldListener());
+		panel.add(delFieldBtn);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -256,37 +267,60 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		System.out.println("Test");
 	}
 	
-	class NewFieldListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			Object[] data = new Object[] { comboData[0] };
-			JTable theTable = table;
-			FieldTableModel tableModel = (FieldTableModel)theTable.getModel();
-			tableModel.addRow(data);
-		}
-	}
 	private JTable getJTableField() {
 		
 		// Nom des colonnes
-		String[] columnNames = {"Matière"};
+		String[] columnNames = {"Matière enseignée"};
 		
 		// On s'occupe de la ComboBox
 		ArrayList<Field> fields = dataStore.getFields();
-		comboData = new String[fields.size()];
+		comboData = new String[fields.size() + 1];
+		comboData[0] = ""; // Première cellule vide
 		for (int i = 0; i < fields.size(); i++) {
-			comboData[i] = fields.get(i).toString();
+			comboData[i+1] = fields.get(i).toString();
 		}
-		JComboBox combo = new JComboBox(comboData);
+		comboBox = new JComboBox(comboData);
 
-		// Données du tableau
-		Object[][] data = {{comboData[1]}};
+		// On peuple le tableau avec des données vides
+		Object[][] data = {{comboData[0]}};
 
 		// On crée le tableau
 		FieldTableModel model = new FieldTableModel(data, columnNames);
 		JTable table = new JTable(model);
 		table.setRowHeight(30);
-		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(combo));
+		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
 
 		return table;
+	}
+	
+	/** 
+	 * Met à jour le tableau des matières en fonction de l'enseignant.
+	 * @param teacher L'enseignant
+	 */
+	public void populateTableForTeacher(Teacher teacher) {
+		ArrayList<Field> teacherFields = teacher.getFields();
+		Object[][] data = new Object[teacherFields.size()][1];
+		for (int i = 0; i < teacherFields.size(); i++) {
+			data[i][0] = teacherFields.get(i).toString();
+		}
+		
+		((FieldTableModel)table.getModel()).loadData(data);
+	}
+	
+	class NewFieldListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object[] data = new Object[]
+		            {comboData[0]};
+		         ((FieldTableModel)table.getModel()).addRow(data);
+		}
+	}
+	
+	class DelFieldListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int row = table.getSelectedRow();
+			if(row >= 0)
+				((FieldTableModel)table.getModel()).removeRow(row);
+		}
 	}
 	
 	public class TeacherListModel extends AbstractListModel<Teacher> {
@@ -318,6 +352,9 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		}
 	}
 	
+	/**
+	 * Méthode gérant la sélection d'un enseignant dans la liste.
+	 */
 	public void valueChanged(ListSelectionEvent e) {
 		// Si un élément de la liste est sélectionné.
 		if(!e.getValueIsAdjusting() && teacherList.getSelectedValuesList().size() > 0) {
@@ -328,6 +365,8 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 			teacherFirstNameField.setText(selectedTeacher.getFirstName());
 			teacherLastNameField.setText(selectedTeacher.getLastName());
 			teacherMailLabel.setText(selectedTeacher.getMail());
+			// On met à jour le tableau de matières
+			this.populateTableForTeacher(selectedTeacher);
 		} else {
 			// Sinon, on affiche le message qui prie l'utilisateur de sélectionner un professeur.
 			infoPanel.add(disabledPanel, BorderLayout.CENTER);	
@@ -344,6 +383,11 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	        this.data = data;
 	    }
 	 
+	    public void loadData(Object[][] data) {
+	    	this.data = data;
+	    	this.fireTableDataChanged();
+	    }
+	    
 	    public int getRowCount() {
 	        return data.length;
 	    }
@@ -367,9 +411,62 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	    
 	    public void setValueAt(Object value, int row, int col) {
 	        //On interdit la modification sur certaines colonnes !
-	        this.data[row][col] = value;
+	    	
+	    	// Matière modifiée.
+	    	if(col == 0 && !value.equals("")) {
+	    		Field theField = null;
+	    		// On récupère le nom de la matière, puis on retrouve le bon objet Field en fonction de son nom
+	    		for (Field field : dataStore.getFields()) {
+	    			if(field.toString().equals(value)) {
+	    				theField = field;
+	    			}
+	    		}
+	    		
+	    		// On vérifie que la matière n'existe pas déjà
+	    		int count = 0;
+	    		for (int i = 0; i < selectedTeacher.getFields().size(); i++) {
+	    			if(selectedTeacher.getFields().get(i).toString().equals(value) && i != row) {
+	    				count++;
+	    			}
+	    		}
+	    		
+	    		// Si l'utilisateur met à jour une matière, alors on modifie le field dans l'ArrayList.
+	    		if (count == 0) {
+	    			if(row < selectedTeacher.getFields().size()) {
+		    			selectedTeacher.updateFieldAt(row, theField);
+		    		} else {
+			    		selectedTeacher.addField(theField);
+		    		}
+	    			this.data[row][col] = value;
+	    		} else {
+	    			JOptionPane.showMessageDialog(null, "Cette manière est déjà attribuée pour cet enseignant !");
+	    		}
+	    	}
 	     }
 	    
+	    public void removeRow(int position) {
+	    	
+	    	// Si la matière est renseignée, on la supprime de la liste des matières de l'enseignant.
+			if(!table.getModel().getValueAt(position, 0).equals("")) {
+				selectedTeacher.removeFieldAt(position);
+			}
+			
+			// Puis on supprime la ligne dans le tableau
+	    	int indice = 0, indice2 = 0, nbRow = this.getRowCount()-1, nbCol = this.getColumnCount();
+	        Object temp[][] = new Object[nbRow][nbCol];
+	         
+	        for(Object[] value : this.data){
+	           if(indice != position){
+	              temp[indice2++] = value;
+	           }
+	           System.out.println("Indice = " + indice);
+	           indice++;
+	        }
+	        this.data = temp;
+	        temp = null;
+	        this.fireTableDataChanged();
+
+	    }
 	    //Retourne la classe de la donnée de la colonne
 	    public Class getColumnClass(int col){
 	    	return this.data[0][col].getClass();
@@ -397,15 +494,6 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	    }
 	}
 	
-	public class ComboRenderer extends JComboBox implements TableCellRenderer {
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean isFocus, int row, int col) {   
-			this.addItem("Très bien");
-			this.addItem("Bien");
-			this.addItem("Mal");
-			return this;
-		}
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		

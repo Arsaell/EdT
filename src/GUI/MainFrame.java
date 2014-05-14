@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import DATA.DataStore;
+import DATA.WeekTable;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -24,7 +25,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -70,12 +72,24 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		JMenuItem mntmCrneauxHoraires = new JMenuItem("Créneaux horaires");
 		mnParamtrage.add(mntmCrneauxHoraires);
+		
+		JMenu mnEmploiDuTemps = new JMenu("Emploi du temps");
+		menuBar.add(mnEmploiDuTemps);
+		
+		JMenuItem mntmViewEdT = new JMenuItem("Visualiser un emploi du temps");
+		mntmViewEdT.addActionListener(new ViewEdTListener());
+		mnEmploiDuTemps.add(mntmViewEdT);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 	}
 
+	class ViewEdTListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			EdTViewerWindow viewer = new EdTViewerWindow(WeekTable.getDefault());
+		}
+	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.mntmTeachers) {
 			TeacherWindow teacherWindow = new TeacherWindow(this.dataStore);

@@ -376,7 +376,7 @@ public class Filler	{
 		
 		for (Teacher teach : this.teachers)	{
 			for (Field f : teach.getFields())	{
-				teachTimeSpare.put(f,  teach.getMWWH().substract(teach.getCWWH()).divideBy(teach.getFields().length));
+				teachTimeSpare.put(f,  teach.getMWWH().substract(teach.getCWWH()).divideBy(teach.getFields().size()));
 			}
 		}
 		
