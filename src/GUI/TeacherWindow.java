@@ -49,6 +49,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -71,6 +72,7 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	private JTextField teacherFirstNameField;
 	private JLabel teacherMailLabel;
 	private JTable table;
+	private String[] comboData;
 	private JList<Teacher> teacherList;
 	
 	private TeacherListModel teacherListModel;
@@ -223,8 +225,12 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		teacherTabbedPane.addTab("Matières enseignées", null, fieldPanel, null);
 		fieldPanel.setLayout(new BorderLayout(0, 0));
 		
-		JTable table = getJTableField();
+		table = getJTableField();
 		fieldPanel.add(new JScrollPane(table));
+		
+		JButton newFieldBtn = new JButton("Nouvelle matière");
+		newFieldBtn.addActionListener(new NewFieldListener());
+		fieldPanel.add(newFieldBtn, BorderLayout.SOUTH);
 		
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -250,13 +256,36 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		System.out.println("Test");
 	}
 	
+	class NewFieldListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object[] data = new Object[] { comboData[0] };
+			JTable theTable = table;
+			FieldTableModel tableModel = (FieldTableModel)theTable.getModel();
+			tableModel.addRow(data);
+		}
+	}
 	private JTable getJTableField() {
 		
+		// Nom des colonnes
 		String[] columnNames = {"Matière"};
 		
-		Object[][] data = {{" ", " "}};
-		JTable table = new JTable(new FieldTableModel(columnNames));
-		
+		// On s'occupe de la ComboBox
+		ArrayList<Field> fields = dataStore.getFields();
+		comboData = new String[fields.size()];
+		for (int i = 0; i < fields.size(); i++) {
+			comboData[i] = fields.get(i).toString();
+		}
+		JComboBox combo = new JComboBox(comboData);
+
+		// Données du tableau
+		Object[][] data = {{comboData[1]}};
+
+		// On crée le tableau
+		FieldTableModel model = new FieldTableModel(data, columnNames);
+		JTable table = new JTable(model);
+		table.setRowHeight(30);
+		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(combo));
+
 		return table;
 	}
 	
@@ -305,18 +334,18 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		}
 	}	
 	
-	public class FieldTableModel extends AbstractTableModel {
-	    private final Field[] fields;
+	class FieldTableModel extends AbstractTableModel {
+	    private Object[][] data;
 	    private String[] titles;
 	    
-	    public FieldTableModel(String[] titles) {
+	    public FieldTableModel(Object[][] data, String[] titles) {
 	        super();
 	        this.titles = titles;
-	        fields = new Field[]{ };
+	        this.data = data;
 	    }
 	 
 	    public int getRowCount() {
-	        return fields.length;
+	        return data.length;
 	    }
 	 
 	    public int getColumnCount() {
@@ -330,10 +359,41 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 	    public Object getValueAt(int rowIndex, int columnIndex) {
 	        switch(columnIndex){
 	            case 0:
-	                return fields[rowIndex].getName();
+	                return data[rowIndex][columnIndex].toString();
 	            default:
-	                return null; //Ne devrait jamais arriver
+	                return data[rowIndex][columnIndex]; //Ne devrait jamais arriver
 	        }
+	    }
+	    
+	    public void setValueAt(Object value, int row, int col) {
+	        //On interdit la modification sur certaines colonnes !
+	        this.data[row][col] = value;
+	     }
+	    
+	    //Retourne la classe de la donnée de la colonne
+	    public Class getColumnClass(int col){
+	    	return this.data[0][col].getClass();
+	    }
+	    
+	    public boolean isCellEditable(int row, int col){
+	    	return true;
+	    }
+	    
+	    //Permet d'ajouter une ligne dans le tableau
+	    public void addRow(Object[] data){
+	       int indice = 0, nbRow = this.getRowCount(), nbCol = this.getColumnCount();
+	        
+	       Object temp[][] = this.data;
+	       this.data = new Object[nbRow+1][nbCol];
+	        
+	       for(Object[] value : temp)
+	          this.data[indice++] = value;
+	       
+	       this.data[indice] = data;
+	       temp = null;
+	       //Cette méthode permet d'avertir le tableau que les données
+	       //ont été modifiées, ce qui permet une mise à jour complète du tableau
+	       this.fireTableDataChanged();
 	    }
 	}
 	
