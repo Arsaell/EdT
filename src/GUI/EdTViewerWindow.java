@@ -55,6 +55,7 @@ public class EdTViewerWindow {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1056, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle(wt.getOwner().toString());
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel classSelectorPanel = new JPanel();

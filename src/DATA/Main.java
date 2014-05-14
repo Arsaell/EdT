@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import GUI.EdTViewerWindow;
+import GUI.WelcomeFrame;
 
 public class Main	{
 
@@ -40,13 +41,15 @@ public class Main	{
 		
 		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
-		//*
+		
+		new WelcomeFrame();
+		/*
 		for (Group g : groups)	{
 			
 			//g.getWeekTable().print();
 			//System.out.println("\n\n");
 			
-			EdTViewerWindow evw = new EdTViewerWindow(g.getWeekTable());
+			new EdTViewerWindow(g.getWeekTable());
 		}
 		//*/
 	}
