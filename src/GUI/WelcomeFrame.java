@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 public class WelcomeFrame extends JFrame {
 
@@ -27,7 +28,7 @@ public class WelcomeFrame extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 450, 300);
+		this.setBounds(100, 100, 250, 140);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton b1 = new JButton("Nouveau");
@@ -59,8 +60,7 @@ public class WelcomeFrame extends JFrame {
 				System.exit(0);
 			}
 		});
-
-		this.getContentPane().setLayout(new GridLayout(2,2, 10, 10));
+		getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 23, 23));
 		
 		this.getContentPane().add(b1);
 		this.getContentPane().add(b2);

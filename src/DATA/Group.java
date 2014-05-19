@@ -7,29 +7,24 @@ import java.util.Iterator;
 
 public class Group extends Timeable implements People	{
 
-	private int ID;
 	private String name;
-	private int level;
 
 	protected int effectif;
 	public LinksList links;
 	public HashMap<Field, Time> classes;
-	private HashMap<Field, Double> constraints;
 	private HashMap<Field, Boolean> done;
 
 	private Group parent;
 	private Group[] children;
 	
 	
-	public Group(int aID,String aName, int aEff)	{
+	public Group(String aName, int aEff)	{
 		
-		this.ID = aID;
 		this.name = aName;
 		this.effectif = aEff;
 		this.classes = null;	//Implement
 		this.links = new LinksList();
 		this.classes = new HashMap<Field, Time>();
-		this.constraints = new HashMap<Field, Double>();
 		this.done = new HashMap<Field, Boolean>();
 	}
 	
@@ -84,7 +79,7 @@ public class Group extends Timeable implements People	{
 	}
 	
 	public String getMail()	{
-		return "pcg" + Integer.toString((int)this.ID + 1) + "@insa-lyon.fr";
+		return this.name.toLowerCase().replaceAll(" ", "") + "@insa-lyon.fr";
 	}
 	
 	public int getEffectif()	{
@@ -119,6 +114,10 @@ public class Group extends Timeable implements People	{
 		return this;
 	}
 	
+	public Group getParent()	{
+		return this.parent;
+	}
+	
 	public String toString()	{
 		
 		return (this.parent == null ? "" : (this.parent.toString() + " ")) + this.name;
@@ -131,6 +130,10 @@ public class Group extends Timeable implements People	{
 	public Group setChildren(Group[] aChildren) {
 		this.children = aChildren;
 		return this;
+	}
+
+	public HashMap<Field, Boolean> getFieldsDone() {
+		return this.done;
 	}
 
 }

@@ -1,21 +1,21 @@
 package DATA;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Classroom extends Timeable	{
 
-	private int ID;
+	private Point coords;
 	private ClassType type;
 	private String name;
 	private int effectif;
 	private WeekTable timeTable;
 	
-	public Classroom(int aID, ClassType aType, String aName, int aEff)	{
+	public Classroom(ClassType aType, String aName, int aEff, Point aCoords)	{
 	
 		super();
-		this.ID = aID;
 		this.type = aType;
 		this.name = aName;
 		this.effectif = aEff;

@@ -4,11 +4,11 @@ import javax.swing.JPanel;
 
 public class TeacherPanel extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
-	public TeacherPanel() {
+	private StartFrame container;
+	
+	public TeacherPanel(StartFrame aContainer) {
 
+		this.container = aContainer;
 	}
 
 }

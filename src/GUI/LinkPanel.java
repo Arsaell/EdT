@@ -2,12 +2,13 @@ package GUI;
 
 import javax.swing.JPanel;
 
-public class ClassroomPanel extends JPanel {
+public class LinkPanel extends JPanel {
 
 	private StartFrame container;
 	
-	public ClassroomPanel(StartFrame aContainer) {
+	public LinkPanel(StartFrame aContainer) {
 
+		super();
 		this.container = aContainer;
 	}
 
