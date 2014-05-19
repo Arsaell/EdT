@@ -1,15 +1,16 @@
 package GUI;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import DATA.DataStore;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
+import java.io.File;
 
 public class WelcomeFrame extends JFrame {
 
@@ -42,8 +43,18 @@ public class WelcomeFrame extends JFrame {
 		JButton b2 = new JButton("Ouvrir");
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new OpenFrame();
-				setVisible(false);
+				JFileChooser fc = new JFileChooser();
+				
+			    fc.setFileFilter(new FileNameExtensionFilter("Emploi du Temps", "EdT"));
+				
+			    int res = fc.showOpenDialog(frame);
+				
+			    File f = null;
+				if (res == JFileChooser.APPROVE_OPTION)	{
+					f = fc.getSelectedFile();
+					new DataStore(f);
+					
+				}
 			}
 		});
 		

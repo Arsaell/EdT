@@ -1,6 +1,7 @@
 package DATA;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +20,10 @@ public class DataStore {
 		this.addFixtures();
 	}
 	
+	public DataStore(File f) {
+		//BOUYAKAKAH !
+	}
+
 	public void addFixtures() {
 
 		ArrayList<Slot> temp = new ArrayList<Slot>();

@@ -1,0 +1,24 @@
+DATA :
+	+ Filler :
+		Gérer une boucle de répétition qui teste plusieurs configurations, et non pas seulement le premier ordre aléatoire sorti par les HashMap.
+
+	+ DataStore :
+		Récupérer une sauvegarde depuis un fichier (texte ?)
+
+GUI :
+	
+	+ GroupsPanel : 
+		Boutons Enlever et Éditer pour la liste des groupes créés.
+	
+	+ Idem pour tous les Panel des la StartFrame avec une JList à gauche.
+	
+	+ LinksPanel : 
+		comme d'hab, un splitpane, avec :	
+			à gauche : Trois JList si possible sans séparation visible, avec des selectionlistenner pour avoir l'impression de ne sélectionner qu'une ligne
+			à droite :
+				Jtrees pour les groups et fields
+				JComboBox pour les profs. (Léo ?)
+		Toujours pareil, boutons ajouter, enlever, éditer.
+	
+	+ WelcomeFrame :
+		Implémenter le bouton "Ouvrir".

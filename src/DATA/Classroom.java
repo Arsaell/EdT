@@ -32,4 +32,8 @@ public class Classroom extends Timeable	{
  	public String toString()	{
 		return (this.type.getShortName() + " " + this.name);
 	}
+
+	public String getName() {
+		return this.name;
+	}
 }

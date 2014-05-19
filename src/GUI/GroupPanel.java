@@ -5,29 +5,19 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import DATA.ClassType;
 import DATA.Field;
 import DATA.Group;
-import DATA.Slot;
 import DATA.Time;
 import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JButton;
-import javax.swing.AbstractListModel;
-import javax.swing.MutableComboBoxModel;
-
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -35,7 +25,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JScrollBar;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -43,26 +32,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.ListSelectionModel;
-import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 import javax.swing.border.EmptyBorder;
 
 public class GroupPanel extends JPanel {
@@ -97,9 +73,11 @@ public class GroupPanel extends JPanel {
 				classesList.setListData(classes.keySet().toArray());
 				
 				if (container.getFieldsList().size() == 0)
-					fieldsList.setListData(new String[]{"Veuillez ajouter les matières", "dans l'onglet \"Fields\"."});
+					fieldsList.setListData(new String[]{"Veuillez ajouter", "les matières", "dans l'onglet \"Fields\"."});
 				if (classes.size() == 0)
-					classesList.setListData(new String[]{"Veuillez sélectionner une matière","dans la liste à droite."});
+					classesList.setListData(new String[]{"Veuillez sélectionner", "une matière", "dans la liste", "à droite."});
+				
+				splitPane.setDividerLocation(0.25);
 			}
 		});
 		
@@ -118,6 +96,7 @@ public class GroupPanel extends JPanel {
 		splitPane.setLeftComponent(scrollPane);
 		
 		this.groupsTree = new JTree(new DefaultMutableTreeNode("All"));
+		this.groupsTree.setRootVisible(false);
 		scrollPane.setViewportView(groupsTree);
 		
 		JPanel panel = new JPanel();
@@ -297,7 +276,9 @@ public class GroupPanel extends JPanel {
 				
 				if (g.getParent() == null)	{
 					groupsTree = new JTree(tn);
+					groupsTree.setRootVisible(false);
 					splitPane.setLeftComponent(new JScrollPane(groupsTree));
+					splitPane.setDividerLocation(0.25);
 				}
 				else
 					nodes.get(g.getParent()).add(tn);

@@ -9,6 +9,7 @@ public class TeacherPanel extends JPanel {
 	public TeacherPanel(StartFrame aContainer) {
 
 		this.container = aContainer;
+		
 	}
 
 }
