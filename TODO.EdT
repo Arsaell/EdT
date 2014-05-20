@@ -14,12 +14,7 @@ GUI :
 	+ Idem pour tous les Panel des la StartFrame avec une JList à gauche.
 	
 	+ LinksPanel : 
-		comme d'hab, un splitpane, avec :	
-			à gauche : Trois JList si possible sans séparation visible, avec des selectionlistenner pour avoir l'impression de ne sélectionner qu'une ligne
-			à droite :
-				Jtrees pour les groups et fields
-				JComboBox pour les profs. (Léo ?)
-		Toujours pareil, boutons ajouter, enlever, éditer.
+		Les listes de gauche affichent tous les éléments du DS, et non pas ceux reliés par des Links. à revoir.
 	
 	+ WelcomeFrame :
 		Implémenter le bouton "Ouvrir".
