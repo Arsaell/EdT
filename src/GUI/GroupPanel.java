@@ -79,6 +79,11 @@ public class GroupPanel extends JPanel {
 				
 				splitPane.setDividerLocation(0.25);
 			}
+			
+			public void componentHidden(ComponentEvent e)	{
+				container.getDS().setGroups(new ArrayList<Group>(groups));
+			}
+			
 		});
 		
 		this.container = aContainer;

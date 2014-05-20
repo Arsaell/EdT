@@ -4,6 +4,7 @@ DATA :
 
 	+ DataStore :
 		Récupérer une sauvegarde depuis un fichier (texte ?)
+		Stocker les ArrayList et leurs contenus dans un fichier.
 
 GUI :
 	

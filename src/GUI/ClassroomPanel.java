@@ -75,6 +75,7 @@ public class ClassroomPanel extends JPanel {
 		this.treenodes = new HashMap<ClassType, DefaultMutableTreeNode>();
 		
 		this.addComponentListener(new ComponentAdapter() {
+			
 			public void componentShown(ComponentEvent e) {
 				
 				ArrayList<ClassType> types = container.getTypes();
@@ -99,6 +100,10 @@ public class ClassroomPanel extends JPanel {
 				cbType = new JComboBox(types.toArray());
 				panel.add(cbType, 5);
 				//System.out.println(tree.getModel().getChild(tree.getModel().getRoot(), 0));
+			}
+			
+			public void componentHidden(ComponentEvent e)	{
+				container.getDS().setClassrooms(classrooms);
 			}
 		});
 		

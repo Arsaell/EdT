@@ -6,6 +6,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.ScrollPane;
@@ -25,6 +26,9 @@ import DATA.WeekTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.border.CompoundBorder;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class WeekPanel extends JPanel {
 
@@ -34,7 +38,14 @@ public class WeekPanel extends JPanel {
 	public WeekPanel(StartFrame aContainer) {
 
 		super();
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				container.getDS().setDefaultWeek(updateWeekTable());
+			}
+		});
 		this.container = aContainer;
+		this.setBorder(new EmptyBorder(23, 23, 23, 23));
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -97,32 +108,7 @@ public class WeekPanel extends JPanel {
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				ArrayList<Slot> temp = new ArrayList<Slot>();
-				int begin = -1;
-				
-				for (int col = 1 ; col < table.getColumnCount() ; col++)	{
-					for (int row = 0 ; row < table.getRowCount() ; row++)	{
-						
-						table.getValueAt(row, col);
-						
-						if (table.getValueAt(row, col) == null)
-							table.setValueAt(false, row, col);
-
-						if (row < table.getRowCount() - 1 && table.getValueAt(row + 1, col) == null)
-							table.setValueAt(false, row + 1, col);
-						
-						if (begin == -1 && (Boolean)table.getValueAt(row, col))
-							begin = row;
-						
-						if (row != begin && (Boolean)table.getValueAt(row, col) && (row == table.getRowCount() - 1 || !(Boolean)table.getValueAt(row + 1, col)))	{
-							temp.add(new Slot(new Time((col - 1) * 10000 + begin * 100), new Time((col - 1) * 10000 + row * 100)));
-							begin = -1;
-						}
-					}
-				}
-				WeekTable def = new WeekTable(temp, null);
-				
-				WeekTable.setDefault(def);
+				WeekTable.setDefault(updateWeekTable());
 				
 				container.allowTimeableTabs(true);
 			}
@@ -132,4 +118,33 @@ public class WeekPanel extends JPanel {
 		
 	}
 
+	private WeekTable updateWeekTable()	{
+
+		ArrayList<Slot> temp = new ArrayList<Slot>();
+		int begin = -1;
+		
+		for (int col = 1 ; col < table.getColumnCount() ; col++)	{
+			for (int row = 0 ; row < table.getRowCount() ; row++)	{
+				
+				table.getValueAt(row, col);
+				
+				if (table.getValueAt(row, col) == null)
+					table.setValueAt(false, row, col);
+
+				if (row < table.getRowCount() - 1 && table.getValueAt(row + 1, col) == null)
+					table.setValueAt(false, row + 1, col);
+				
+				if (begin == -1 && (Boolean)table.getValueAt(row, col))
+					begin = row;
+				
+				if (row != begin && (Boolean)table.getValueAt(row, col) && (row == table.getRowCount() - 1 || !(Boolean)table.getValueAt(row + 1, col)))	{
+					temp.add(new Slot(new Time((col - 1) * 10000 + begin * 100), new Time((col - 1) * 10000 + row * 100)));
+					begin = -1;
+				}
+			}
+		}
+		WeekTable res = new WeekTable(temp, null);
+		
+		return res;
+	}
 }

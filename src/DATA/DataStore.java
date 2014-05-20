@@ -15,6 +15,8 @@ public class DataStore {
 	private ArrayList<Group> groups = new ArrayList<Group>();
 	private ArrayList<ClassType> types = new ArrayList<ClassType>();
 	private ArrayList<Field> fields = new ArrayList<Field>();
+	private Time MWWH;
+	private WeekTable defaultWeek;
 	
 	public DataStore() {
 		this.addFixtures();
@@ -38,7 +40,8 @@ public class DataStore {
 		temp.add(new Slot(new Time(40800), new Time(41200)));
 		temp.add(new Slot(new Time(41400), new Time(41800)));
 		
-		WeekTable.setDefault(new WeekTable(temp, null));
+		this.defaultWeek = new WeekTable(temp, null);
+		WeekTable.setDefault(this.defaultWeek);
 		
 		this.types.add(0, new ClassType("Cours", "Amphithéâtre", new Slot(new Time(100), new Time(130))));
 		this.types.add(1, new ClassType("TD", "TD", new Slot(new Time(130), new Time(200))));
@@ -81,7 +84,7 @@ public class DataStore {
 		this.fields.add(concept);
 		this.fields.add(contrucp);
 		
-		Time MWWH = new Time (2500);
+		this.MWWH = new Time (2500);
 		
 		this.teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPtMt, MWWH));
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
@@ -146,6 +149,22 @@ public class DataStore {
 	
 	public ArrayList<Field> getFields() {
 		return fields;
+	}
+
+	public Time getMWWH() {
+		return MWWH;
+	}
+
+	public WeekTable getDefaultWeek() {
+		return defaultWeek;
+	}
+
+	public void setMWWH(Time mWWH) {
+		MWWH = mWWH;
+	}
+
+	public void setDefaultWeek(WeekTable defaultWeek) {
+		this.defaultWeek = defaultWeek;
 	}
 
 	public DataStore setTeachers(ArrayList<Teacher> teachers) {

@@ -3,12 +3,15 @@ package GUI;
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import DATA.ClassType;
@@ -26,17 +29,28 @@ import javax.swing.BoxLayout;
 
 public class StartFrame extends JFrame {
 
-	public FieldPanel fp = new FieldPanel(this);
-	public WeekPanel wp = new WeekPanel(this);
-	public TeacherPanel tp = new TeacherPanel(this);
-	public ClassroomPanel cp = new ClassroomPanel(this);
-	public LinkPanel lp = new LinkPanel(this);
-	public GroupPanel gp = new GroupPanel(this);
+	private DataStore ds;
+	public FieldPanel fp;
+	public WeekPanel wp;
+	public TeacherPanel tp;
+	public ClassroomPanel cp;
+	public LinkPanel lp;
+	public GroupPanel gp;
 	public JTabbedPane tabbedPane;
 	
 	public StartFrame() {
 		super();
 
+		this.ds = new DataStore();
+		
+		this.fp = new FieldPanel(this);
+		this.wp = new WeekPanel(this);
+		this.tp = new TeacherPanel(this, this.ds);
+		this.cp = new ClassroomPanel(this);
+		this.lp = new LinkPanel(this);
+		this.gp = new GroupPanel(this);
+		
+		
 		this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab("Week", wp);
 		tabbedPane.addTab("Fields", fp);
@@ -60,18 +74,24 @@ public class StartFrame extends JFrame {
 		
 		getContentPane().add(tabbedPane);
 		getContentPane().add(btTer);
+		
 		this.setBounds(200, 200, 650, 500);
+		((JComponent) this.getContentPane()).setBorder(new EmptyBorder(15, 15, 15, 15));
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 
+	public DataStore getDS()	{
+		return this.ds;
+	}
+	
 	public ArrayList<Field> getFieldsList()	{
-		return fp.getFields();
+		return this.ds.getFields();
 	}
 
 	public ArrayList<ClassType> getTypes()	{
-		return this.fp.getClassTypes();
+		return this.ds.getTypes();
 	}
 	
 	public void allowTimeableTabs(Boolean bool) {

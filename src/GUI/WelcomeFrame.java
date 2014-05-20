@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import DATA.DataStore;
+import DATA.Filler;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -52,8 +53,8 @@ public class WelcomeFrame extends JFrame {
 			    File f = null;
 				if (res == JFileChooser.APPROVE_OPTION)	{
 					f = fc.getSelectedFile();
-					new DataStore(f);
-					
+					DataStore ds = new DataStore(f);
+					new MainFrame(new Filler(new DataStore(f)));
 				}
 			}
 		});

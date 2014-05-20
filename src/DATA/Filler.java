@@ -14,7 +14,7 @@ public class Filler	{
 	private ArrayList<Teacher> teachers;
 	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
-	//private List<Constraint> constraints;
+	private DataStore dataStore;
 	
 	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
@@ -25,7 +25,16 @@ public class Filler	{
 		this.MWWH = aMWWH;
 		
 	}
-		
+	
+	public Filler(DataStore ds) {
+		this.dataStore = ds;
+		this.classrooms = ds.getClassrooms();
+		this.groups = ds.getGroups();
+		this.teachers = ds.getTeachers();
+		this.types = ds.getTypes();
+		this.MWWH = ds.getMWWH();
+	}
+
 	/*
 	 * Dans l'ordre spécifié par la paramètre,
 	 * cette méthode devra attribuer les constrainables

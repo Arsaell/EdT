@@ -27,6 +27,8 @@ import DATA.ClassType;
 import DATA.Field;
 import DATA.Slot;
 import DATA.Time;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class FieldPanel extends JPanel {
 	
@@ -52,6 +54,13 @@ public class FieldPanel extends JPanel {
 	public FieldPanel(StartFrame aContainer) {
 
 		super();
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				container.getDS().setFields(fields);
+				container.getDS().setTypes(classtypes);
+			}
+		});
 		
 		this.container = aContainer;
 		this.classtypes = new ArrayList<ClassType>();
