@@ -68,27 +68,27 @@ public class GroupPanel extends JPanel {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				
-				groupsCBox = new JComboBox(groups.toArray());
-				fieldsList.setListData(container.getFieldsList().toArray());
+				groupsCBox = new JComboBox(groups);
+				fieldsList.setListData(container.ds.getFields().toArray());
 				classesList.setListData(classes.keySet().toArray());
 				
-				if (container.getFieldsList().size() == 0)
+				if (container.ds.getFields().size() == 0)
 					fieldsList.setListData(new String[]{"Veuillez ajouter", "les matières", "dans l'onglet \"Fields\"."});
 				if (classes.size() == 0)
 					classesList.setListData(new String[]{"Veuillez sélectionner", "une matière", "dans la liste", "à droite."});
 				
-				splitPane.setDividerLocation(0.25);
+				//splitPane.setDividerLocation(0.25);
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.getDS().setGroups(new ArrayList<Group>(groups));
+				container.ds.setGroups(new ArrayList<Group>(groups));
 			}
 			
 		});
 		
 		this.container = aContainer;
 		
-		this.groups = new Vector<Group>();
+		this.groups = new Vector<Group>(this.container.ds.getGroups());
 		this.classes = new HashMap<Field, Time>();
 		this.nodes = new HashMap<Group, DefaultMutableTreeNode>();
 //		classes.put(new Field(new ClassType("", "", new Slot(new Time(), new Time())), ""), new Time());
@@ -101,7 +101,7 @@ public class GroupPanel extends JPanel {
 		splitPane.setLeftComponent(scrollPane);
 		
 		this.groupsTree = new JTree(new DefaultMutableTreeNode("All"));
-		this.groupsTree.setRootVisible(false);
+		//this.groupsTree.setRootVisible(false);
 		scrollPane.setViewportView(groupsTree);
 		
 		JPanel panel = new JPanel();
@@ -188,7 +188,7 @@ public class GroupPanel extends JPanel {
 		panel_1.setLayout(new GridLayout(1, 3, 10, 10));
 		
 
-		this.fieldsList = new JList(this.container.getFieldsList().toArray());
+		this.fieldsList = new JList(this.container.ds.getFields().toArray());
 		
 		panel_1.add(fieldsList);
 		
@@ -281,7 +281,7 @@ public class GroupPanel extends JPanel {
 				
 				if (g.getParent() == null)	{
 					groupsTree = new JTree(tn);
-					groupsTree.setRootVisible(false);
+					//groupsTree.setRootVisible(false);
 					splitPane.setLeftComponent(new JScrollPane(groupsTree));
 					splitPane.setDividerLocation(0.25);
 				}
@@ -317,7 +317,7 @@ public class GroupPanel extends JPanel {
 	
 	private void checkAddClassEnabled()	{
 		//System.out.println("Class");
-		this.addClass.setEnabled(container.getFieldsList().size() != 0 && this.fieldsList.getSelectedIndex() != -1 && ((Integer)this.hours.getValue() + (Integer)this.minutes.getValue() > 0));
+		this.addClass.setEnabled(container.ds.getFields().size() != 0 && this.fieldsList.getSelectedIndex() != -1 && ((Integer)this.hours.getValue() + (Integer)this.minutes.getValue() > 0));
 	}
 	
 	public ArrayList<Group> getGroups()	{

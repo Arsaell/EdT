@@ -41,7 +41,7 @@ public class WeekPanel extends JPanel {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				container.getDS().setDefaultWeek(updateWeekTable());
+				container.ds.setDefaultWeek(updateWeekTable());
 			}
 		});
 		this.container = aContainer;
@@ -107,10 +107,11 @@ public class WeekPanel extends JPanel {
 		JButton btnValider = new JButton("Valider");
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				WeekTable.setDefault(updateWeekTable());
+				System.out.println("WeekPanel.valider() : " + container.ds);
+				container.ds.setDefaultWeek(updateWeekTable());
 				
 				container.allowTimeableTabs(true);
+				System.out.println("WeekPanel.valider() : " + container.ds);
 			}
 		});
 		btnValider.setVerticalAlignment(SwingConstants.TOP);

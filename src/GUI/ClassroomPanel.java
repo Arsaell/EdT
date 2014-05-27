@@ -66,19 +66,20 @@ public class ClassroomPanel extends JPanel {
 	private JSplitPane splitPane;
 	private JScrollPane scrollPane;
 	private JPanel panel;
+	private JButton btnPreview;
 	
 	public ClassroomPanel(StartFrame aContainer) {
 
 		super();
-		
-		this.classrooms = new ArrayList<Classroom>();
+		this.container = aContainer;
+		this.classrooms = this.container.ds.getClassrooms();
 		this.treenodes = new HashMap<ClassType, DefaultMutableTreeNode>();
 		
 		this.addComponentListener(new ComponentAdapter() {
 			
 			public void componentShown(ComponentEvent e) {
 				
-				ArrayList<ClassType> types = container.getTypes();
+				ArrayList<ClassType> types = container.ds.getTypes();
 				
 				tree = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode()));
 				
@@ -103,11 +104,10 @@ public class ClassroomPanel extends JPanel {
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.getDS().setClassrooms(classrooms);
+				container.ds.setClassrooms(classrooms);
 			}
 		});
 		
-		this.container = aContainer;
 		this.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		this.splitPane = new JSplitPane();
@@ -205,6 +205,17 @@ public class ClassroomPanel extends JPanel {
 		
 		panel.add(btnAjouter);
 		
+		btnPreview = new JButton("Preview");
+		btnPreview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame fr = new JFrame();
+				fr.add(new MapPanel(classrooms, fr));
+				fr.pack();
+				fr.setVisible(true);
+			}
+		});
+		panel.add(btnPreview);
+		
 	}
 
 	private void checkEnableBtn()	{
@@ -267,7 +278,7 @@ public class ClassroomPanel extends JPanel {
 			});
 			
 			pane.add(bt);
-			this.add(pane);
+			getContentPane().add(pane);
 			this.pack();
 			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			this.setVisible(true);
