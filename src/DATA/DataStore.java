@@ -58,7 +58,7 @@ public class DataStore {
 		this.types.add(7, new ClassType("Sport", "Gymnase", new Slot(new Time(200), new Time(200))));
 		
 		this.classrooms.add(new Classroom(types.get(1), "C9", 25, new Point(0, 0)));
-		//this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
+		this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
 		this.classrooms.add(new Classroom(types.get(0), "Vannier", 100, new Point(1, 0)));
 		//this.classrooms.add(new Classroom(types.get(0), "Turing", 100, new Point(1, 1)));
 		this.classrooms.add(new Classroom(types.get(2), "Optique", 16, new Point(0, 2)));

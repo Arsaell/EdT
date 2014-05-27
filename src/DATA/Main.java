@@ -1,5 +1,7 @@
 package DATA;
 
+import GUI.EdTViewerWindow;
+
 public class Main	{
 
 	public static void main(String[] args)	{
@@ -23,11 +25,21 @@ public class Main	{
 		
 		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
+		//new EdTViewerWindow(ds.getClassrooms().get(0).getWeekTable());
 		
 		//new WelcomeFrame();
 		/*
+		
+		Time time = new Time();
+		for (Field f : ds.getGroups().get(1).getClasses().keySet())
+			time = time.add(ds.getGroups().get(1).getClasses().get(f));
+		
 		for (Group g : ds.getGroups())	{
-			
+			Time t = new Time();
+			for (Slot s : g.getWeekTable().getSlots())
+				if (s instanceof Lesson)
+					t = t.add(s.getDuration());
+			System.out.println(g + " --> " + t + " / " + time);
 			new EdTViewerWindow(g.getWeekTable());
 		}
 		//*/

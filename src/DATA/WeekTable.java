@@ -2,7 +2,15 @@ package DATA;
 
 import java.util.ArrayList;
 
-
+/**
+ * Cette classe représente un emploi du temps hebdomadaire.
+ * Elle regroupe un propriétaire Timeable (Teacher, Group ou Classroom)
+ * et une liste de Slots représentant tous les créneaux horaires de la semaine.
+ * La variable static minDelta représente l'intervalle minimum entre des créneaux (exemple : une demi-heure à l'INSA),
+ * De même, defaultWeek correspond à l'ensemble des créneaux travaillés de la semaine (exemple: 8h-12, 14h-18 du lundi au vendredi) 
+ * @author arsaell
+ *
+ */
 
 public class WeekTable {
 	
@@ -12,6 +20,13 @@ public class WeekTable {
 	private static Time minDelta = new Time(1);
 	private static WeekTable defaultWeek;
 	
+	/**
+	 * Cette méthode est celle à appeler de préférence :
+	 * Elle recopie les créneaux de l'instance statique defaultWeek
+	 * afin que toutes les instances qui implémentent Timeable (autrement dit, qui sont associées à une instance de WeekTable)
+	 * soient basées sur la même semaine de travail.
+	 * @param aOwner
+	 */
 	public WeekTable(Timeable aOwner)	{
 	
 		this(defaultWeek, aOwner);
@@ -32,28 +47,6 @@ public class WeekTable {
 	
 	public void setSlot(Slot aSlot)	{
 	
-	}
-	
-	public Slot getNextFreeSlot(Time start, Time duration)	{
-	
-		if (this.indexForTime(start) == -1)	{
-			
-			System.out.println("\n\n\t\t##########\n\n\tWeekTable.getNextFreeSlot(Time start) : Starting time out of table !\n\n\t\t##########\n\n");
-			return null;
-		}
-		
-		Slot curr = null;
-		
-		for (int i = this.indexForTime(start) ; i < this.slots.size() ; i++)	{
-			
-			curr = this.slots.get(i);
-			
-			if (!(curr instanceof Lesson) && curr.getDuration().isntLessThan(duration))	{
-				return curr;
-			}
-		}
-		
-		return null;
 	}
 	
 	public ArrayList<Slot> getAllFreeSlots (Time duration)	{
@@ -144,6 +137,20 @@ public class WeekTable {
 		return false;
 	}
 	
+	public int checkForDuplicates()	{
+		int res = 0;
+		for (int i = 1 ; i < this.slots.size() ; i++)
+			if (!(this.slots.get(i - 1) instanceof Lesson) && !(this.slots.get(i) instanceof Lesson) && this.slots.get(i).getBegin().substract(this.slots.get(i - 1).getEnd()).isLessThan(new Time(2)))	{
+				Slot s = new Slot(this.slots.get(i - 1).getBegin(), this.slots.get(i).getEnd());
+				//System.out.println("WeekTable.checkForDuplicates() : " + this.slots.get(i - 1) + " + " + this.slots.get(i) + " = " + s);
+				this.slots.remove(i);
+				this.slots.remove(i - 1);
+				this.slots.add(i - 1, s);
+				res++;
+			}
+		return res;
+	}
+	
 	private int  indexForTime(Time t)	{
 		
 		int i;
@@ -173,23 +180,25 @@ public class WeekTable {
 		return minDelta;
 	}
 
-	public void print() {
+	public String toString() {
 		
-		System.out.println("\n\tWeektable : " + this.owner + "\n");
+		String res = "\tWeektable : " + this.owner + "\n";
 		int currentDay = 0;
 		for (Slot s : this.slots)	{
 			
 			if ((int)s.getBegin().getDay() > currentDay)	{
-				System.out.println("");
+				res += "\n";
 				currentDay = (int) s.getBegin().getDay();
 			}
 			
 			if (s instanceof Lesson)	{
-				System.out.print(((Lesson)s).getSlot() + " : " + ((Lesson)s).getField() + "\t");
+				res += (((Lesson)s).getSlot().toString() + " : " + ((Lesson)s).getField().toString() + "\t");
 			}
 			else
-				System.out.print(s + "\t");
+				res += s.toString() + "\t";
+			
 		}
+		return res;
 	}
 	
 	public ArrayList<Slot> getSlots() {

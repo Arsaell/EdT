@@ -100,10 +100,9 @@ public class EdTContentPanel extends JPanel {
 				if (s instanceof Lesson)	{
 					
 					jpnl.setBackground(Color.white);
-					
 					JLabel field = new JLabel();
 					field.setHorizontalTextPosition(SwingConstants.CENTER);
-					field.setText(((Lesson) s).getField().getName());
+					field.setText(((Lesson) s).getField().toString());
 					jpnl.add(field);
 					
 					if (! (wt.getOwner() instanceof Teacher))	{

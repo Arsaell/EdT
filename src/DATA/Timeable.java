@@ -11,10 +11,6 @@ public abstract class Timeable extends Constrainable	{
 		this.timeTable = new WeekTable(WeekTable.getDefault(), this);
 	}
 	
-	public Slot getNextFreeSlot(Time start, Time duration)	{
-		return this.timeTable.getNextFreeSlot(start, duration);
-	}
-	
 	public ArrayList<Slot> getAllFreeSlots(Time duration)	{
 		return this.timeTable.getAllFreeSlots(duration);
 	}
@@ -27,6 +23,10 @@ public abstract class Timeable extends Constrainable	{
 		int i = this.timeTable.getSlots().indexOf(l);
 		this.timeTable.getSlots().remove(i);
 		this.timeTable.getSlots().add(i, l.getSlot());
+		this.timeTable.checkForDuplicates();
+		if (this instanceof Group)	{
+			((Group)this).done.put(l.getField(), false);
+		}
 	}
 	
 	public WeekTable getWeekTable()	{
