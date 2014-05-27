@@ -323,7 +323,7 @@ public class TeacherWindow implements ActionListener, KeyListener, ListSelection
 		}
 	}
 	
-	public class TeacherListModel extends AbstractListModel<Teacher> {
+	public class TeacherListModel extends AbstractListModel {
 
 		private ArrayList<Teacher> teachers;
 		
