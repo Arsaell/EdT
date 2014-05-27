@@ -2,6 +2,7 @@ package DATA;
 
 import java.util.ArrayList;
 import DATA.HashMap;
+import GUI.EdTViewerWindow;
 
 public class Filler	{
 
@@ -9,8 +10,15 @@ public class Filler	{
 	private ArrayList<ClassType> types;
 	private ArrayList<Group> groups;
 	private ArrayList<Teacher> teachers;
+	private ArrayList<Lesson> done;		//Utilisée pour stocker l'"historique" pendant le remplissage.
+	HashMap<Integer, Integer> steps;	//idem
+	private int lastErrorIndex;
 	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
+	
+	private int mode;
+	public static final int IGNORE = 0, ABORT = 1, RETRY = 2;
+	
 	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
@@ -34,12 +42,17 @@ public class Filler	{
 	 * cette méthode devra attribuer les constrainables
 	 * jusqu'à ce que l'emploi du temps soit complet.
 	 * */
-	public int fill(Constrainable[] order)	{
+	public int fill(HashMap<Constrainable, Double> order, int mode)	{
 
+		this.mode = mode;
 		ArrayList<Group> groupsOrder = new ArrayList<Group>();
 		ArrayList<Field> fieldsOrder = new ArrayList<Field>();
 		
-		for (Constrainable c : order)	{
+		this.steps = new HashMap<Integer, Integer>();
+		this.done = new ArrayList<Lesson>();
+		
+		for (Object o : order)	{
+			Constrainable c = (Constrainable) o;
 			if (c instanceof Group)
 				groupsOrder.add((Group)c);
 			
@@ -49,13 +62,16 @@ public class Filler	{
 		
 		int errors = 0;
 		
-		for (Constrainable c : order)	{
+		for (int i = 0 ; i < order.size() ; i++)	{
+
+			steps.put(i, done.size());
+			Constrainable c = order.getKey(i);
 			
 			if (c instanceof Field)	{				//Order : Group
 
 				//System.out.println(c + "\t\t\t" + this.takeCareOf((Field)c, groupsOrder));
 				if (!this.takeCareOf((Field) c, groupsOrder))
-					++errors;
+					i = this.takeCareOf(new FillerError(c, i), order, groupsOrder, fieldsOrder);
 			}
 			
 			else if (c instanceof ClassType)	{	//Order : Group
@@ -78,6 +94,11 @@ public class Filler	{
 				if (!this.takeCareOf((Group) c, fieldsOrder))
 					++errors;
 			}
+			//*
+			if (errors > 0)
+				for (int j = 0 ; j < steps.size() ; j++)
+					System.out.println("Filler.fill() #steps : " + j + " --> " + steps.get(j));
+			//*/
 		}
 		return errors;
 	}
@@ -127,7 +148,7 @@ public class Filler	{
 						/*
 						else if (teach == this.teachers.get(this.teachers.size() - 1))
 							System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
-						*/
+						//*/
 						
 						if(i == this.teachers.size() - 1)
 							i = -1;
@@ -157,7 +178,7 @@ public class Filler	{
 							if (teach.canTeach(f, g))	{
 							
 								boolean res = g.setTeacher(teach, f);
-								System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
+								//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
 								break;
 							}
 							
@@ -175,7 +196,7 @@ public class Filler	{
 		return (!failed);
 	}
 	
-	public Constrainable[] computeConstraints(boolean attributeTeachers)	{
+	public HashMap<Constrainable, Double> computeConstraints(boolean attributeTeachers)	{
 		
 		/*
 			Retourne un tableau des objets les plus contraints, dans l'ordre
@@ -500,20 +521,20 @@ public class Filler	{
 		data.add(teachingConstraints);
 		data.add(groupConstraints);
 		
-		Constrainable[] res = this.orderByValues(data);
+		HashMap<Constrainable, Double> res = this.orderByValues(data);
 		
 		return res;
 	}
 	
-	private Constrainable[] orderByValues(ArrayList<HashMap<Constrainable, Double>> data){
+	private HashMap<Constrainable, Double> orderByValues(ArrayList<HashMap<Constrainable, Double>> data){
 		
 		//System.out.print("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : ");
 		
-		ArrayList<Constrainable> temp = new ArrayList<Constrainable>();
+		HashMap<Constrainable, Double> temp = new HashMap<Constrainable, Double>();
 		HashMap<Constrainable, Double> constraints = new HashMap<Constrainable, Double>();
 		
 	//On insère un premier élément pour lancer la boucle.
-		temp.add((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
+		temp.put((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1), 0.);
 		
 		//System.out.println(temp);
 		
@@ -530,7 +551,7 @@ public class Filler	{
 					
 					//System.out.print("  #2 : " + i);
 					
-					Constrainable c2 = temp.get(i);
+					Constrainable c2 = temp.getKey(i);
 					double con = -1;
 					
 					//System.out.println(" c2 : " + c2 + " # " + con);
@@ -549,13 +570,13 @@ public class Filler	{
 					
 					if (hm.get(c1) > con)	{
 						//System.out.println("Fits here : " + i);
-						temp.add(i , c1);
+						temp.put(i, c1 , con);
 						break;
 					}
 					
 					else if (i == temp.size() - 1)	{
 						//System.out.println("addLast() : " + (temp.size() + 1));
-						temp.add(c1);
+						temp.put(c1, con);
 						break;
 					}
 				}
@@ -566,18 +587,7 @@ public class Filler	{
 				temp.remove(data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
 			}
 		}
-		
-		Constrainable[] res = new Constrainable[temp.size()];
-		
-		for (int i = 0 ; i < temp.size(); i++)
-			res[i] = temp.get(i);
-		
-		/*
-		for (int i = 0 ; i < res.length ; i++)	
-			if (res[i] instanceof ClassType)
-				System.out.println("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : " + res[i] + "\t\t--> " + constraints.get(res[i]));
-		//*/
-		
+
 		/*
 		//Boucle d'affichage uniquement, peut être passée sous commentaire
 		for (Constrainable c : res)	{
@@ -593,7 +603,7 @@ public class Filler	{
 			System.out.println("Filler.orderByValues() #res : " + c + " \t " + con);
 		}
 		//*/
-		return res;
+		return temp;
 	}
 
 	private boolean takeCareOf(Field f, ArrayList<Group> order)	{
@@ -788,13 +798,68 @@ public class Filler	{
 				return false;
 			}
 			
-			else 
+			else 	{
 				left = left.substract(duration);
+				this.done.add(res);
+			}
 		}
 		
 		group.getFieldsDone().put(field, true);
 		
 		return true;
+	}
+
+	private int takeCareOf(FillerError error, HashMap<Constrainable, Double> order, ArrayList<Group> groupOrder, ArrayList<Field> fieldOrder) {
+		
+		System.out.print("Filler.takeCareOf(FillerError) : " + error + "\t--> ");
+		
+		switch (this.mode)	{
+		case ABORT :
+			System.out.println("ABORT");
+			return order.size();
+			
+		case IGNORE :
+			System.out.println("IGNORE");
+			return error.getStart();
+			
+		case RETRY:
+			
+			System.out.println("RETRY : ");
+			
+			for (int i = error.getStart() ; i > 0 ; i--)	{
+				System.out.println("#0 : " + i);
+				if (order.getValue(i - 1) - order.getValue(i) < 0.05 && !(order.getKey(i) instanceof Field) && i != this.lastErrorIndex)	{
+					
+					this.lastErrorIndex = i;
+					
+					Constrainable c = order.getKey(i);
+					double constr = order.getValue(i);
+					System.out.println(" #1 : " + c + "(--> " + constr + ") [" + done.size() + "] " + steps.get(i - 2) + " " + steps.get(i + 1));
+					order.remove(c);
+					order.put(i - 1, c, constr);
+					
+					for (int j = steps.get(i - 1) ; j < done.size() ; j++)	{
+						Lesson l = done.get(j);
+						System.out.println("  #2 : " + j + l);
+						l.getPlace().removeLesson(l);
+						l.getStudents().removeLesson(l);
+						l.getTeacher().removeLesson(l);
+						done.remove(l);
+					}
+					//steps.remove(i - 1);
+					steps.remove(i);
+					
+					steps.put(i, done.size());
+					return i - 1;
+				}
+			}
+			break;
+			
+		default :
+			break;
+		}
+		
+		return error.getStart();
 	}
 
 	public Classroom findClassRoom(ClassType type, Slot s) {

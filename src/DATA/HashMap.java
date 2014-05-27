@@ -36,6 +36,10 @@ public class HashMap<K, V> implements Map<K, V>, Iterable {
 		return this.keys.get(index);
 	}
 	
+	public V getValue(int index)	{
+		return this.values.get(index);
+	}
+	
 	@Override
 	public V get(Object key) {
 		if (keys.indexOf(key) != -1)
@@ -59,6 +63,16 @@ public class HashMap<K, V> implements Map<K, V>, Iterable {
 		return value;
 	}
 
+	public void put(int index, K key, V value)	{
+		int i = keys.indexOf(key);
+		if (i != -1)	{
+			keys.remove(i);
+			values.remove(i);
+		}
+		keys.add(index, key);
+		values.add(index, value);
+	}
+	
 	@Override
 	public V remove(Object key) {
 		int index = keys.indexOf(key);

@@ -11,13 +11,13 @@ public class Main	{
 		Filler filler = new Filler(ds);
 		//System.out.println("Main.main() : Filler built.");
 		
-		Constrainable[] constraints = filler.computeConstraints(true);
+		HashMap<Constrainable, Double> constraints = filler.computeConstraints(true);
 		
 		//System.out.println("Main.main() : Constraints computed.");
 		
 		//System.out.println("Main.main() : Teachers attributed to groups.");
 		
-		int errors = filler.fill(constraints);
+		int errors = filler.fill(constraints, Filler.RETRY);
 		
 		//classrooms.get(0).getWeekTable().print();
 		

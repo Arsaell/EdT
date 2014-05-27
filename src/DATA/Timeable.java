@@ -23,6 +23,12 @@ public abstract class Timeable extends Constrainable	{
 		return this.timeTable.addLesson(l);
 	}
 	
+	public void removeLesson(Lesson l)	{
+		int i = this.timeTable.getSlots().indexOf(l);
+		this.timeTable.getSlots().remove(i);
+		this.timeTable.getSlots().add(i, l.getSlot());
+	}
+	
 	public WeekTable getWeekTable()	{
 		return this.timeTable;
 	}

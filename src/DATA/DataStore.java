@@ -58,9 +58,9 @@ public class DataStore {
 		this.types.add(7, new ClassType("Sport", "Gymnase", new Slot(new Time(200), new Time(200))));
 		
 		this.classrooms.add(new Classroom(types.get(1), "C9", 25, new Point(0, 0)));
-		this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
+		//this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
 		this.classrooms.add(new Classroom(types.get(0), "Vannier", 100, new Point(1, 0)));
-		this.classrooms.add(new Classroom(types.get(0), "Turing", 100, new Point(1, 1)));
+		//this.classrooms.add(new Classroom(types.get(0), "Turing", 100, new Point(1, 1)));
 		this.classrooms.add(new Classroom(types.get(2), "Optique", 16, new Point(0, 2)));
 		this.classrooms.add(new Classroom(types.get(3), "1", 16, new Point(2, 0)));
 		this.classrooms.add(new Classroom(types.get(4), "Usinage", 32, new Point(2, 2)));
@@ -79,6 +79,7 @@ public class DataStore {
 		Field[] PaMtPt = {physiquea, mathst, physiquet};
 		Field[] MtPtCt = {mathst, physiquet, concept};
 		Field[] PtCtCp = {physiquet, concept, contrucp};
+		Field[] Mt = {mathst};
 		this.fields.add(mathsa);
 		this.fields.add(mathst);
 		this.fields.add(physiquea);
@@ -92,12 +93,12 @@ public class DataStore {
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
 		this.teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
 		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
-		//this.teachers.add(new Teacher(4, "Flutter", "Shy", CtCpMa, MWWH));
-		//this.teachers.add(new Teacher(5, "Pinkie", "Pie", CpMaPa, MWWH));
-		//this.teachers.add(new Teacher(6, "Spike", "", MaPtMt, MWWH));
-		//this.teachers.add(new Teacher(7, "Celestia", "", MaPtMt, MWWH));
-		//this.teachers.add(new Teacher(8, "Princess", "Luna", MaPtMt, MWWH));
-		//this.teachers.add(new Teacher(9, "Discord", "", MaPtMt, MWWH));
+		//this.teachers.add(new Teacher(4, "Flutter", "Shy", Mt, MWWH));
+		//this.teachers.add(new Teacher(5, "Pinkie", "Pie", Mt, MWWH));
+		//this.teachers.add(new Teacher(6, "Spike", "", Mt, MWWH));
+		//this.teachers.add(new Teacher(7, "Celestia", "", Mt, MWWH));
+		//this.teachers.add(new Teacher(8, "Princess", "Luna", Mt, MWWH));
+		//this.teachers.add(new Teacher(9, "Discord", "", Mt, MWWH));
 		
 		
 		HashMap<Field, Time> classes = new HashMap<Field, Time>();
@@ -109,13 +110,11 @@ public class DataStore {
 		classes.put(concept, new Time(200));
 		classes.put(contrucp, new Time(400));
 		
-		//System.out.println("Main.main() : classes " + classes);
-		
 		this.groups.add(new Group("Lanip", 100).setClasses(null).setParent(null));
 		this.groups.add(new Group("g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		this.groups.add(new Group("g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		this.groups.add(new Group("g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		//this.groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
+		//this.groups.add(new Group("gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
 		Group[] gtab = {this.groups.get(1), this.groups.get(2)};
 		this.groups.get(0).setChildren(gtab);
