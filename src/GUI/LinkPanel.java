@@ -27,6 +27,8 @@ import DATA.Group;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +44,7 @@ public class LinkPanel extends JPanel {
 	private JList<Field> lField,listField;
 	private JButton btnEnlever, btnEditer, btnAjouter;
 	private JPanel panel;
+	private JSplitPane splitPane;
 
 	public LinkPanel(StartFrame aContainer) {
 
@@ -57,21 +60,18 @@ public class LinkPanel extends JPanel {
 		this.listField = new JList<Field>();
 		this.lGroup = new JList<Group>();
 		this.listGroup = new JList<Group>();
+		this.splitPane = new JSplitPane();
 		
-		JSplitPane splitPane = new JSplitPane();
 		add(splitPane);
 
-		JPanel pane = new JPanel();
-		pane.setBorder(new CompoundBorder(new TitledBorder(new LineBorder(
-				new Color(184, 207, 229)), "Liens existants",
-				TitledBorder.LEFT, TitledBorder.TOP, null, null),
-				new EmptyBorder(15, 5, 15, 5)));
-		pane.setLayout(new BorderLayout(0, 0));
-		splitPane.setLeftComponent(pane);
+		JPanel leftPane = new JPanel();
+		leftPane.setBorder(new TitledBorder(new EmptyBorder(5, 5, 5, 5), "Liens Existants", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		leftPane.setLayout(new BorderLayout(0, 0));
+		splitPane.setLeftComponent(leftPane);
 		
 		this.panel = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(panel);
-		pane.add(scrollPane, BorderLayout.CENTER);
+		leftPane.add(scrollPane, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 
 		setUpLinksLists();
@@ -84,7 +84,7 @@ public class LinkPanel extends JPanel {
 				checkEnableButtons();
 			}
 		});
-		pane.add(btnEnlever, BorderLayout.SOUTH);
+		leftPane.add(btnEnlever, BorderLayout.SOUTH);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new CompoundBorder(new TitledBorder(new LineBorder(
@@ -122,16 +122,14 @@ public class LinkPanel extends JPanel {
 			}
 		});
 		listTeach.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listTeach.setModel(new AbstractListModel() {
-			String[] values = new String[] { "Twilight Sparkle", "Rarity",
-					"Rainbow Dash", "Apple Jack" };
-
+		listTeach.setModel(new AbstractListModel<Teacher>() {
+		
 			public int getSize() {
-				return values.length;
+				return container.ds.getTeachers().size();
 			}
 
-			public Object getElementAt(int index) {
-				return values[index];
+			public Teacher getElementAt(int index) {
+				return container.ds.getTeachers().get(index);
 			}
 		});
 		panel_3.add(listTeach);
@@ -144,15 +142,14 @@ public class LinkPanel extends JPanel {
 		});
 		
 		listGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listGroup.setModel(new AbstractListModel() {
-			String[] values = new String[] { "LanIP", "g46", "g42", "g2116" };
-
+		listGroup.setModel(new AbstractListModel<Group>() {
+			
 			public int getSize() {
-				return values.length;
+				return container.ds.getGroups().size();
 			}
 
-			public Object getElementAt(int index) {
-				return values[index];
+			public Group getElementAt(int index) {
+				return container.ds.getGroups().get(index);
 			}
 		});
 
@@ -166,16 +163,14 @@ public class LinkPanel extends JPanel {
 		});
 		
 		listField.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listField.setModel(new AbstractListModel() {
-			String[] values = new String[] { "Maths TD", "Maths Cours",
-					"TP Physique", "Physique Cours" };
-
+		listField.setModel(new AbstractListModel<Field>() {
+			
 			public int getSize() {
-				return values.length;
+				return container.ds.getFields().size();
 			}
 
-			public Object getElementAt(int index) {
-				return values[index];
+			public Field getElementAt(int index) {
+				return container.ds.getFields().get(index);
 			}
 		});
 
@@ -206,7 +201,15 @@ public class LinkPanel extends JPanel {
 				Link newLink = new Link((Teacher)listTeach.getSelectedValue(), (Group)listGroup.getSelectedValue(), (Field)listField.getSelectedValue());
 				links.add(newLink);
 				setUpLinksLists();
+				
+				listTeach.setSelectedIndex(-1);
+				listGroup.setSelectedIndex(-1);
+				listField.setSelectedIndex(-1);
+				lTeach.setSelectedIndex(-1);
+				lGroup.setSelectedIndex(-1);
+				lField.setSelectedIndex(-1);
 				checkEnableButtons();
+				System.out.println("LinkPanel.addLink() : " + newLink);
 			}
 		});
 		panel_4.add(btnAjouter, BorderLayout.EAST);
@@ -301,82 +304,6 @@ public class LinkPanel extends JPanel {
 		});
 		panel.add(lField, BorderLayout.EAST);
 		
-		if (links.size() == 0)	{
-			
-			lGroup.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-
-			lTeach.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-
-			lField.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-
-			listTeach.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-
-			listGroup.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-
-			listField.setModel(new AbstractListModel() {
-
-				String[] values = new String[]{"Va", "te", "faire", "voir"};
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-			
-		}
-
 	}
 	
 	private void checkEnableButtons()	{
