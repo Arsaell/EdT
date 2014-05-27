@@ -19,6 +19,7 @@ public class Classroom extends Timeable	{
 		this.type = aType;
 		this.name = aName;
 		this.effectif = aEff;
+		this.coords = aCoords;
 	}
 	
 	public ClassType getType()	{
@@ -35,5 +36,9 @@ public class Classroom extends Timeable	{
 
 	public String getName() {
 		return this.name;
+	}
+	
+	public Point getCoords()	{
+		return this.coords;
 	}
 }

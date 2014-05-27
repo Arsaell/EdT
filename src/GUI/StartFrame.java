@@ -13,6 +13,8 @@ import java.awt.FlowLayout;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import DATA.ClassType;
 import DATA.DataStore;
@@ -29,7 +31,7 @@ import javax.swing.BoxLayout;
 
 public class StartFrame extends JFrame {
 
-	private DataStore ds;
+	protected DataStore ds;
 	public FieldPanel fp;
 	public WeekPanel wp;
 	public TeacherPanel tp;
@@ -42,16 +44,26 @@ public class StartFrame extends JFrame {
 		super();
 
 		this.ds = new DataStore();
+		this.ds.addFixtures();
 		
 		this.fp = new FieldPanel(this);
 		this.wp = new WeekPanel(this);
-		this.tp = new TeacherPanel(this, this.ds);
-		this.cp = new ClassroomPanel(this);
-		this.lp = new LinkPanel(this);
-		this.gp = new GroupPanel(this);
+		this.tp = null;
+		this.cp = null;
+		this.gp = null;
+		this.lp = null;
 		
 		
 		this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				System.out.println("TabbedPane.stateChanged() : " + ds);
+				//ds.addFixtures();
+				allowLinksTab();
+				//pack();
+			}
+		});
+		
 		tabbedPane.addTab("Week", wp);
 		tabbedPane.addTab("Fields", fp);
 		tabbedPane.addTab("Teachers", tp);
@@ -60,38 +72,33 @@ public class StartFrame extends JFrame {
 		tabbedPane.addTab("Links", lp);
 		tabbedPane.setSelectedIndex(0);
 		
-		this.allowTimeableTabs(false);
-		JButton btTer = new JButton("Terminer");
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-//		btTer.addActionListener(new ActionListener()	{
-//
-//			public void actionPerformed(ActionEvent arg0) {
-//				DataStore ds = new DataStore().setTypes(fp.getTypes()).setTeachers(tp.getTeachers()).setGroups(gp.getGroups()).setClassrooms(cp.getClassrooms()).setFields(fp.getFields());
-//				new MainWindow(ds);
-//			}
-//			
-//		});
+		tabbedPane.setEnabledAt(5, false);
 		
+		JButton btTer = new JButton("Terminer");
+		btTer.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				new MainFrame(new Filler(ds));
+			}
+		});
+		
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
 		getContentPane().add(tabbedPane);
 		getContentPane().add(btTer);
 		
-		this.setBounds(200, 200, 650, 500);
+		this.setBounds(100, 100, 750, 550);
 		((JComponent) this.getContentPane()).setBorder(new EmptyBorder(15, 15, 15, 15));
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.allowTimeableTabs(false);
+		this.allowLinksTab();
+		
+		
 		this.setVisible(true);
-	}
-
-	public DataStore getDS()	{
-		return this.ds;
-	}
-	
-	public ArrayList<Field> getFieldsList()	{
-		return this.ds.getFields();
-	}
-
-	public ArrayList<ClassType> getTypes()	{
-		return this.ds.getTypes();
+		
 	}
 	
 	public void allowTimeableTabs(Boolean bool) {
@@ -107,9 +114,39 @@ public class StartFrame extends JFrame {
 		}
 		
 		else	{
+			this.cp = new ClassroomPanel(this);
+			this.tp = new TeacherPanel(this, this.ds);
+			this.gp = new GroupPanel(this);
+			this.tabbedPane.remove(2);
+			//this.tabbedPane.setTabComponentAt(2, this.tp);
+			//this.tabbedPane.add(this.tp, 2);
+			this.tabbedPane.insertTab("Teachers", null, this.tp, "", 2);
+			this.tabbedPane.remove(3);
+			//this.tabbedPane.setTabComponentAt(3, this.cp);
+			//this.tabbedPane.add(this.cp, 3);
+			this.tabbedPane.insertTab("Classrooms", null, this.cp, "", 3);
+			this.tabbedPane.remove(4);
+			//this.tabbedPane.setTabComponentAt(4, this.gp);
+			//this.tabbedPane.add(this.gp, 4);
+			this.tabbedPane.insertTab("Groups", null, this.gp, "", 4);
 			this.tabbedPane.setToolTipTextAt(2, null);
 			this.tabbedPane.setToolTipTextAt(3, null);
 			this.tabbedPane.setToolTipTextAt(4, null);
 		}
+	}
+	
+	private void allowLinksTab()	{
+		
+		System.out.println("allowLinksTab()\t" + this.ds);// + "\n\t" + this.ds.getTeachers() + "\n\t" + this.ds.getGroups() + "\n\t" + this.ds.getFields() + "\n\t" + this.ds.getTypes() + "\n\t" + this.ds.getDefaultWeek());
+		
+		if (this.lp == null && this.isActive())
+			if (this.ds.getTeachers().size() > 0 && this.ds.getGroups().size() > 0 && this.ds.getFields().size() > 0)	{
+				
+				System.out.println("true");
+				this.lp = new LinkPanel(this);
+				this.tabbedPane.remove(5);
+				this.tabbedPane.addTab("Links", this.lp);
+				this.tabbedPane.setEnabledAt(5, true);
+			}
 	}
 }

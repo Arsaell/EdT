@@ -73,6 +73,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 	private JPanel infoPanel;
 	private JPanel infosPanel;
 	private JPanel disabledPanel;
+	private JPanel fieldPanel;
 	private JButton deleteTeacherBtn;
 	private JTextField teacherLastNameField;
 	private JTextField teacherFirstNameField;
@@ -95,15 +96,19 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				teacherListModel = new TeacherListModel(container.getDS().getTeachers());
+				teachers = container.ds.getTeachers();
+				JTable table = getJTableField();
+				fieldPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+				teacherListModel = new TeacherListModel(container.ds.getTeachers());
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.getDS().setTeachers(teachers);
+				container.ds.setTeachers(teachers);
 			}
 		});
 		this.container = aContainer;
 		this.dataStore = dataStore;
+		this.teachers = container.ds.getTeachers();
 		this.teacherListModel = new TeacherListModel(this.dataStore.getTeachers());
 		initialize();
 	}
@@ -234,7 +239,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		deleteTeacherBtn.setVisible(false);
 		panel_1.add(deleteTeacherBtn);
 		
-		JPanel fieldPanel = new JPanel();
+		this.fieldPanel = new JPanel();
 		teacherTabbedPane.addTab("Matières enseignées", null, fieldPanel, null);
 		fieldPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -274,7 +279,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		mntmQuitter.setBackground(Color.WHITE);
 		mnFichier.add(mntmQuitter);
 		*/
-		System.out.println("Test");
+		//System.out.println("Test");
 	}
 	
 	private JTable getJTableField() {
@@ -284,15 +289,20 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		
 		// On s'occupe de la ComboBox
 		ArrayList<Field> fields = dataStore.getFields();
+		
+		//System.out.println("tp : " + fields.size());
+		
 		comboData = new String[fields.size() + 1];
 		comboData[0] = ""; // Première cellule vide
 		for (int i = 0; i < fields.size(); i++) {
 			comboData[i+1] = fields.get(i).toString();
 		}
 		comboBox = new JComboBox(comboData);
+		//System.out.println("tp : " + comboBox.getItemCount());
 
 		// On peuple le tableau avec des données vides
 		Object[][] data = {{comboData[0]}};
+		//System.out.println("tp : " + data[0].length);
 
 		// On crée le tableau
 		FieldTableModel model = new FieldTableModel(data, columnNames);
@@ -300,6 +310,8 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		table.setRowHeight(30);
 		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
 
+		//System.out.println("tp : " + table.getColumnModel().getColumn(0));
+		
 		return table;
 	}
 	
@@ -449,7 +461,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		    		}
 	    			this.data[row][col] = value;
 	    		} else {
-	    			JOptionPane.showMessageDialog(null, "Cette manière est déjà attribuée pour cet enseignant !");
+	    			JOptionPane.showMessageDialog(null, "Cette matière est déjà attribuée pour cet enseignant !");
 	    		}
 	    	}
 	     }

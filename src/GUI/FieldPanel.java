@@ -55,16 +55,22 @@ public class FieldPanel extends JPanel {
 
 		super();
 		addComponentListener(new ComponentAdapter() {
+			
+			@Override
+			public void componentShown(ComponentEvent e)	{
+				fields = container.ds.getFields();
+				classtypes = container.ds.getTypes();
+			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				container.getDS().setFields(fields);
-				container.getDS().setTypes(classtypes);
+				container.ds.setFields(fields);
+				container.ds.setTypes(classtypes);
 			}
 		});
 		
 		this.container = aContainer;
-		this.classtypes = new ArrayList<ClassType>();
-		this.fields = new ArrayList<Field>();
+		this.classtypes = container.ds.getTypes();
+		this.fields = container.ds.getFields();
 		
 		this.setMinimumSize(new Dimension(450, 325));
 		

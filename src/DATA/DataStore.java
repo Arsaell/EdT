@@ -19,7 +19,13 @@ public class DataStore {
 	private WeekTable defaultWeek;
 	
 	public DataStore() {
-		this.addFixtures();
+		this.teachers = new ArrayList<Teacher>();
+		this.classrooms = new ArrayList<Classroom>();
+		this.groups = new ArrayList<Group>();
+		this.types = new ArrayList<ClassType>();
+		this.fields = new ArrayList<Field>();
+		
+		//this.addFixtures();
 	}
 	
 	public DataStore(File f) {
@@ -132,6 +138,7 @@ public class DataStore {
 	}
 	
 	public ArrayList<Teacher> getTeachers() {
+		//System.out.println("DataStore.getTeachers() : " + this.teachers);
 		return this.teachers;
 	}
 
@@ -168,7 +175,11 @@ public class DataStore {
 	}
 
 	public DataStore setTeachers(ArrayList<Teacher> teachers) {
-		this.teachers = teachers;
+		//System.out.println("DataStore.setTeachers() : " + teachers);
+		if (teachers != null)
+			this.teachers = teachers;
+		else
+			this.teachers = new ArrayList<Teacher>();
 		return this;
 	}
 
@@ -190,5 +201,9 @@ public class DataStore {
 	public DataStore setFields(ArrayList<Field> fields) {
 		this.fields = fields;
 		return this;
+	}
+	
+	public String toString()	{
+		return "Datastore : " + this.classrooms.size() + " classrooms, " + this.fields.size() + " fields, " + this.groups.size() + " groups, " + this.teachers.size() + " teachers, " + this.types.size() + " types.";
 	}
 }

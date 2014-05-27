@@ -64,6 +64,12 @@ public class LinkPanel extends JPanel {
 
 		this.container = aContainer;
 		this.links = new ArrayList<Link>();
+		this.lTeach = new JList<Teacher>();
+		this.listTeach = new JList<Teacher>();
+		this.lField = new JList<Field>();
+		this.listField = new JList<Field>();
+		this.lGroup = new JList<Group>();
+		this.listGroup = new JList<Group>();
 		
 		JSplitPane splitPane = new JSplitPane();
 		add(splitPane);
@@ -243,11 +249,11 @@ public class LinkPanel extends JPanel {
 		lTeach.setModel(new AbstractListModel<Teacher>() {
 			
 			public int getSize() {
-				return container.getDS().getTeachers().size();
+				return container.ds.getTeachers().size();
 			}
 
 			public Teacher getElementAt(int index) {
-				return container.getDS().getTeachers().get(index);
+				return container.ds.getTeachers().get(index);
 			}
 		});
 		panel.add(lTeach, BorderLayout.WEST);
@@ -271,11 +277,11 @@ public class LinkPanel extends JPanel {
 		lGroup.setModel(new AbstractListModel<Group>() {
 
 			public int getSize() {
-				return container.getDS().getGroups().size();
+				return container.ds.getGroups().size();
 			}
 
 			public Group getElementAt(int index) {
-				return container.getDS().getGroups().get(index);
+				return container.ds.getGroups().get(index);
 			}
 		});
 		panel.add(lGroup, BorderLayout.CENTER);
@@ -299,11 +305,11 @@ public class LinkPanel extends JPanel {
 		lField.setModel(new AbstractListModel<Field>() {
 			
 			public int getSize() {
-				return container.getDS().getFields().size();
+				return container.ds.getFields().size();
 			}
 
 			public Field getElementAt(int index) {
-				return container.getDS().getFields().get(index);
+				return container.ds.getFields().get(index);
 			}
 		});
 		panel.add(lField, BorderLayout.EAST);
