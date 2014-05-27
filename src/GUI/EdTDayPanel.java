@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 public class EdTDayPanel extends JPanel {
 	

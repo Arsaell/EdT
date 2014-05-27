@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class EdTHourPanel extends JPanel {
@@ -18,7 +17,6 @@ public class EdTHourPanel extends JPanel {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 
 		this.setPreferredSize(new Dimension(51,600));
-		System.out.println("Test");
 	}
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);

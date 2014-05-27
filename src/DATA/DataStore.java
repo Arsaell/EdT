@@ -3,7 +3,7 @@ package DATA;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import DATA.HashMap;
 
 import DATA.Teacher;
 import DATA.Time;
@@ -16,7 +16,7 @@ public class DataStore {
 	private ArrayList<ClassType> types = new ArrayList<ClassType>();
 	private ArrayList<Field> fields = new ArrayList<Field>();
 	private Time MWWH;
-	private WeekTable defaultWeek;
+	//private WeekTable defaultWeek;
 	
 	public DataStore() {
 		this.teachers = new ArrayList<Teacher>();
@@ -46,8 +46,7 @@ public class DataStore {
 		temp.add(new Slot(new Time(40800), new Time(41200)));
 		temp.add(new Slot(new Time(41400), new Time(41800)));
 		
-		this.defaultWeek = new WeekTable(temp, null);
-		WeekTable.setDefault(this.defaultWeek);
+		WeekTable.setDefault(new WeekTable(temp, null));
 		
 		this.types.add(0, new ClassType("Cours", "Amphithéâtre", new Slot(new Time(100), new Time(130))));
 		this.types.add(1, new ClassType("TD", "TD", new Slot(new Time(130), new Time(200))));
@@ -80,9 +79,6 @@ public class DataStore {
 		Field[] PaMtPt = {physiquea, mathst, physiquet};
 		Field[] MtPtCt = {mathst, physiquet, concept};
 		Field[] PtCtCp = {physiquet, concept, contrucp};
-		Field[] CtCpMa = {concept, contrucp, mathsa};
-		Field[] CpMaPa = {contrucp, mathsa, physiquea};
-		
 		this.fields.add(mathsa);
 		this.fields.add(mathst);
 		this.fields.add(physiquea);
@@ -163,7 +159,7 @@ public class DataStore {
 	}
 
 	public WeekTable getDefaultWeek() {
-		return defaultWeek;
+		return WeekTable.getDefault();
 	}
 
 	public void setMWWH(Time mWWH) {
@@ -171,7 +167,7 @@ public class DataStore {
 	}
 
 	public void setDefaultWeek(WeekTable defaultWeek) {
-		this.defaultWeek = defaultWeek;
+		WeekTable.setDefault(defaultWeek);
 	}
 
 	public DataStore setTeachers(ArrayList<Teacher> teachers) {

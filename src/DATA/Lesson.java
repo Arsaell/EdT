@@ -16,6 +16,7 @@ public class Lesson	extends Slot{
 		this.students = aGroup;
 		this.field = aField;
 		this.place = aPlace;
+		this.check();
 	}
 	
 	private boolean check()	{
@@ -81,18 +82,22 @@ public class Lesson	extends Slot{
 	
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+		this.check();
 	}
 	
 	public void setStudents(Group students) {
 		this.students = students;
+		this.check();
 	}
 	
 	public void setField(Field field) {
 		this.field = field;
+		this.check();
 	}
 	
 	public void setPlace(Classroom place) {
 		this.place = place;
+		this.check();
 	}
 
 	public String toString()	{

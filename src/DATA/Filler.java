@@ -1,10 +1,7 @@
 package DATA;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Iterator;
+import DATA.HashMap;
 
 public class Filler	{
 
@@ -14,8 +11,6 @@ public class Filler	{
 	private ArrayList<Teacher> teachers;
 	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
-	private DataStore dataStore;
-	
 	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
@@ -27,7 +22,6 @@ public class Filler	{
 	}
 	
 	public Filler(DataStore ds) {
-		this.dataStore = ds;
 		this.classrooms = ds.getClassrooms();
 		this.groups = ds.getGroups();
 		this.teachers = ds.getTeachers();
@@ -39,8 +33,6 @@ public class Filler	{
 	 * Dans l'ordre spécifié par la paramètre,
 	 * cette méthode devra attribuer les constrainables
 	 * jusqu'à ce que l'emploi du temps soit complet.
-	 * 
-	 * À finir : prendre en compte le boolean renvoyé par chaque méthode takeCareOf, peut-être renvoyer le nopmbre d'erreur rencontrées.
 	 * */
 	public int fill(Constrainable[] order)	{
 
@@ -127,7 +119,7 @@ public class Filler	{
 						
 						if (teach.canTeach(f, g))	{
 						
-							boolean res = g.setTeacher(teach, f);
+							g.setTeacher(teach, f);
 							//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
 							break;
 						}
@@ -218,8 +210,9 @@ public class Filler	{
 			
 			g = this.groups.get(i);
 			
-			for (Field f : g.classes.keySet())	{
+			for (Object o : g.classes)	{
 				
+				Field f = (Field) o;
 				//System.out.println("Filler.computeConstraints() #classrooms Time Needed 1 : # " + f + " # " + f.getType() + " # " + g + " # " + g.classes.get(f) + " # " + roomTimeNeeded.get(f.getType()));
 				
 				Time t = roomTimeNeeded.get(f.getType()).add(g.classes.get(f));
@@ -264,8 +257,9 @@ public class Filler	{
 		//Hours needed by students
 		for (int i = 0 ; i < this.groups.size() ; i++)	{
 			g = this.groups.get(i);
-			for (Field f : g.classes.keySet())	{
+			for (Object o : g.classes)	{
 				
+				Field f = (Field) o;
 				if (!teachTimeNeeded.containsKey(f))	{
 					teachTimeNeeded.put(f, new Time());
 					teachTimeAttributed.put(f,  new Time());
@@ -276,7 +270,7 @@ public class Filler	{
 			}
 		}
 		/*
-		for (Field f : teachTimeNeeded.keySet())
+		for (Field f : teachTimeNeeded)
 			System.out.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f));
 		//*/
 		
@@ -298,8 +292,9 @@ public class Filler	{
 		 * jusqu'à couvrir le besoin des étudiants.
 		 * */
 		
-		for (Field f : teachTimeAttributed.keySet())	{
+		for (Object o : teachTimeAttributed)	{
 			
+			Field f = (Field) o;
 			//System.out.println("Filler.computeConstraints() #teachersTime : #0 " + f);
 			
 			while (teachTimeAttributed.get(f).isLessThan(teachTimeNeeded.get(f)))	{
@@ -347,15 +342,17 @@ public class Filler	{
 		}
 		
 		/*
-		for (Field f : teachTimeAttributed.keySet())
+		for (Field f : teachTimeAttributed)
 			System.out.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f) + teachTimeAttributed.get(f));
 		//*/
 		
 		boolean okay = true;
 		//System.out.println("Filler.computeConstraints() #Teachers : ");
 		
-		for (Field f : teachTimeNeeded.keySet())	{
-		
+		for (Object o : teachTimeNeeded)	{
+
+			Field f = (Field) o;
+			
 			//System.out.println("\t" + f + " --> " + teachTimeNeeded.get(f) + " / " + teachTimeAvailable.get(f));
 			
 			if (teachTimeNeeded.get(f).isMoreThan(teachTimeAttributed.get(f)))	{
@@ -393,15 +390,18 @@ public class Filler	{
 		HashMap<Constrainable, Double> roomConstraints = new HashMap<Constrainable, Double>();
 		HashMap<Constrainable, Double> teachingConstraints = new HashMap<Constrainable, Double>();
 		
-		for (ClassType type : roomTimeNeeded.keySet())	{
+		for (Object o : roomTimeNeeded)	{
 			
+			ClassType type = (ClassType) o;
 			//System.out.println("Filler.computeConstraints() #Rooms : " + type + " --> " + roomTimeNeeded.get(type) + " / " + roomTimeAvailable.get(type) + " = " + roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
 			
 			roomConstraints.put(type, roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
 		//			constraint =			Needed				  /			Available
 		}
 		
-		for (Field field : teachTimeNeeded.keySet())	{
+		for (Object o : teachTimeNeeded)	{
+
+			Field field = (Field) o;
 			
 			//System.out.println("Filler.computeConstraints() #Fields : " + field + " --> " + teachTimeNeeded.get(field) + " / " + teachTimeSpare.get(field).add(teachTimeAttributed.get(field)) + " = " + teachTimeNeeded.get(field).divideBy(teachTimeAttributed.get(field).add(teachTimeSpare.get(field))));
 			teachingConstraints.put(field, teachTimeNeeded.get(field).divideBy(teachTimeAttributed.get(field).add(teachTimeSpare.get(field))));
@@ -415,8 +415,11 @@ public class Filler	{
 		
 		for (Group group : this.groups)	{
 			Time t = new Time();
-			for (Field f : group.classes.keySet())
+			for (Object o : group.classes)	{
+				
+				Field f = (Field) o;
 				t = t.add(group.classes.get(f));
+			}
 			groupConstraints.put(group, t.divideBy(this.MWWH));
 			//System.out.println("Filler.computeConstraints() #Groups : " + group + " --> " + t + " / " + this.MWWH + " = " + t.divideBy(this.MWWH));
 		}
@@ -438,17 +441,18 @@ public class Filler	{
 		if (attributeTeachers)	{
 			
 			//On réinitialise les horaires des profs (simulés pour le calcul de contrainte).
-			for (Teacher teach : cwwhs.keySet())
+			for (Object o : cwwhs)	{
+				Teacher teach = (Teacher) o;
 				teach.setCWWH(cwwhs.get(teach));
-			
+			}
 			//La liste temp contiendra les field triés par ordre de contrainte.
 			ArrayList<Field> temp = new ArrayList<Field>();
 			
 			//On insère un élément pour lancer la boucle.
-			temp.add((Field) teachingConstraints.keySet().toArray()[teachingConstraints.size() - 1]);
+			temp.add((Field) teachingConstraints.getKey(teachingConstraints.size() - 1));
 			
-			for (Constrainable cons : teachingConstraints.keySet()){
-				Field f1 = (Field) cons;
+			for (Object o: teachingConstraints){
+				Field f1 = (Field) o;
 				for (int i = 0 ; i < temp.size() ; i++)	{
 					Field f2 = temp.get(i);
 					
@@ -463,8 +467,8 @@ public class Filler	{
 					}
 				}
 				//On enlève l'élément inséré pour l'initialisation
-				if (f1 == teachingConstraints.keySet().toArray()[0])	{
-					temp.remove(teachingConstraints.keySet().toArray()[teachingConstraints.size() - 1]);
+				if (f1 == teachingConstraints.getKey(0))	{
+					temp.remove(teachingConstraints.getKey(teachingConstraints.size() - 1));
 				}
 			}
 			
@@ -483,8 +487,10 @@ public class Filler	{
 		
 		//On réinitialise les horaires des profs.
 		if (!attributeTeachers)
-			for (Teacher teach : cwwhs.keySet())
+			for (Object o : cwwhs)	{
+				Teacher teach = (Teacher) o;
 				teach.setCWWH(cwwhs.get(teach));
+			}
 		
 		
 		ArrayList<HashMap<Constrainable, Double>> data = new ArrayList<HashMap<Constrainable, Double>>();
@@ -507,7 +513,7 @@ public class Filler	{
 		HashMap<Constrainable, Double> constraints = new HashMap<Constrainable, Double>();
 		
 	//On insère un premier élément pour lancer la boucle.
-		temp.add((Constrainable) data.get(data.size() - 1).keySet().toArray()[data.get(data.size() - 1).size() - 1]);
+		temp.add((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
 		
 		//System.out.println(temp);
 		
@@ -515,8 +521,8 @@ public class Filler	{
 			
 			//System.out.println("#0 (hashmap) : " + hm.size());
 			
-			for (Constrainable c1 : hm.keySet()){
-				
+			for (Object o : hm){
+				Constrainable c1 = (Constrainable) o;
 				constraints.put(c1,  hm.get(c1));
 				//System.out.println(" #1 : " + c1 + " --> " + constraints.get(c1));
 				
@@ -557,7 +563,7 @@ public class Filler	{
 			
 			//On enlève l'élément inséré à l'initialisation.
 			if (hm == data.get(1))	{
-				temp.remove(data.get(data.size() - 1).keySet().toArray()[data.get(data.size() - 1).size() - 1]);
+				temp.remove(data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
 			}
 		}
 		
@@ -791,7 +797,7 @@ public class Filler	{
 		return true;
 	}
 
-	private Classroom findClassRoom(ClassType type, Slot s) {
+	public Classroom findClassRoom(ClassType type, Slot s) {
 		
 		//System.out.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
 		
@@ -807,4 +813,12 @@ public class Filler	{
 		return null;
 	}
 	
+	public Classroom findClassRoom(int eff, Slot s)	{
+		
+		for (Classroom c : this.classrooms)
+			if (c.getEffectif() >= eff)
+				if (s.canFitIn(c.getAllFreeSlots(s.getDuration())))
+					return c;
+		return null;
+	}
 }

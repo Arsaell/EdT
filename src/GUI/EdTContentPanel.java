@@ -1,23 +1,13 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-
-import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
-
 import DATA.*;
 
 public class EdTContentPanel extends JPanel {

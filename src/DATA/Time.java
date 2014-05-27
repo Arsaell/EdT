@@ -117,7 +117,7 @@ public class Time	{
 		//System.out.println("Time.divideBy(Time t) : " + this + " / " + t + " --> " + this.toMin() + " / " + t.toMin() + " = " + (double)this.toMin() / t.toMin());
 		
 		if (t.equals(new Time()))
-			return (Double) null;
+			return 0.0;
 		return (double)(this.toMin()) / (double)t.toMin();
 	}
 	

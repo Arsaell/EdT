@@ -26,7 +26,6 @@ public class WeekTable {
 	
 		this.owner = aOwner;
 		this.slots = new ArrayList<Slot>();
-		
 		for (Slot s : source.slots)
 			this.slots.add(s.clone());
 	}
@@ -62,7 +61,7 @@ public class WeekTable {
 		//System.out.println("\n\tWeekTable.getAllFreeSlots() : " + duration + "\n" + this.slots);
 		
 		ArrayList<Slot> res = new ArrayList<Slot>();
-		Time current = this.slots.get(0).getBegin();
+		this.slots.get(0).getBegin();
 		
 		for (Slot s : this.slots)	{
 			//System.out.println("WeekTable.getAllFreeSlots() : " + s);
@@ -192,12 +191,10 @@ public class WeekTable {
 				System.out.print(s + "\t");
 		}
 	}
-
 	
 	public ArrayList<Slot> getSlots() {
 		return this.slots;
 	}
-
 	
 	public Timeable getOwner() {
 		return this.owner;

@@ -1,22 +1,18 @@
 package GUI;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -25,12 +21,10 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeModelListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import DATA.ClassType;
@@ -43,10 +37,10 @@ import java.util.HashMap;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -135,6 +129,16 @@ public class ClassroomPanel extends JPanel {
 		
 		this.tfName = new JTextField();
 		tfName.setHorizontalAlignment(SwingConstants.LEFT);
+		tfName.addInputMethodListener(new InputMethodListener() {
+			
+			@Override
+			public void inputMethodTextChanged(InputMethodEvent event) {
+				checkEnableBtn();
+			}
+
+			@Override
+			public void caretPositionChanged(InputMethodEvent event) {}
+		});
 		panel.add(tfName);
 		tfName.setColumns(10);
 		
@@ -151,6 +155,13 @@ public class ClassroomPanel extends JPanel {
 		
 		spEff = new JSpinner();
 		spEff.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spEff.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				checkEnableBtn();
+			}
+		});
 		panel.add(spEff);
 		
 		this.btnPosition = new JButton("Position");
@@ -161,6 +172,7 @@ public class ClassroomPanel extends JPanel {
 				} catch(Exception e){
 					e.printStackTrace();
 				}
+				checkEnableBtn();
 			}
 		});
 		panel.add(btnPosition);
@@ -198,6 +210,7 @@ public class ClassroomPanel extends JPanel {
 				tfName.setText("");
 				cbType.setSelectedIndex(-1);
 				spEff.setValue(0);
+				checkEnableBtn();
 			}
 		});
 		
@@ -212,10 +225,11 @@ public class ClassroomPanel extends JPanel {
 				fr.add(new MapPanel(classrooms, fr));
 				fr.pack();
 				fr.setVisible(true);
+				checkEnableBtn();
 			}
 		});
 		panel.add(btnPreview);
-		
+		this.checkEnableBtn();
 	}
 
 	private void checkEnableBtn()	{
@@ -273,6 +287,7 @@ public class ClassroomPanel extends JPanel {
 				
 				public void actionPerformed(ActionEvent arg0) {
 					cp.setPosition(new Point(p.x + 2, p.y + 2));
+					cp.checkEnableBtn();
 					setVisible(false);
 				}
 			});
@@ -284,5 +299,4 @@ public class ClassroomPanel extends JPanel {
 			this.setVisible(true);
 		}
 	}
-
 }

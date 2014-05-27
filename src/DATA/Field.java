@@ -7,9 +7,6 @@ public class Field extends Constrainable	{
 	private ClassType type;
 	private String name;
 	private Slot duration;	
-	private int level;
-	private HashMap<Character, Double> constraints; //Associer un type à un slot (minTime, maxTime)
-
 	public Field(ClassType aType, String aName)	{
 
 		this.type = aType;

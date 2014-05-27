@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
 
-import DATA.DataStore;
 import DATA.Filler;
 import DATA.WeekTable;
 
@@ -21,14 +20,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	
 	private JMenuItem mntmTeachers;
-	private DataStore dataStore;
-
+	private JProgressBar pb;
 	
 	public MainFrame(Filler filler) {
 		
 		// On charge le datastore.
-		this.dataStore = new DataStore();
-
+		//this.dataStore = new DataStore();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -63,13 +60,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
+		this.pb = new JProgressBar();
+		pb.setValue(46);
+		contentPane.add(pb, BorderLayout.SOUTH);
 		setContentPane(contentPane);
 		setVisible(true);
 	}
 
 	class ViewEdTListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			EdTViewerWindow viewer = new EdTViewerWindow(WeekTable.getDefault());
+			new EdTViewerWindow(WeekTable.getDefault());
 		}
 	}
 	public void actionPerformed(ActionEvent e) {

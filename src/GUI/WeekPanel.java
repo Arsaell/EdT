@@ -2,19 +2,10 @@ package GUI;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.ScrollPane;
-
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import java.awt.CardLayout;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -26,7 +17,6 @@ import DATA.WeekTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import javax.swing.border.CompoundBorder;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -107,11 +97,11 @@ public class WeekPanel extends JPanel {
 		JButton btnValider = new JButton("Valider");
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("WeekPanel.valider() : " + container.ds);
+				//System.out.println("WeekPanel.valider() : " + container.ds);
 				container.ds.setDefaultWeek(updateWeekTable());
 				
 				container.allowTimeableTabs(true);
-				System.out.println("WeekPanel.valider() : " + container.ds);
+				//System.out.println("WeekPanel.valider() : " + container.ds);
 			}
 		});
 		btnValider.setVerticalAlignment(SwingConstants.TOP);

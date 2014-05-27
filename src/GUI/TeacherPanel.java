@@ -5,16 +5,8 @@ import DATA.Field;
 import DATA.Teacher;
 import DATA.Time;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JList;
 
 import java.awt.GridBagConstraints;
@@ -40,26 +32,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import javax.swing.JTable;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.ListSelectionModel;
 
-import java.awt.event.KeyAdapter;
 import java.awt.FlowLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;

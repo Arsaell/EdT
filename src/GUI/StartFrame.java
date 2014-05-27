@@ -1,32 +1,17 @@
 package GUI;
 
-import java.awt.EventQueue;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import DATA.ClassType;
 import DATA.DataStore;
-import DATA.Field;
 import DATA.Filler;
-import DATA.Time;
-
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.BoxLayout;
 
 public class StartFrame extends JFrame {
@@ -44,7 +29,7 @@ public class StartFrame extends JFrame {
 		super();
 
 		this.ds = new DataStore();
-		this.ds.addFixtures();
+		//this.ds.addFixtures();
 		
 		this.fp = new FieldPanel(this);
 		this.wp = new WeekPanel(this);
@@ -57,7 +42,7 @@ public class StartFrame extends JFrame {
 		this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				System.out.println("TabbedPane.stateChanged() : " + ds);
+				//System.out.println("TabbedPane.stateChanged() : " + ds);
 				//ds.addFixtures();
 				allowLinksTab();
 				//pack();
@@ -137,12 +122,12 @@ public class StartFrame extends JFrame {
 	
 	private void allowLinksTab()	{
 		
-		System.out.println("allowLinksTab()\t" + this.ds);// + "\n\t" + this.ds.getTeachers() + "\n\t" + this.ds.getGroups() + "\n\t" + this.ds.getFields() + "\n\t" + this.ds.getTypes() + "\n\t" + this.ds.getDefaultWeek());
+		//System.out.println("allowLinksTab()\t" + this.ds);// + "\n\t" + this.ds.getTeachers() + "\n\t" + this.ds.getGroups() + "\n\t" + this.ds.getFields() + "\n\t" + this.ds.getTypes() + "\n\t" + this.ds.getDefaultWeek());
 		
 		if (this.lp == null && this.isActive())
 			if (this.ds.getTeachers().size() > 0 && this.ds.getGroups().size() > 0 && this.ds.getFields().size() > 0)	{
 				
-				System.out.println("true");
+				//System.out.println("true");
 				this.lp = new LinkPanel(this);
 				this.tabbedPane.remove(5);
 				this.tabbedPane.addTab("Links", this.lp);

@@ -1,11 +1,8 @@
 package DATA;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 
-	private int ID;
 	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;
 	private ArrayList<Field> fields;
@@ -13,7 +10,6 @@ public class Teacher extends Timeable implements People, Comparable<Teacher>	{
 	
 	public Teacher(int aID, String aFirstName, String aLastName, Field[] aFields, Time aMWWH)	{
 	
-		this.ID = aID;
 		this.firstName = aFirstName;
 		this.lastName = aLastName;
 		

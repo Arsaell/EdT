@@ -1,9 +1,6 @@
 package DATA;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Classroom extends Timeable	{
 
@@ -11,8 +8,6 @@ public class Classroom extends Timeable	{
 	private ClassType type;
 	private String name;
 	private int effectif;
-	private WeekTable timeTable;
-	
 	public Classroom(ClassType aType, String aName, int aEff, Point aCoords)	{
 	
 		super();

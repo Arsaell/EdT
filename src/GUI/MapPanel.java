@@ -1,8 +1,8 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -19,7 +19,6 @@ import DATA.Classroom;
 import javax.swing.JSplitPane;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
 
 public class MapPanel extends JPanel {
 	
@@ -48,11 +47,13 @@ public class MapPanel extends JPanel {
 		this.add(splitPane);
 		
 		this.panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		panel.setLayout(null);
 		JLabel label = new JLabel(new ImageIcon(img));
+		label.setBounds(0, 0, img.getWidth(), img.getHeight());
 		this.panel.add(label);
 		splitPane.setLeftComponent(panel);
-		
+		this.setPreferredSize(new Dimension(1050, 550));
+		this.setMinimumSize(new Dimension(1050, 550));
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
 		panel.setLayout(new GridLayout(0, 2, 0, 0));
@@ -113,7 +114,7 @@ public class MapPanel extends JPanel {
 			}
 		}
 		
-		this.splitPane.setDividerLocation(0.75);
+		this.splitPane.setDividerLocation(img.getWidth());
 	}
 
 	private void updateHC()	{
