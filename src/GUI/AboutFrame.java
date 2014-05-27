@@ -26,7 +26,8 @@ public class AboutFrame extends JFrame {
 		//contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JTextArea jta = new JTextArea("\n\nCe programme est le résulta d'un projet d'informatique réalisé par :\n\tRémi DUPOUY\n\tLéo MARTINEZ\n\tGatien PASCAUD\n\tTom RAVIX\n\ndans le cadre de l'enseignement d'informatique en seconde année\ndu premier cycle de l'INSA de Lyon.\n\n");
+		JTextArea jta = new JTextArea("\n\nCe programme est le résultat d'un projet d'informatique réalisé par :\n\tRémi DUPOUY\n\tLéo MARTINEZ\n\tGatien PASCAUD\n\tTom RAVIX\n\ndans le cadre de l'enseignement d'informatique en seconde année\ndu premier cycle de l'INSA de Lyon.\n\n");
+		jta.setEditable(false);
 		contentPane.add(jta);
 		
 		JButton jb = new JButton("Fermer");

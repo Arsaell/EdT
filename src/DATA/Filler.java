@@ -13,10 +13,8 @@ public class Filler	{
 	private ArrayList<Group> groups;
 	private ArrayList<Teacher> teachers;
 	
-	private HashMap<Group, HashMap<Field, Boolean>> fieldsDone;
-	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
-	//private List<Constraint> constraints;
+	private DataStore dataStore;
 	
 	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
@@ -26,15 +24,17 @@ public class Filler	{
 		this.types = aTypes;
 		this.MWWH = aMWWH;
 		
-		this.fieldsDone = new HashMap<Group, HashMap<Field, Boolean>>();
-		
-		for (Group g : this.groups)	{
-			this.fieldsDone.put(g, new HashMap<Field, Boolean>());
-			for (Field f : g.classes.keySet())
-				this.fieldsDone.get(g).put(f, false);
-		}
 	}
-		
+	
+	public Filler(DataStore ds) {
+		this.dataStore = ds;
+		this.classrooms = ds.getClassrooms();
+		this.groups = ds.getGroups();
+		this.teachers = ds.getTeachers();
+		this.types = ds.getTypes();
+		this.MWWH = ds.getMWWH();
+	}
+
 	/*
 	 * Dans l'ordre spécifié par la paramètre,
 	 * cette méthode devra attribuer les constrainables
@@ -593,7 +593,7 @@ public class Filler	{
 	private boolean takeCareOf(Field f, ArrayList<Group> order)	{
 		
 		for (Group group : order)
-			if (group.getClasses().containsKey(f) && !this.fieldsDone.get(group).get(f))
+			if (group.getClasses().containsKey(f) && !group.getFieldsDone().get(f))
 				if (!this.takeCareOf(group, f))
 					return false;
 		return true;
@@ -603,7 +603,7 @@ public class Filler	{
 		
 		for (Group group : groupOrder)	{
 			for (Field field : fieldOrder)	{
-				if (field.getType() == ct && group.getClasses().containsKey(field) && !this.fieldsDone.get(group).get(field))	{
+				if (field.getType() == ct && group.getClasses().containsKey(field) && !group.getFieldsDone().get(field))	{
 					if (!this.takeCareOf(group, field))
 						return false;
 				}
@@ -617,7 +617,7 @@ public class Filler	{
 		for (Field f : fieldsOrder)	{
 			if (teach.knows(f))	{
 				for (Group g : groupsOrder)	{
-					if (teach.getLinks().getLinks(g).size() != 0 && !(this.fieldsDone.get(g).get(f)))	{
+					if (teach.getLinks().getLinks(g).size() != 0 && !(g.getFieldsDone().get(f)))	{
 
 						Time left = g.getClasses().get(f);
 						
@@ -636,7 +636,7 @@ public class Filler	{
 	private boolean takeCareOf(Group g, ArrayList<Field> order)	{
 		
 		for (Field f : order)	{
-			if (g.classes.containsKey(f) && !this.fieldsDone.get(g).get(f))	{
+			if (g.classes.containsKey(f) && !g.getFieldsDone().get(f))	{
 				
 				if (!this.takeCareOf(g, f))
 					return false;
@@ -786,7 +786,7 @@ public class Filler	{
 				left = left.substract(duration);
 		}
 		
-		this.fieldsDone.get(group).put(field, true);
+		group.getFieldsDone().put(field, true);
 		
 		return true;
 	}

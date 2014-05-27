@@ -1,14 +1,17 @@
 package GUI;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import DATA.DataStore;
+import DATA.Filler;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import java.io.File;
 
 public class WelcomeFrame extends JFrame {
 
@@ -27,7 +30,7 @@ public class WelcomeFrame extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 450, 300);
+		this.setBounds(100, 100, 250, 140);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton b1 = new JButton("Nouveau");
@@ -41,8 +44,18 @@ public class WelcomeFrame extends JFrame {
 		JButton b2 = new JButton("Ouvrir");
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new OpenFrame();
-				setVisible(false);
+				JFileChooser fc = new JFileChooser();
+				
+			    fc.setFileFilter(new FileNameExtensionFilter("Emploi du Temps", "EdT"));
+				
+			    int res = fc.showOpenDialog(frame);
+				
+			    File f = null;
+				if (res == JFileChooser.APPROVE_OPTION)	{
+					f = fc.getSelectedFile();
+					DataStore ds = new DataStore(f);
+					new MainFrame(new Filler(new DataStore(f)));
+				}
 			}
 		});
 		
@@ -59,8 +72,7 @@ public class WelcomeFrame extends JFrame {
 				System.exit(0);
 			}
 		});
-
-		this.getContentPane().setLayout(new GridLayout(2,2, 10, 10));
+		getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 23, 23));
 		
 		this.getContentPane().add(b1);
 		this.getContentPane().add(b2);

@@ -1,5 +1,7 @@
 package DATA;
 
+import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,11 +15,17 @@ public class DataStore {
 	private ArrayList<Group> groups = new ArrayList<Group>();
 	private ArrayList<ClassType> types = new ArrayList<ClassType>();
 	private ArrayList<Field> fields = new ArrayList<Field>();
+	private Time MWWH;
+	private WeekTable defaultWeek;
 	
 	public DataStore() {
 		this.addFixtures();
 	}
 	
+	public DataStore(File f) {
+		//BOUYAKAKAH !
+	}
+
 	public void addFixtures() {
 
 		ArrayList<Slot> temp = new ArrayList<Slot>();
@@ -32,7 +40,8 @@ public class DataStore {
 		temp.add(new Slot(new Time(40800), new Time(41200)));
 		temp.add(new Slot(new Time(41400), new Time(41800)));
 		
-		WeekTable.setDefault(new WeekTable(temp, null));
+		this.defaultWeek = new WeekTable(temp, null);
+		WeekTable.setDefault(this.defaultWeek);
 		
 		this.types.add(0, new ClassType("Cours", "Amphithéâtre", new Slot(new Time(100), new Time(130))));
 		this.types.add(1, new ClassType("TD", "TD", new Slot(new Time(130), new Time(200))));
@@ -43,23 +52,23 @@ public class DataStore {
 		this.types.add(6, new ClassType("TD Info", "TD", new Slot(new Time(200), new Time(200))));
 		this.types.add(7, new ClassType("Sport", "Gymnase", new Slot(new Time(200), new Time(200))));
 		
-		this.classrooms.add(new Classroom(0, types.get(1), "C9", 25));
-		this.classrooms.add(new Classroom(0, types.get(1), "2.10", 25));
-		this.classrooms.add(new Classroom(1, types.get(0), "Vannier", 100));
-		this.classrooms.add(new Classroom(46, types.get(0), "Turing", 100));
-		this.classrooms.add(new Classroom(2, types.get(2), "Optique", 16));
-		this.classrooms.add(new Classroom(3, types.get(3), "1", 16));
-		this.classrooms.add(new Classroom(4, types.get(4), "Usinage", 32));
-		this.classrooms.add(new Classroom(5, types.get(5), "Est", 25));
-		this.classrooms.add(new Classroom(6, types.get(6), "Archie", 25));
-		this.classrooms.add(new Classroom(7, types.get(7), "Piscine", 150));
+		this.classrooms.add(new Classroom(types.get(1), "C9", 25, new Point(0, 0)));
+		this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
+		this.classrooms.add(new Classroom(types.get(0), "Vannier", 100, new Point(1, 0)));
+		this.classrooms.add(new Classroom(types.get(0), "Turing", 100, new Point(1, 1)));
+		this.classrooms.add(new Classroom(types.get(2), "Optique", 16, new Point(0, 2)));
+		this.classrooms.add(new Classroom(types.get(3), "1", 16, new Point(2, 0)));
+		this.classrooms.add(new Classroom(types.get(4), "Usinage", 32, new Point(2, 2)));
+		this.classrooms.add(new Classroom(types.get(5), "Est", 25, new Point(0, 3)));
+		this.classrooms.add(new Classroom(types.get(6), "Archie", 25, new Point(3, 0)));
+		this.classrooms.add(new Classroom(types.get(7), "Piscine", 150, new Point(0, 3)));
 		
-		Field mathsa = (new Field(0, types.get(0), "Maths"));
-		Field physiquea = (new Field(1, types.get(0), "Physique"));
-		Field mathst = (new Field(2, types.get(1), "Maths"));
-		Field physiquet = (new Field(3, types.get(1), "Physique"));
-		Field concept = (new Field(4, types.get(5), "Conception"));
-		Field contrucp = (new Field(5, types.get(4), "Usinage"));
+		Field mathsa = (new Field(types.get(0), "Maths"));
+		Field physiquea = (new Field(types.get(0), "Physique"));
+		Field mathst = (new Field(types.get(1), "Maths"));
+		Field physiquet = (new Field(types.get(1), "Physique"));
+		Field concept = (new Field(types.get(5), "Conception"));
+		Field contrucp = (new Field(types.get(4), "Usinage"));
 		
 		Field[] MaPtMt = {mathsa, physiquet, mathst};
 		Field[] PaMtPt = {physiquea, mathst, physiquet};
@@ -75,7 +84,7 @@ public class DataStore {
 		this.fields.add(concept);
 		this.fields.add(contrucp);
 		
-		Time MWWH = new Time (2500);
+		this.MWWH = new Time (2500);
 		
 		this.teachers.add(new Teacher(0, "Twilight", "Sparkle", MaPtMt, MWWH));
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
@@ -100,10 +109,10 @@ public class DataStore {
 		
 		//System.out.println("Main.main() : classes " + classes);
 		
-		this.groups.add(new Group(0, "Lanip", 100).setClasses(null).setParent(null));
-		this.groups.add(new Group(1, "g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		this.groups.add(new Group(2, "g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
-		this.groups.add(new Group(3, "g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
+		this.groups.add(new Group("Lanip", 100).setClasses(null).setParent(null));
+		this.groups.add(new Group("g46", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
+		this.groups.add(new Group("g42", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
+		this.groups.add(new Group("g2116", 25).setClasses(classes).setParent(groups.get(0)).setChildren(null));
 		//this.groups.add(new Group(4, "gPi", 25).setClasses(classes).setParent(groups.get(1)).setChildren(null));
 		
 		Group[] gtab = {this.groups.get(1), this.groups.get(2)};
@@ -140,6 +149,22 @@ public class DataStore {
 	
 	public ArrayList<Field> getFields() {
 		return fields;
+	}
+
+	public Time getMWWH() {
+		return MWWH;
+	}
+
+	public WeekTable getDefaultWeek() {
+		return defaultWeek;
+	}
+
+	public void setMWWH(Time mWWH) {
+		MWWH = mWWH;
+	}
+
+	public void setDefaultWeek(WeekTable defaultWeek) {
+		this.defaultWeek = defaultWeek;
 	}
 
 	public DataStore setTeachers(ArrayList<Teacher> teachers) {

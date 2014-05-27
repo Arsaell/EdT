@@ -1,76 +1,76 @@
 package GUI;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 
-import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ListDataListener;
-
-import net.miginfocom.swing.MigLayout;
-
-import org.eclipse.wb.swing.FocusTraversalOnArray;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import DATA.ClassType;
 import DATA.Field;
 import DATA.Slot;
 import DATA.Time;
-
-import javax.swing.JSeparator;
-import javax.swing.JScrollPane;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
-import javax.swing.JLayeredPane;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import javax.swing.JSpinner;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class FieldPanel extends JPanel {
 	
 	private ArrayList<ClassType> classtypes;
 	private ArrayList<Field> fields;
 	
-	private JTextField textField;
-	private JTextField textField_1;
-	private JSpinner textField_2;
-	private JSpinner textField_3;
-	private JSpinner textField_4;
-	private JSpinner textField_5;
-	private JTextField textField_6;
-	private JList list_1;
-	/**
-	 * Create the panel.
-	 */
-	public FieldPanel() {
+	private StartFrame container;
+	
+	private JTextField fieldName;
+	private JTextField typeName;
+	private JSpinner minHour;
+	private JSpinner minMin;
+	private JSpinner maxHour;
+	private JSpinner maxMin;
+	private JTextField roomType;
+	private JList typesList;
+	private JList fieldsList;
+	private JButton addType;
+	private JButton addField;
+	private JComboBox fieldType;
+	
+	
+	public FieldPanel(StartFrame aContainer) {
 
 		super();
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				container.getDS().setFields(fields);
+				container.getDS().setTypes(classtypes);
+			}
+		});
 		
+		this.container = aContainer;
 		this.classtypes = new ArrayList<ClassType>();
 		this.fields = new ArrayList<Field>();
 		
 		this.setMinimumSize(new Dimension(450, 325));
-		setLayout(new MigLayout("", "[450px]", "[67px][67px][67px][67px]"));
 		
-		JLabel lblTypes = new JLabel("Types");
-		add(lblTypes, "cell 0 0,grow");
+		JLabel lblTypes = new JLabel("                            Types");
 		
 		JSplitPane splitPane_1 = new JSplitPane();
-		add(splitPane_1, "cell 0 1,grow");
 		
 		JPanel panel_1 = new JPanel();
 		splitPane_1.setRightComponent(panel_1);
@@ -79,15 +79,30 @@ public class FieldPanel extends JPanel {
 		JLabel lblNom = new JLabel("Nom");
 		panel_1.add(lblNom);
 		
-		textField_1 = new JTextField();
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		typeName = new JTextField();
+		typeName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				//System.out.println("typeName");
+				checkEnableButtons();
+			}
+		});
+		panel_1.add(typeName);
+		typeName.setColumns(10);
 		
 		JLabel lblType_1 = new JLabel("Type de Salle");
 		panel_1.add(lblType_1);
 		
-		textField_6 = new JTextField();
-		panel_1.add(textField_6);
+		roomType = new JTextField();
+		panel_1.add(roomType);
+		roomType.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				//System.out.println("roomType");
+				checkEnableButtons();
+			}
+		});
+		
 		
 		JLabel lblTempsMinimum = new JLabel("Temps Minimum");
 		panel_1.add(lblTempsMinimum);
@@ -96,14 +111,28 @@ public class FieldPanel extends JPanel {
 		panel_1.add(panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 		
-		textField_2 = new JSpinner();
-		panel_2.add(textField_2);
+		minHour = new JSpinner();
+		minHour.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				//System.out.println("minHour");
+				checkEnableButtons();
+			}
+		});
+		panel_2.add(minHour);
+		
 		
 		JLabel lblHeures = new JLabel("heures");
 		panel_2.add(lblHeures);
 		
-		textField_3 = new JSpinner();
-		panel_2.add(textField_3);
+		minMin = new JSpinner();
+		panel_2.add(minMin);
+		minMin.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				//System.out.println("minMin");
+				checkEnableButtons();
+			}
+		});
+		
 		
 		JLabel lblMinutes = new JLabel("minutes");
 		panel_2.add(lblMinutes);
@@ -115,14 +144,28 @@ public class FieldPanel extends JPanel {
 		panel_1.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
-		textField_4 = new JSpinner();
-		panel_3.add(textField_4);
+		maxHour = new JSpinner();
+		panel_3.add(maxHour);
+		maxHour.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				//System.out.println("maxHour");
+				checkEnableButtons();
+			}
+		});
+		
 		
 		JLabel lblHeures_1 = new JLabel("heures");
 		panel_3.add(lblHeures_1);
 		
-		textField_5 = new JSpinner();
-		panel_3.add(textField_5);
+		maxMin = new JSpinner();
+		panel_3.add(maxMin);
+		maxMin.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				//System.out.println("maxMin");
+				checkEnableButtons();
+			}
+		});
+		
 		
 		JLabel lblMinutes_1 = new JLabel("minutes");
 		panel_3.add(lblMinutes_1);
@@ -130,80 +173,70 @@ public class FieldPanel extends JPanel {
 		JLabel label = new JLabel("");
 		panel_1.add(label);
 		
-		JButton btnAjouter_1 = new JButton("Ajouter");
-		btnAjouter_1.addActionListener(new ActionListener() {
+		addType = new JButton("Ajouter");
+		addType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String name = textField_1.getText();
-				String shortName = textField_6.getText();
-				int hmin = (Integer) textField_2.getValue();
-				int mmin = (Integer) textField_3.getValue();
-				int hmax = (Integer) textField_4.getValue();
-				int mmax = (Integer) textField_5.getValue();
-				
-				try	{
-					
-					ClassType ct = new ClassType(name, shortName, new Slot(new Time(hmin * 100 + mmin), new Time(hmax * 100 + mmax)));
-					classtypes.add(ct);
-					
-					textField_1.setText("");
-					textField_6.setText("");
-					textField_2.setValue(0);
-					textField_3.setValue(0);
-					textField_4.setValue(0);
-					textField_5.setValue(0);
-					
-				} catch (Exception e)	{
-					e.printStackTrace();
-					System.out.println("GUI.FieldPanel : tried to add an unavalid ClassType");
-				}
+				String name = typeName.getText();
+				String shortName = roomType.getText();
+				int hmin = (Integer) minHour.getValue();
+				int mmin = (Integer) minMin.getValue();
+				int hmax = (Integer) maxHour.getValue();
+				int mmax = (Integer) maxMin.getValue();
+				if (name.length() > 0 && shortName.length() > 0 && hmin + mmin > 0 && hmax + mmax > 0)
+					try	{
+						
+						ClassType ct = new ClassType(name, shortName, new Slot(new Time(hmin * 100 + mmin), new Time(hmax * 100 + mmax)));
+						classtypes.add(ct);
+						
+						typeName.setText("");
+						roomType.setText("");
+						minHour.setValue(0);
+						minMin.setValue(0);
+						maxHour.setValue(0);
+						maxMin.setValue(0);
+						
+						typesList.setListData(classtypes.toArray());
+						fieldType.addItem(ct);
+						
+					} catch (Exception e)	{
+						e.printStackTrace();
+						System.out.println("GUI.FieldPanel : tried to add an unavalid ClassType");
+					}
+				checkEnableButtons();
 			}
 		});
-		panel_1.add(btnAjouter_1);
+		panel_1.add(addType);
 		
 		JPanel panel_4 = new JPanel();
 		splitPane_1.setLeftComponent(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		
-		list_1 = new JList();
-		panel_4.add(new JScrollPane(list_1), BorderLayout.NORTH);
-		list_1.setBorder(new LineBorder(Color.RED, 1, true));
-		
-		ListModel alm = new AbstractListModel() {
-			Object[] values = classtypes.toArray();
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-			
-		};
-		
-		list_1.setModel(alm);
-		
-		JButton btnEnlever = new JButton("Enlever");
-		panel_4.add(btnEnlever, BorderLayout.SOUTH);
-		
-		JLabel lblMatires = new JLabel("Matières");
-		add(lblMatires, "cell 0 2,grow");
-		
-		JSplitPane splitPane = new JSplitPane();
-		add(splitPane, "cell 0 3,grow");
-		
-		JList list = new JList();
-		list.setBorder(new LineBorder(Color.RED, 1, true));
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Maths Cours", "Maths TD", "Physique Cours", "Physique TD"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
+		typesList = new JList(classtypes.toArray());
+		panel_4.add(new JScrollPane(typesList), BorderLayout.NORTH);
+//		
+//		ListModel ctList = new javax.swing.DefaultListModel();
+//		
+//		list_1.setModel(ctList);
+//		
+		JButton rmType = new JButton("Enlever");
+		rmType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int[] sel = typesList.getSelectedIndices();
+				for (int i = sel.length - 1 ; i >= 0 ; i--)
+					classtypes.remove(sel[i]);
+
+				typesList.setListData(classtypes.toArray());
+				
+				fieldType.removeAllItems();
+				for (ClassType ct : classtypes)
+					fieldType.addItem(ct);
 			}
 		});
-		splitPane.setLeftComponent(new JScrollPane(list));
+		panel_4.add(rmType, BorderLayout.SOUTH);
+		
+		JLabel lblMatires = new JLabel("                            Matières");
+		
+		JSplitPane splitPane = new JSplitPane();
 		
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
@@ -212,20 +245,99 @@ public class FieldPanel extends JPanel {
 		JLabel lblNewLabel = new JLabel("Nom");
 		panel.add(lblNewLabel);
 		
-		textField = new JTextField();
-		panel.add(textField);
-		textField.setColumns(10);
+		fieldName = new JTextField();
+		panel.add(fieldName);
+		fieldName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				checkEnableButtons();
+			}
+		});
+		
 		
 		JLabel lblType = new JLabel("Type");
 		panel.add(lblType);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
-		panel.add(comboBox);
+		fieldType = new JComboBox(classtypes.toArray());
+		fieldType.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				checkEnableButtons();
+			}
+		});
+		panel.add(fieldType);
 		
-		JButton btnAjouter = new JButton("Ajouter");
-		panel.add(btnAjouter);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{list, textField}));
-	}
+		JLabel label_3 = new JLabel("");
+		panel.add(label_3);
+		
+		this.addField = new JButton("Ajouter");
+		addField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Field f = new Field((ClassType)fieldType.getSelectedItem(), fieldName.getText());
+				fields.add(f);
+				fieldsList.setListData(fields.toArray());
+			}
+		});
+		panel.add(addField);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(lblTypes);
 
+		JPanel fieldsPanel = new JPanel();
+		
+		splitPane.setLeftComponent(fieldsPanel);
+		
+		fieldsList = new JList(this.fields.toArray());
+		//addField = new JButton("Ajouter");
+		
+		
+		JButton rmField = new JButton("Enlever");
+		rmField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int [] sel = fieldsList.getSelectedIndices();
+				
+				for (int i = sel.length - 1 ; i >= 0 ; i--)
+					fields.remove(sel[i]);
+				
+				fieldsList.setListData(fields.toArray());
+			}
+		});
+		fieldsPanel.setLayout(new BorderLayout(0, 0));
+		
+		
+		fieldsPanel.add(new JScrollPane(fieldsList), BorderLayout.NORTH);
+		fieldsPanel.add(rmField, BorderLayout.SOUTH);
+		
+		JLabel label_1 = new JLabel("");
+		add(label_1);
+		add(splitPane_1);
+		
+		JLabel label_4 = new JLabel("");
+		add(label_4);
+		add(lblMatires);
+		add(splitPane);
+		
+		JLabel label_5 = new JLabel("");
+		add(label_5);
+		this.checkEnableButtons();
+	}
+	
+	private void checkEnableButtons()	{
+		
+		boolean bool = this.typeName.getText().length() > 0 && this.roomType.getText().length() > 0 && ((Integer)this.minHour.getValue() + (Integer)this.minMin.getValue() > 0) && ((Integer)this.maxHour.getValue() + (Integer)this.maxMin.getValue() > 0);
+		//System.out.print(bool);
+		this.addType.setEnabled(bool);
+		
+		bool = this.fieldName.getText().length() > 0 && this.fieldType.getSelectedItem() != null;
+		//System.out.print(bool);
+		this.addField.setEnabled(bool);
+	}
+	
+	public ArrayList<ClassType> getClassTypes()	{
+		return this.classtypes;
+	}
+	
+	public ArrayList<Field> getFields()	{
+		return this.fields;
+	}
 }

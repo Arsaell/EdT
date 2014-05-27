@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import DATA.DataStore;
+import DATA.Filler;
 import DATA.WeekTable;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -22,28 +23,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenuItem mntmTeachers;
 	private DataStore dataStore;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public MainFrame() {
+	
+	public MainFrame(Filler filler) {
 		
 		// On charge le datastore.
 		this.dataStore = new DataStore();
@@ -83,6 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		setVisible(true);
 	}
 
 	class ViewEdTListener implements ActionListener {
@@ -91,10 +73,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.mntmTeachers) {
-			TeacherWindow teacherWindow = new TeacherWindow(this.dataStore);
-			teacherWindow.getFrame().setVisible(true);
-		}
+//		if(e.getSource() == this.mntmTeachers) {
+//			TeacherPanel teacherWindow = new TeacherPanel(this, this.dataStore);
+//			teacherWindow.getRootPane().setVisible(true);
+//		}
 		
 	}
 }
