@@ -1,9 +1,10 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Slot	{
+public class Slot implements Serializable {
 
 	private Time begin, end;
 	

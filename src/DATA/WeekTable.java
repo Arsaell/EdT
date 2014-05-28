@@ -1,5 +1,6 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

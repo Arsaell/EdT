@@ -1,8 +1,9 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class LinksList extends ArrayList<Link> {
+public class LinksList extends ArrayList<Link> implements Serializable {
 	
 	/*
 	 * Jusqu'à présent, cette classe n'a pas été utilisée.

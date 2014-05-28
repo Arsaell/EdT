@@ -1,6 +1,8 @@
 package DATA;
 
-public class Link {
+import java.io.Serializable;
+
+public class Link implements Serializable {
 
 		private Teacher teach;
 		private Group group;

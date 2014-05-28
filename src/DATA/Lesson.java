@@ -1,8 +1,8 @@
 package DATA;
 
+import java.io.Serializable;
 
-
-public class Lesson	extends Slot{
+public class Lesson	extends Slot implements Serializable {
 	
 	private Teacher teacher;
 	private Group students;

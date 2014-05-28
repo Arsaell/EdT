@@ -48,7 +48,6 @@ import java.awt.event.ComponentEvent;
 
 public class TeacherPanel extends JPanel implements ActionListener, KeyListener, ListSelectionListener{
 
-	private StartFrame container;
 	private ArrayList<Teacher> teachers;
 	
 	private JPanel infoPanel;
@@ -73,23 +72,21 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 	 * Create the application.
 	 * @param startFrame 
 	 */
-	public TeacherPanel(StartFrame aContainer, DataStore dataStore) {
+	public TeacherPanel(DataStore ds) {
 		addComponentListener(new ComponentAdapter() {
-			@Override
 			public void componentShown(ComponentEvent e) {
-				teachers = container.ds.getTeachers();
+				teachers = dataStore.getTeachers();
 				JTable table = getJTableField();
 				fieldPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-				teacherListModel = new TeacherListModel(container.ds.getTeachers());
+				teacherListModel = new TeacherListModel(dataStore.getTeachers());
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.ds.setTeachers(teachers);
+				dataStore.setTeachers(teachers);
 			}
 		});
-		this.container = aContainer;
-		this.dataStore = dataStore;
-		this.teachers = container.ds.getTeachers();
+		this.dataStore = ds;
+		this.teachers = dataStore.getTeachers();
 		this.teacherListModel = new TeacherListModel(this.dataStore.getTeachers());
 		initialize();
 	}
@@ -350,6 +347,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		}
 
 		public void addElement(Teacher newTeacher) {
+			System.out.println("Coucou !");
 			this.teachers.add(newTeacher);
 			fireContentsChanged(this, 0, teachers.size());
 		}
@@ -505,7 +503,6 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 			Teacher newTeacher = new Teacher(0, "", "", new Field[]{}, new Time((byte)1, (byte)1, (byte)1));
 			((TeacherListModel) teacherList.getModel()).addElement(newTeacher);
 			teacherList.setSelectedValue(newTeacher, true);
-			teachers.add(newTeacher);
 		}
 	}
 
