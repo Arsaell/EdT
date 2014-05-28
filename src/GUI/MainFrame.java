@@ -67,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton btnGroups;
 	private JButton btnFields;
 	private JButton btnWeekTable;
+	private JButton btnFillFrame;
 	private JPanel listPanel;
 	private JPanel EdTPanel;
 	private JLabel teacherLabel;
@@ -79,6 +80,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		setBounds(100, 100, 450, 300);
 		
 		this.dataStore = ds;
+		filler = new Filler(ds);
+		filler.fill(filler.computeConstraints(true), Filler.IGNORE);
 		
 		contentPane = new ContentPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -167,6 +170,19 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 				
 			});
+			
+			btnFillFrame = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/book_open.png"))));
+			btnFillFrame.setText("Construire l'emploi du temps");
+			btnFillFrame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					/*JFrame frame = new 
+					frame.setBounds(100, 100, 750, 550);
+					frame.getContentPane().add(new FieldPanel(dataStore));
+					frame.setVisible(true);*/
+				}
+			});
+			
+
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -193,6 +209,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		JPanel leftContainer = new JPanel();
 		
+		EdTPanel = new JPanel();
+		getContentPane().add(EdTPanel, BorderLayout.CENTER);
+		EdTPanel.setVisible(false);
+		
 		listPanel = new ListPanel(dataStore, this.EdTPanel);
 		leftContainer.add(listPanel);
 		FlowLayout fl_leftContainer = new FlowLayout(FlowLayout.LEFT, 5, 5);
@@ -204,9 +224,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		listPanel.setVisible(false);
 		teacherLabel.setVisible(false);
 		
-		EdTPanel = new JPanel();
-		getContentPane().add(EdTPanel);
-		EdTPanel.setVisible(false);
 		
 	}
 	public void actionPerformed(ActionEvent e) {
@@ -324,8 +341,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				
 				// On y place les bonnes infos.
 				selectedTeacher = teacherList.getSelectedValue();
-
+				System.out.println(selectedTeacher);
 				// On affiche l'emploi du temps du prof
+				EdTPanel.setMinimumSize(new Dimension(500, 500));
 				EdTPanel.add(new EdTViewerPanel(selectedTeacher.getWeekTable()));
 			}
 		}
