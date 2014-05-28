@@ -2,6 +2,7 @@ package DATA;
 
 import java.util.ArrayList;
 import DATA.HashMap;
+import GUI.EdTViewerWindow;
 
 public class Filler	{
 
@@ -10,7 +11,16 @@ public class Filler	{
 	private ArrayList<Group> groups;
 	private ArrayList<Teacher> teachers;
 	
+	private ArrayList<Lesson> done;						//Utilisée pour stocker l'"historique" pendant le remplissage.
+	private HashMap<Integer, Integer> steps;			//idem
+	private HashMap<Integer, Integer> errorsIndexes;	//idem
+	private int lastErrorIndex = 0;						//idem
+	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
+	
+	private int mode;
+	public static final int IGNORE = 0, ABORT = 1, RETRY = 2;
+	
 	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
@@ -29,17 +39,27 @@ public class Filler	{
 		this.MWWH = ds.getMWWH();
 	}
 
-	/*
+	/**
 	 * Dans l'ordre spécifié par la paramètre,
-	 * cette méthode devra attribuer les constrainables
+	 * cette méthode devra attribuer les Constrainables
 	 * jusqu'à ce que l'emploi du temps soit complet.
-	 * */
-	public int fill(Constrainable[] order)	{
+	 * Le paramètre mode détermine le comportement de la méthode handleError en cas d'échec.
+	 * @param order l'ordre général dans lequel traiter les données (déterminé par la méthode computeConstraints()).
+	 * @param mode Le comportement à appliquer si l'une des méthodes takeCareOf([...]) renvoie false ( <=> rencontre une erreur)
+	 * @return le nombre d'erreurs rencontrées lors du remplissage.
+	 */
+	public int fill(HashMap<Constrainable, Double> order, int mode)	{
 
+		this.mode = mode;
 		ArrayList<Group> groupsOrder = new ArrayList<Group>();
 		ArrayList<Field> fieldsOrder = new ArrayList<Field>();
 		
-		for (Constrainable c : order)	{
+		this.steps = new HashMap<Integer, Integer>();
+		this.errorsIndexes = new HashMap<Integer, Integer>();
+		this.done = new ArrayList<Lesson>();
+		
+		for (Object o : order)	{
+			Constrainable c = (Constrainable) o;
 			if (c instanceof Group)
 				groupsOrder.add((Group)c);
 			
@@ -49,40 +69,60 @@ public class Filler	{
 		
 		int errors = 0;
 		
-		for (Constrainable c : order)	{
-			
-			if (c instanceof Field)	{				//Order : Group
+		//System.out.println("Filler.fill() : " + order);
+		
+		for (int i = 0 ; i < order.size() ; i++)	{
 
-				//System.out.println(c + "\t\t\t" + this.takeCareOf((Field)c, groupsOrder));
-				if (!this.takeCareOf((Field) c, groupsOrder))
+			steps.put(i, done.size());
+			//System.out.println("Filler.fill().steps : " + steps + "\n\t\t\t" + done.size());
+			Constrainable c = order.getKey(i);
+			//System.out.println("Filler.fill() #steps : " + i + " " + steps.values());// + "\n\n" + order);
+			//System.out.println("Filler.fill : " + i + " " + c);
+			
+			if (c instanceof Field)	{
+
+				if (!this.takeCareOf((Field) c, groupsOrder))	{
 					++errors;
+					System.out.println("Filler.fill#Error : " + c);
+					i = this.handleError(i, order);
+				}
 			}
 			
-			else if (c instanceof ClassType)	{	//Order : Group
+			else if (c instanceof ClassType)	{
 
-				//System.out.println(c + "\t\t\t" + this.takeCareOf((ClassType)c, groupsOrder, fieldsOrder));
-				if (!this.takeCareOf((ClassType) c, groupsOrder, fieldsOrder))
+				if (!this.takeCareOf((ClassType) c, groupsOrder, fieldsOrder))	{
 					++errors;
+					System.out.println("Filler.fill#Error : " + c);
+					i = this.handleError(i, order);
+				}
 			}
 			
-			else if (c instanceof Teacher)	{		//Order : Field
+			else if (c instanceof Teacher)	{
 
-				//System.out.println(c + "\t\t\t" + this.takeCareOf((Teacher)c, fieldsOrder, groupsOrder));
-				if (!this.takeCareOf((Teacher) c, fieldsOrder, groupsOrder))
+				if (!this.takeCareOf((Teacher) c, fieldsOrder, groupsOrder))	{
 					++errors;
+					System.out.println("Filler.fill#Error : " + c);
+					i = this.handleError(i, order);
+				}
 			}
 			
-			else if (c instanceof Group)	{		//Order : Field
+			else if (c instanceof Group)	{
 				
-				//System.out.println(c + "\t\t\t" + this.takeCareOf((Group)c, fieldsOrder));
-				if (!this.takeCareOf((Group) c, fieldsOrder))
+				if (!this.takeCareOf((Group) c, fieldsOrder))	{
 					++errors;
+					System.out.println("Filler.fill#Error : " + c);
+					i = this.handleError(i, order);
+				}
 			}
 		}
 		return errors;
 	}
 	
-	//Attribue les profs aux groupes dans l'ordre indiqué par le paramètre order (par ordre de contrainte dans l'idée)
+	/**
+	 * Attribue les profs aux groupes dans l'ordre indiqué par le paramètre order (par ordre de contrainte dans l'idée)
+	 * @param order l'ordre dans lequel traiter les matières lors de l'attribution.
+	 * @return false si une erreur a été rencontrée (le descriptif de l'erreur est détailler dans la sortie terminal).
+	 */
 	public boolean attributeTeachers(ArrayList<Field> order)	{
 	
 		/*
@@ -127,7 +167,7 @@ public class Filler	{
 						/*
 						else if (teach == this.teachers.get(this.teachers.size() - 1))
 							System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
-						*/
+						//*/
 						
 						if(i == this.teachers.size() - 1)
 							i = -1;
@@ -157,7 +197,7 @@ public class Filler	{
 							if (teach.canTeach(f, g))	{
 							
 								boolean res = g.setTeacher(teach, f);
-								System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
+								//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
 								break;
 							}
 							
@@ -175,7 +215,20 @@ public class Filler	{
 		return (!failed);
 	}
 	
-	public Constrainable[] computeConstraints(boolean attributeTeachers)	{
+	/**
+	 * Cette méthode est appelée peu après l'instanciation du Filler pour déterminer
+	 * dans quel ordre il est préférable de traiter les éléments des listes.
+	 * Il détermine pour chaque classe implémentant l'interface Constrainable 
+	 * une contrainte sous forme d'un double entre 0 et 1 :
+	 * 0 signifiant que l'élément est complètement libre
+	 * 1 signifiant que la marge de manoeuvre lors de l'attribution/placement de l'élément est nulle.
+	 * Elle renvoie une HashMap ordonnée de ces contraintes via la méthode orderByValues()
+	 * @param attributeTeachers détermine si la méthode devrait ou non profiter du calcul des contraintes
+	 * pour tenter d'attribuer les Teachers aux Groups et ainsi ensuite recalculer plus précisément
+	 * les contraintes des Teachers
+	 * @return une liste ordonnée de Constrainables associés de leur contrainte.
+	 */
+	public HashMap<Constrainable, Double> computeConstraints(boolean attributeTeachers)	{
 		
 		/*
 			Retourne un tableau des objets les plus contraints, dans l'ordre
@@ -500,20 +553,26 @@ public class Filler	{
 		data.add(teachingConstraints);
 		data.add(groupConstraints);
 		
-		Constrainable[] res = this.orderByValues(data);
+		HashMap<Constrainable, Double> res = this.orderByValues(data);
 		
 		return res;
 	}
 	
-	private Constrainable[] orderByValues(ArrayList<HashMap<Constrainable, Double>> data){
+	/**
+	 * Une méthode appelée uniquement par computeConstraints() pour mettre en ordre ses résultats.
+	 * Sa fonction est d'intercaler dans une seule HashMap ordonnée tous les Constrainables traités par computeConstraints().
+	 * @param data Un ensemble de Constrainables associés à leur contrainte respective.
+	 * @return	une HashMap unique et ordonnée par contrainte de tous les Constrainables traités par computeConstraints()
+	 */
+	private HashMap<Constrainable, Double> orderByValues(ArrayList<HashMap<Constrainable, Double>> data){
 		
 		//System.out.print("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : ");
 		
-		ArrayList<Constrainable> temp = new ArrayList<Constrainable>();
+		HashMap<Constrainable, Double> temp = new HashMap<Constrainable, Double>();
 		HashMap<Constrainable, Double> constraints = new HashMap<Constrainable, Double>();
 		
 	//On insère un premier élément pour lancer la boucle.
-		temp.add((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
+		temp.put((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1), 0.);
 		
 		//System.out.println(temp);
 		
@@ -530,7 +589,7 @@ public class Filler	{
 					
 					//System.out.print("  #2 : " + i);
 					
-					Constrainable c2 = temp.get(i);
+					Constrainable c2 = temp.getKey(i);
 					double con = -1;
 					
 					//System.out.println(" c2 : " + c2 + " # " + con);
@@ -549,13 +608,13 @@ public class Filler	{
 					
 					if (hm.get(c1) > con)	{
 						//System.out.println("Fits here : " + i);
-						temp.add(i , c1);
+						temp.put(i, c1 , con);
 						break;
 					}
 					
 					else if (i == temp.size() - 1)	{
 						//System.out.println("addLast() : " + (temp.size() + 1));
-						temp.add(c1);
+						temp.put(c1, con);
 						break;
 					}
 				}
@@ -566,18 +625,7 @@ public class Filler	{
 				temp.remove(data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1));
 			}
 		}
-		
-		Constrainable[] res = new Constrainable[temp.size()];
-		
-		for (int i = 0 ; i < temp.size(); i++)
-			res[i] = temp.get(i);
-		
-		/*
-		for (int i = 0 ; i < res.length ; i++)	
-			if (res[i] instanceof ClassType)
-				System.out.println("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : " + res[i] + "\t\t--> " + constraints.get(res[i]));
-		//*/
-		
+
 		/*
 		//Boucle d'affichage uniquement, peut être passée sous commentaire
 		for (Constrainable c : res)	{
@@ -593,9 +641,13 @@ public class Filler	{
 			System.out.println("Filler.orderByValues() #res : " + c + " \t " + con);
 		}
 		//*/
-		return res;
+		return temp;
 	}
 
+	/**
+	 * Les quatres méthodes suivantes sont simplement des interfaces entre la méthode fill() (appelante)
+	 * et la méthode takeCareOf(Group, Field) (qui fait la plus grande partie du travail)
+	 */
 	private boolean takeCareOf(Field f, ArrayList<Group> order)	{
 		
 		for (Group group : order)
@@ -652,6 +704,13 @@ public class Filler	{
 		return true;
 	}
 
+	/**
+	 * S'occupe de générer et attribuer des Lessons correspondant aux paramètres jusqu'à remplir les exigences de group.classes
+	 * Si cette fonction renvoie false, la méthode fill() qui l'appelle s'occupera de transmettre l'erreur à la méthode handleError().
+	 * @param group le Group dont la méthode attribue les matières
+	 * @param field la matière concernée
+	 * @return false si une erreur a été rencontrée (un descriptif de l'erreur est affiché dans la sortie terminal).
+	 */
 	private boolean takeCareOf(Group group, Field field) {
 		
 		//System.out.println("\n\n\tFiller.takeCarOf (" + group + ", " + field + ")\n\n");
@@ -788,8 +847,10 @@ public class Filler	{
 				return false;
 			}
 			
-			else 
+			else 	{
 				left = left.substract(duration);
+				this.done.add(res);
+			}
 		}
 		
 		group.getFieldsDone().put(field, true);
@@ -797,6 +858,87 @@ public class Filler	{
 		return true;
 	}
 
+	/**
+	 * Méthode appelée lorsque l'une des méthodes takeCarOf([...]) renvoie false.
+	 * @param start	L'index dans la liste ordonnée de Constrainables auquel a eu lieu l'erreur
+	 * @param order	la liste ordonnée de Constrainables utilisée par la méthode fill()
+	 * @return l'index dans la liste order auquel la méthode fill() doit reprendre.
+	 */
+	private int handleError(int start, HashMap<Constrainable, Double> order) {
+		
+		System.out.print("Filler.handleError() : ==> ");
+		switch (this.mode)	{
+		case ABORT	:
+			System.out.println("ABORT");
+			return order.size();
+			
+		case IGNORE	:
+			System.out.println("IGNORE");
+			return start;
+			
+		case RETRY	:
+			
+			System.out.println("RETRY : " + start);
+			
+			if (start == 0)
+				this.mode = Filler.ABORT;
+			
+			else	{
+				
+				int i;
+				
+				for (i = start ; i > 0 ; i--)	{
+					
+					System.out.println("#0 : i=" + i + " ; constr(i)=" + order.getValue(i) + " ; constr(i - 1)=" + order.getValue(i - 1) + " ; lastErrorIndex=" + this.lastErrorIndex + " ; errorIndexes=" + this.errorsIndexes);
+					
+					if (Math.abs(order.getValue(i - 1) - order.getValue(i)) < 0.05 && i != this.lastErrorIndex && ((this.errorsIndexes.get(i) != null && this.errorsIndexes.get(i) < 5) || this.errorsIndexes.get(i) == null ))	{
+						
+						this.lastErrorIndex = i;
+						this.errorsIndexes.put(start, this.errorsIndexes.get(start) != null ? this.errorsIndexes.get(start) + 1 : 1);
+						
+						Constrainable c = order.getKey(i);
+						double constr = order.getValue(i);
+						System.out.println(" #1 : " + c + "(--> " + constr + ") [" + done.size() + "] " + steps.get(i - 1) + " " + steps.get(i) + " " + steps.get(i + 1));
+						
+						order.remove(c);
+						order.put(i - 1, c, constr);
+						
+						for (int j = steps.get(i - 1) ; j < done.size() ; j++)	{
+							Lesson l = done.get(j);
+							System.out.println("  #2 : " + j + " " + l.toString().replaceAll("\n", ""));
+							l.getPlace().removeLesson(l);
+							l.getStudents().removeLesson(l);
+							l.getTeacher().removeLesson(l);
+							
+							done.remove(j);
+						}
+						System.out.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
+						//System.out.println(done);
+						
+						for (int j = i - 1 ; j < steps.size() ; j++)
+							steps.remove(j);
+						
+						steps.put(i - 1, done.size());
+						System.out.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
+						
+						return i - 1;
+					}
+					}
+				System.out.println("Filler.handleError()#RETRY : " + done.size() + " " + steps);
+				return i - 1;
+			}
+			
+		default :
+			return start;
+		}
+	}
+	
+	/**
+	 * Renvoie une Classroom disponible pendant le Slot s, du type spécifié en paramètre, ou null si aucune salle ne correspond.
+	 * @param type le type de la salle recherchée
+	 * @param s	le créneau pour lequel on recherche une salle
+	 * @return une Classroom du type demandé, disponible pendant le créneau spécifié.
+	 */
 	public Classroom findClassRoom(ClassType type, Slot s) {
 		
 		//System.out.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
@@ -813,6 +955,12 @@ public class Filler	{
 		return null;
 	}
 	
+	/**
+	 * Renvoie une Classroom disponible pendant le Slot s, dont l'effectif est supérieur ou égal à eff, ou null si aucune salle ne correspond.
+	 * @param eff l'effectif minimum de la salle recherchée
+	 * @param s le créneau pour lequel on recherche une salle
+	 * @return une Classroom d'effectif suffisant, disponible pour le créneau spécifié.
+	 */
 	public Classroom findClassRoom(int eff, Slot s)	{
 		
 		for (Classroom c : this.classrooms)

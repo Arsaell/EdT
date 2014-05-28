@@ -168,7 +168,6 @@ public class Time implements Serializable {
 	}
 	
 	//Renvoie this dans le format utilisé par le constructeur new Time(int i);
-	
 	private int toInt()	{
 		return this.day * 10000 + this.hour * 100 + this.min;
 	}

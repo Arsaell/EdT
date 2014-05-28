@@ -11,7 +11,7 @@ public class Group extends Timeable implements People, Serializable {
 	protected int effectif;
 	public LinksList links;
 	public HashMap<Field, Time> classes;
-	private HashMap<Field, Boolean> done;
+	protected HashMap<Field, Boolean> done;
 
 	private Group parent;
 	private Group[] children;

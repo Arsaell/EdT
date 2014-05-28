@@ -1,5 +1,7 @@
 package DATA;
 
+import GUI.EdTViewerWindow;
+
 public class Main	{
 
 	public static void main(String[] args)	{
@@ -11,23 +13,33 @@ public class Main	{
 		Filler filler = new Filler(ds);
 		//System.out.println("Main.main() : Filler built.");
 		
-		Constrainable[] constraints = filler.computeConstraints(true);
+		HashMap<Constrainable, Double> constraints = filler.computeConstraints(true);
 		
 		//System.out.println("Main.main() : Constraints computed.");
 		
 		//System.out.println("Main.main() : Teachers attributed to groups.");
 		
-		int errors = filler.fill(constraints);
+		int errors = filler.fill(constraints, Filler.RETRY);
 		
 		//classrooms.get(0).getWeekTable().print();
 		
 		System.out.println("Main.main() : Groups filled : " + errors + " errors.");
 		
+		//new EdTViewerWindow(ds.getClassrooms().get(0).getWeekTable());
 		
 		//new WelcomeFrame();
 		/*
+		
+		Time time = new Time();
+		for (Field f : ds.getGroups().get(1).getClasses().keySet())
+			time = time.add(ds.getGroups().get(1).getClasses().get(f));
+		
 		for (Group g : ds.getGroups())	{
-			
+			Time t = new Time();
+			for (Slot s : g.getWeekTable().getSlots())
+				if (s instanceof Lesson)
+					t = t.add(s.getDuration());
+			System.out.println(g + " --> " + t + " / " + time);
 			new EdTViewerWindow(g.getWeekTable());
 		}
 		//*/

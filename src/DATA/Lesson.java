@@ -31,7 +31,7 @@ public class Lesson	extends Slot implements Serializable {
 			res = false;
 		}
 		
-		if (!this.teacher.canTeach(this.field, this.students))	{
+		if (!this.teacher.knows(this.field))	{
 		
 			if (res)
 				System.out.println("Lesson.check() : incoherent data ");
