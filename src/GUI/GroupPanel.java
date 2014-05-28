@@ -3,13 +3,19 @@ package GUI;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import DATA.DataStore;
 import DATA.Field;
 import DATA.Group;
 import DATA.Time;
 import DATA.HashMap;
+
 import javax.swing.JSplitPane;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JScrollPane;
+
 import java.awt.GridLayout;
 
 import javax.swing.ComboBoxModel;
@@ -19,27 +25,34 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JButton;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.UIManager;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.border.EmptyBorder;
 
 public class GroupPanel extends JPanel {
@@ -47,8 +60,6 @@ public class GroupPanel extends JPanel {
 	private Vector<Group> groups;
 	private HashMap<Group, DefaultMutableTreeNode> nodes;
 	private HashMap<Field, Time> classes;	
-	
-	private StartFrame container;
 	
 	private Group parentSelected;
 	
@@ -62,35 +73,40 @@ public class GroupPanel extends JPanel {
 	private JButton addClass;
 	private JComboBox<Group> groupsCBox;
 	private JSplitPane splitPane;
+	private DataStore ds;
 
-	public GroupPanel(StartFrame aContainer) {
+	private void initializeTree() {
+		groups = new Vector<Group>(ds.getGroups());
+		groupsCBox = new JComboBox(groups);
+		fieldsList.setListData(ds.getFields().toArray());
+		classesList.setListData(classes.keySet().toArray());
+		setUpTree();
+		if (ds.getFields().size() == 0)
+			fieldsList.setListData(new String[]{"Veuillez ajouter", "les matières", "dans l'onglet \"Fields\"."});
+		if (classes.size() == 0)
+			classesList.setListData(new String[]{"Veuillez sélectionner", "une matière", "dans la liste", "à droite."});
+		
+		splitPane.setDividerLocation(0.25);
+
+	}
+	
+	public GroupPanel(DataStore dataStore) {
 		
 		super();
+		this.ds = dataStore;
+		
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
-				
-				groups = new Vector<Group>(container.ds.getGroups());
-				groupsCBox = new JComboBox(groups);
-				fieldsList.setListData(container.ds.getFields().toArray());
-				classesList.setListData(classes.keySet().toArray());
-				setUpTree();
-				if (container.ds.getFields().size() == 0)
-					fieldsList.setListData(new String[]{"Veuillez ajouter", "les matières", "dans l'onglet \"Fields\"."});
-				if (classes.size() == 0)
-					classesList.setListData(new String[]{"Veuillez sélectionner", "une matière", "dans la liste", "à droite."});
-				
-				splitPane.setDividerLocation(0.25);
+				initializeTree();
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.ds.setGroups(new ArrayList<Group>(groups));
+				ds.setGroups(new ArrayList<Group>(groups));
 			}
 			
 		});
 		
-		this.container = aContainer;
-		
-		this.groups = new Vector<Group>(this.container.ds.getGroups());
+		this.groups = new Vector<Group>(ds.getGroups());
 		this.classes = new HashMap<Field, Time>();
 		this.nodes = new HashMap<Group, DefaultMutableTreeNode>();
 //		classes.put(new Field(new ClassType("", "", new Slot(new Time(), new Time())), ""), new Time());
@@ -190,7 +206,7 @@ public class GroupPanel extends JPanel {
 		panel_1.setLayout(new GridLayout(1, 3, 10, 10));
 		
 
-		this.fieldsList = new JList(this.container.ds.getFields().toArray());
+		this.fieldsList = new JList(ds.getFields().toArray());
 		
 		panel_1.add(fieldsList);
 		
@@ -294,7 +310,7 @@ public class GroupPanel extends JPanel {
 		panel.add(addGroup, gbc_addGroup);
 		panel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{groupName, hours, minutes, addClass}));
 		
-		
+		this.initializeTree();
 		checkAddGroupEnabled();
 		checkAddClassEnabled();
 		
@@ -346,6 +362,6 @@ public class GroupPanel extends JPanel {
 	
 	private void checkAddClassEnabled()	{
 		//System.out.println("Class");
-		this.addClass.setEnabled(container.ds.getFields().size() != 0 && this.fieldsList.getSelectedIndex() != -1 && ((Integer)this.hours.getValue() + (Integer)this.minutes.getValue() > 0));
+		this.addClass.setEnabled(ds.getFields().size() != 0 && this.fieldsList.getSelectedIndex() != -1 && ((Integer)this.hours.getValue() + (Integer)this.minutes.getValue() > 0));
 	}
 }

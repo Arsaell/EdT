@@ -1,6 +1,8 @@
 package DATA;
 
-public class ClassType extends Constrainable {
+import java.io.Serializable;
+
+public class ClassType extends Constrainable implements Serializable {
 	
 	private String name, shortName;
 	private Slot duration;

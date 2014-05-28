@@ -1,9 +1,10 @@
 package DATA;
 
+import java.io.Serializable;
 //import DATA.HashMap;
 import java.util.Iterator;
 
-public class Group extends Timeable implements People	{
+public class Group extends Timeable implements People, Serializable {
 
 	private String name;
 

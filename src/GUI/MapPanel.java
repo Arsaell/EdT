@@ -29,7 +29,7 @@ public class MapPanel extends JPanel {
 	private JSplitPane splitPane;
 	private JPanel panel; 
 	
-	public MapPanel(ArrayList<Classroom> places, JFrame container) {
+	public MapPanel(ArrayList<Classroom> places) {
 		
 		this.places = places;
 		this.hoveredClassroom = null;

@@ -10,8 +10,17 @@ import javax.swing.event.ChangeListener;
 
 import DATA.DataStore;
 import DATA.Filler;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import javax.swing.BoxLayout;
 
 public class StartFrame extends JFrame {
@@ -25,13 +34,14 @@ public class StartFrame extends JFrame {
 	public GroupPanel gp;
 	public JTabbedPane tabbedPane;
 	
-	public StartFrame() {
+	public StartFrame(String datastoreLocation) {
 		super();
-
+		
 		this.ds = new DataStore();
+		this.ds.addFixtures();
 		//this.ds.addFixtures();
 		
-		this.fp = new FieldPanel(this);
+		this.fp = new FieldPanel(this.ds);
 		this.wp = new WeekPanel(this);
 		this.tp = null;
 		this.cp = null;
@@ -50,11 +60,11 @@ public class StartFrame extends JFrame {
 		});
 		
 		tabbedPane.addTab("Week", wp);
-		tabbedPane.addTab("Fields", fp);
-		tabbedPane.addTab("Teachers", tp);
-		tabbedPane.addTab("Classrooms", cp);
-		tabbedPane.addTab("Groups", gp);
-		tabbedPane.addTab("Links", lp);
+		tabbedPane.addTab("Matières", fp);
+		tabbedPane.addTab("Enseignants", tp);
+		tabbedPane.addTab("Salles de classe", cp);
+		tabbedPane.addTab("Groupes", gp);
+		tabbedPane.addTab("Associations", lp);
 		tabbedPane.setSelectedIndex(0);
 		
 		tabbedPane.setEnabledAt(5, false);
@@ -63,8 +73,29 @@ public class StartFrame extends JFrame {
 		btTer.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new MainFrame(new Filler(ds));
+				
+				// On enregistre le dataStore
+				BufferedReader br;
+				try {
+					br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+					String fileName = "";
+					String sCurrentLine = "";
+					while ((sCurrentLine = br.readLine()) != null) {
+						fileName = sCurrentLine;
+					}
+					File fichier =  new File(fileName) ;
+					 // ouverture d'un flux sur un fichier
+					ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+					 // sérialization de l'objet
+					oos.writeObject(ds) ;
+					setVisible(false);
+					new MainFrame(new Filler(ds), ds);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		
@@ -99,9 +130,9 @@ public class StartFrame extends JFrame {
 		}
 		
 		else	{
-			this.cp = new ClassroomPanel(this);
-			this.tp = new TeacherPanel(this, this.ds);
-			this.gp = new GroupPanel(this);
+			this.cp = new ClassroomPanel(this.ds);
+			this.tp = new TeacherPanel(this.ds);
+			this.gp = new GroupPanel(this.ds);
 			this.tabbedPane.remove(2);
 			//this.tabbedPane.setTabComponentAt(2, this.tp);
 			//this.tabbedPane.add(this.tp, 2);

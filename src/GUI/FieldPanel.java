@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -23,9 +24,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import DATA.ClassType;
+import DATA.DataStore;
 import DATA.Field;
 import DATA.Slot;
 import DATA.Time;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -34,7 +37,7 @@ public class FieldPanel extends JPanel {
 	private ArrayList<ClassType> classtypes;
 	private ArrayList<Field> fields;
 	
-	private StartFrame container;
+	private DataStore ds;
 	
 	private JTextField fieldName;
 	private JTextField typeName;
@@ -50,26 +53,26 @@ public class FieldPanel extends JPanel {
 	private JComboBox fieldType;
 	
 	
-	public FieldPanel(StartFrame aContainer) {
+	public FieldPanel(DataStore datastore) {
 
 		super();
 		addComponentListener(new ComponentAdapter() {
 			
 			@Override
 			public void componentShown(ComponentEvent e)	{
-				fields = container.ds.getFields();
-				classtypes = container.ds.getTypes();
+				fields = ds.getFields();
+				classtypes = ds.getTypes();
 			}
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				container.ds.setFields(fields);
-				container.ds.setTypes(classtypes);
+				ds.setFields(fields);
+				ds.setTypes(classtypes);
 			}
 		});
 		
-		this.container = aContainer;
-		this.classtypes = container.ds.getTypes();
-		this.fields = container.ds.getFields();
+		this.ds = datastore;
+		this.classtypes = ds.getTypes();
+		this.fields = ds.getFields();
 		
 		this.setMinimumSize(new Dimension(450, 325));
 		
@@ -325,6 +328,7 @@ public class FieldPanel extends JPanel {
 		JLabel label_5 = new JLabel("");
 		add(label_5);
 		this.checkEnableButtons();
+		this.setVisible(true);
 	}
 	
 	private void checkEnableButtons()	{

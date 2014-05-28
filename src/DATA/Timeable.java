@@ -1,9 +1,8 @@
 package DATA;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-
-
-public abstract class Timeable extends Constrainable	{
+public abstract class Timeable extends Constrainable implements Serializable {
 
 	protected WeekTable timeTable;
 	

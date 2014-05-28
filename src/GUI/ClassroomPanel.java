@@ -29,6 +29,7 @@ import javax.swing.tree.TreePath;
 
 import DATA.ClassType;
 import DATA.Classroom;
+import DATA.DataStore;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.InputMethodEvent;
@@ -47,9 +49,9 @@ import java.io.File;
 
 public class ClassroomPanel extends JPanel {
 
+	private DataStore dataStore;
 	private ArrayList<Classroom> classrooms;
 	private HashMap<ClassType, DefaultMutableTreeNode> treenodes;
-	private StartFrame container;
 	private JTextField tfName;
 	private JComboBox cbType;
 	private JButton btnPosition;
@@ -61,44 +63,47 @@ public class ClassroomPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JButton btnPreview;
+	private ClassroomPanel cp;
 	
-	public ClassroomPanel(StartFrame aContainer) {
+	private void initializeTree() {
+		ArrayList<ClassType> types = dataStore.getTypes();
+		tree = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		
+		for (ClassType ct : dataStore.getTypes())	{
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(ct.getShortName());
+			((DefaultMutableTreeNode)(tree.getModel().getRoot())).add(node);
+			treenodes.put(ct, node);
+		}
+		for (int i = 0 ; i < tree.getRowCount() ; i++)
+			tree.expandRow(i);
+		
+		tree.setRootVisible(false);
+		
+		scrollPane = new JScrollPane(tree);
+		splitPane.setLeftComponent(scrollPane);
+		splitPane.setDividerLocation(0.25);
+		
+		panel.remove(cbType);
+		cbType = new JComboBox(types.toArray());
+		panel.add(cbType, 5);
+	}
+	
+	public ClassroomPanel(DataStore ds) {
 
 		super();
-		this.container = aContainer;
-		this.classrooms = this.container.ds.getClassrooms();
+		this.cp = this;
+		this.dataStore = ds;
+		this.classrooms = dataStore.getClassrooms();
 		this.treenodes = new HashMap<ClassType, DefaultMutableTreeNode>();
 		
 		this.addComponentListener(new ComponentAdapter() {
 			
 			public void componentShown(ComponentEvent e) {
-				
-				ArrayList<ClassType> types = container.ds.getTypes();
-				
-				tree = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode()));
-				
-				for (ClassType ct : container.fp.getClassTypes())	{
-					DefaultMutableTreeNode node = new DefaultMutableTreeNode(ct.getShortName());
-					((DefaultMutableTreeNode)(tree.getModel().getRoot())).add(node);
-					treenodes.put(ct, node);
-				}
-				for (int i = 0 ; i < tree.getRowCount() ; i++)
-					tree.expandRow(i);
-				
-				tree.setRootVisible(false);
-				
-				scrollPane = new JScrollPane(tree);
-				splitPane.setLeftComponent(scrollPane);
-				splitPane.setDividerLocation(0.25);
-				
-				panel.remove(cbType);
-				cbType = new JComboBox(types.toArray());
-				panel.add(cbType, 5);
-				//System.out.println(tree.getModel().getChild(tree.getModel().getRoot(), 0));
+				initializeTree();
 			}
 			
 			public void componentHidden(ComponentEvent e)	{
-				container.ds.setClassrooms(classrooms);
+				dataStore.setClassrooms(classrooms);
 			}
 		});
 		
@@ -168,7 +173,7 @@ public class ClassroomPanel extends JPanel {
 		btnPosition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try	{
-					new PositionFrame(ImageIO.read(new File("Plan Campus.jpg")), (ClassroomPanel)((StartFrame)((JTabbedPane)(getParent())).getParent().getParent().getParent().getParent()).cp);
+					new PositionFrame(ImageIO.read(new File("Plan Campus.jpg")), cp);
 				} catch(Exception e){
 					e.printStackTrace();
 				}
@@ -222,13 +227,14 @@ public class ClassroomPanel extends JPanel {
 		btnPreview.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame fr = new JFrame();
-				fr.add(new MapPanel(classrooms, fr));
+				fr.add(new MapPanel(classrooms));
 				fr.pack();
 				fr.setVisible(true);
 				checkEnableBtn();
 			}
 		});
 		panel.add(btnPreview);
+		this.initializeTree();
 		this.checkEnableBtn();
 	}
 

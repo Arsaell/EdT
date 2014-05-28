@@ -1,10 +1,9 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-
-
-public class WeekTable {
+public class WeekTable implements Serializable {
 	
 	private ArrayList<Slot> slots;
 	private Timeable owner;

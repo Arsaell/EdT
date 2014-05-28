@@ -1,5 +1,6 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -7,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class HashMap<K, V> implements Map<K, V>, Iterable {
+public class HashMap<K, V> implements Map<K, V>, Iterable, Serializable {
 
 	private ArrayList<K> keys = new ArrayList<K>();
 	private ArrayList<V> values = new ArrayList<V>();

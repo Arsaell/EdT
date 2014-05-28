@@ -1,6 +1,8 @@
 package DATA;
 
-public class Time	{
+import java.io.Serializable;
+
+public class Time implements Serializable {
 
 	private  byte day, hour, min;
 	

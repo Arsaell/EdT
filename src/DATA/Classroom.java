@@ -1,8 +1,9 @@
 package DATA;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Classroom extends Timeable	{
+public class Classroom extends Timeable implements Serializable{
 
 	private Point coords;
 	private ClassType type;

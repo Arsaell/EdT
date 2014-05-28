@@ -1,7 +1,8 @@
 package DATA;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Teacher extends Timeable implements People, Comparable<Teacher>	{
+public class Teacher extends Timeable implements People, Comparable<Teacher>, Serializable {
 
 	private String firstName, lastName;
 	private Time maxWeekWorkedHours, currentWeekWorkedHours;

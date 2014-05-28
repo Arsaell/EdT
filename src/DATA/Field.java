@@ -1,8 +1,9 @@
 package DATA;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Field extends Constrainable	{
+public class Field extends Constrainable implements Serializable {
 
 	private ClassType type;
 	private String name;

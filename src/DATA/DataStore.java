@@ -2,13 +2,14 @@ package DATA;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
-import DATA.HashMap;
 
+import DATA.HashMap;
 import DATA.Teacher;
 import DATA.Time;
 
-public class DataStore {
+public class DataStore implements Serializable {
 	
 	private ArrayList<Teacher> teachers = new ArrayList<Teacher>();
 	private ArrayList<Classroom> classrooms= new ArrayList<Classroom>();
@@ -16,7 +17,7 @@ public class DataStore {
 	private ArrayList<ClassType> types = new ArrayList<ClassType>();
 	private ArrayList<Field> fields = new ArrayList<Field>();
 	private Time MWWH;
-	//private WeekTable defaultWeek;
+	private WeekTable defaultWeek;
 	
 	public DataStore() {
 		this.teachers = new ArrayList<Teacher>();
