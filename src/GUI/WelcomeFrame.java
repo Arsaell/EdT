@@ -53,7 +53,7 @@ public class WelcomeFrame extends JFrame {
 			    File f = null;
 				if (res == JFileChooser.APPROVE_OPTION)	{
 					f = fc.getSelectedFile();
-					new MainFrame(new Filler(new DataStore(f)));
+					new MainFrame(new Filler(System.out, new DataStore(f)));
 				}
 			}
 		});

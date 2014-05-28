@@ -64,7 +64,7 @@ public class StartFrame extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new MainFrame(new Filler(ds));
+				new MainFrame(new Filler(System.out, ds));
 			}
 		});
 		

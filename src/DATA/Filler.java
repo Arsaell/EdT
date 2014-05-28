@@ -1,5 +1,6 @@
 package DATA;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import DATA.HashMap;
 import GUI.EdTViewerWindow;
@@ -17,29 +18,33 @@ public class Filler	{
 	private int lastErrorIndex = 0;						//idem
 	
 	private Time MWWH; //Max Worked Week Hours, durée en heures de la semaine
+	private PrintStream ps;
 	
 	private int mode;
 	public static final int IGNORE = 0, ABORT = 1, RETRY = 2;
 	
-	public Filler(ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
+	public Filler(PrintStream aPs, ArrayList<Classroom> aClassrooms, ArrayList<Group> aGroups, ArrayList<Teacher> aTeachers, ArrayList<ClassType> aTypes, Time aMWWH/*, ArrayList<Constraint> aConstraints*/)	{
 	
 		this.classrooms = aClassrooms;
 		this.groups = aGroups;
 		this.teachers = aTeachers;
 		this.types = aTypes;
 		this.MWWH = aMWWH;
-		
+		this.ps = aPs == null ? ps : aPs;
 	}
 	
-	public Filler(DataStore ds) {
+	public Filler(PrintStream aPs, DataStore ds) {
 		this.classrooms = ds.getClassrooms();
 		this.groups = ds.getGroups();
 		this.teachers = ds.getTeachers();
 		this.types = ds.getTypes();
 		this.MWWH = ds.getMWWH();
+		this.ps = aPs == null ? System.out : aPs;
+		
 	}
-
-	/**
+	
+	/**ps.println("");
+	
 	 * Dans l'ordre spécifié par la paramètre,
 	 * cette méthode devra attribuer les Constrainables
 	 * jusqu'à ce que l'emploi du temps soit complet.
@@ -49,7 +54,7 @@ public class Filler	{
 	 * @return le nombre d'erreurs rencontrées lors du remplissage.
 	 */
 	public int fill(HashMap<Constrainable, Double> order, int mode)	{
-
+		
 		this.mode = mode;
 		ArrayList<Group> groupsOrder = new ArrayList<Group>();
 		ArrayList<Field> fieldsOrder = new ArrayList<Field>();
@@ -69,21 +74,21 @@ public class Filler	{
 		
 		int errors = 0;
 		
-		//System.out.println("Filler.fill() : " + order);
+		//ps.println("Filler.fill() : " + order);
 		
 		for (int i = 0 ; i < order.size() ; i++)	{
 
 			steps.put(i, done.size());
-			//System.out.println("Filler.fill().steps : " + steps + "\n\t\t\t" + done.size());
+			//ps.println("Filler.fill().steps : " + steps + "\n\t\t\t" + done.size());
 			Constrainable c = order.getKey(i);
-			//System.out.println("Filler.fill() #steps : " + i + " " + steps.values());// + "\n\n" + order);
-			//System.out.println("Filler.fill : " + i + " " + c);
+			//ps.println("Filler.fill() #steps : " + i + " " + steps.values());// + "\n\n" + order);
+			//ps.println("Filler.fill : " + i + " " + c);
 			
 			if (c instanceof Field)	{
 
 				if (!this.takeCareOf((Field) c, groupsOrder))	{
 					++errors;
-					System.out.println("Filler.fill#Error : " + c);
+					ps.println("Filler.fill#Error : " + c);
 					i = this.handleError(i, order);
 				}
 			}
@@ -92,7 +97,7 @@ public class Filler	{
 
 				if (!this.takeCareOf((ClassType) c, groupsOrder, fieldsOrder))	{
 					++errors;
-					System.out.println("Filler.fill#Error : " + c);
+					ps.println("Filler.fill#Error : " + c);
 					i = this.handleError(i, order);
 				}
 			}
@@ -101,7 +106,7 @@ public class Filler	{
 
 				if (!this.takeCareOf((Teacher) c, fieldsOrder, groupsOrder))	{
 					++errors;
-					System.out.println("Filler.fill#Error : " + c);
+					ps.println("Filler.fill#Error : " + c);
 					i = this.handleError(i, order);
 				}
 			}
@@ -110,7 +115,7 @@ public class Filler	{
 				
 				if (!this.takeCareOf((Group) c, fieldsOrder))	{
 					++errors;
-					System.out.println("Filler.fill#Error : " + c);
+					ps.println("Filler.fill#Error : " + c);
 					i = this.handleError(i, order);
 				}
 			}
@@ -160,13 +165,13 @@ public class Filler	{
 						if (teach.canTeach(f, g))	{
 						
 							g.setTeacher(teach, f);
-							//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
+							//ps.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
 							break;
 						}
 						
 						/*
 						else if (teach == this.teachers.get(this.teachers.size() - 1))
-							System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
+							ps.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
 						//*/
 						
 						if(i == this.teachers.size() - 1)
@@ -174,7 +179,7 @@ public class Filler	{
 						
 						if (i == j - 1)	{
 							failed = true;
-							//System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
+							//ps.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
 							break;
 						}
 					}
@@ -197,14 +202,14 @@ public class Filler	{
 							if (teach.canTeach(f, g))	{
 							
 								boolean res = g.setTeacher(teach, f);
-								//System.out.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
+								//ps.println("Filler.attributeTeachers(Field[] order) : " + g + " " + f + " " + teach + " --> " + res);
 								break;
 							}
 							
 							
 							else if (teach == this.teachers.get(this.teachers.size() - 1))	{
 								failed = true;
-								System.out.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
+								ps.println("Filler.attributeTeachers(Field[] order) says : Couldn't attribute a teacher for field " +  f + " to group " + g);
 							}
 						}
 					}
@@ -266,12 +271,12 @@ public class Filler	{
 			for (Object o : g.classes)	{
 				
 				Field f = (Field) o;
-				//System.out.println("Filler.computeConstraints() #classrooms Time Needed 1 : # " + f + " # " + f.getType() + " # " + g + " # " + g.classes.get(f) + " # " + roomTimeNeeded.get(f.getType()));
+				//ps.println("Filler.computeConstraints() #classrooms Time Needed 1 : # " + f + " # " + f.getType() + " # " + g + " # " + g.classes.get(f) + " # " + roomTimeNeeded.get(f.getType()));
 				
 				Time t = roomTimeNeeded.get(f.getType()).add(g.classes.get(f));
 				roomTimeNeeded.put(f.getType(), t);
 
-				//System.out.println("Filler.computeConstraints() #classrooms Time Needed 2 : " + g + " # " + f + " # " + f.getType() + t + " # " + roomTimeNeeded.get(f.getType()));
+				//ps.println("Filler.computeConstraints() #classrooms Time Needed 2 : " + g + " # " + f + " # " + f.getType() + t + " # " + roomTimeNeeded.get(f.getType()));
 			}
 		}
 		
@@ -282,23 +287,23 @@ public class Filler	{
 			Time t = roomTimeAvailable.get(c.getType()).add(this.MWWH);
 			roomTimeAvailable.put(c.getType(), t);
 			
-			//System.out.println("Filler.computeConstraints() #classrooms Time Available : " + c + " " + t + roomTimeAvailable.get(c.getType()));
+			//ps.println("Filler.computeConstraints() #classrooms Time Available : " + c + " " + t + roomTimeAvailable.get(c.getType()));
 		}
 		
 		boolean failed = false;
 		
 		for (int i = 0 ; i < this.types.size() ; i++)	{
 			
-			//System.out.println("Filler.computeConstraints() #classHours : " + i + " " + (this.classrooms.size() > i ? this.classrooms.get(i) : "null") + " " + durationsNeeded[i] + " / " + durationsAvailable[i]);
+			//ps.println("Filler.computeConstraints() #classHours : " + i + " " + (this.classrooms.size() > i ? this.classrooms.get(i) : "null") + " " + durationsNeeded[i] + " / " + durationsAvailable[i]);
 			
 			if (roomTimeAvailable.get(this.types.get(i)) != null  && roomTimeNeeded.get(this.types.get(i)) != null && roomTimeNeeded.get(this.types.get(i)).isMoreThan(roomTimeAvailable.get(this.types.get(i))) )	{
-				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough classrooms ! " + this.types.get(i));
+				ps.println("## /!\\ ## : Filler.computeConstraints() says : Not enough classrooms ! " + this.types.get(i));
 				failed = true;
 			}
 		}
 		
 		if (!failed)
-			System.out.println("Filler.computeConstraints() says : There are enough classrooms.");
+			ps.println("Filler.computeConstraints() says : There are enough classrooms.");
 		
 	// END : ration hours / classrooms
 		
@@ -324,7 +329,7 @@ public class Filler	{
 		}
 		/*
 		for (Field f : teachTimeNeeded)
-			System.out.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f));
+			ps.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f));
 		//*/
 		
 	// END : ratio hours / teachers
@@ -348,36 +353,36 @@ public class Filler	{
 		for (Object o : teachTimeAttributed)	{
 			
 			Field f = (Field) o;
-			//System.out.println("Filler.computeConstraints() #teachersTime : #0 " + f);
+			//ps.println("Filler.computeConstraints() #teachersTime : #0 " + f);
 			
 			while (teachTimeAttributed.get(f).isLessThan(teachTimeNeeded.get(f)))	{
 			
 				for (Teacher teach : this.teachers)	{
 					
-					//System.out.println("  #1 " + teach);
+					//ps.println("  #1 " + teach);
 					
 					if (teach.knows(f))	{
 						
 						Time available = teach.getMWWH().substract(teach.getCWWH()); 				//Le temps "libre" du prof
 						Time needed = teachTimeNeeded.get(f).substract(teachTimeAttributed.get(f));	//La quantité restante à attribuer.
 
-						//System.out.println("   #2 " + teach.getCWWH() + " " + teach.getMWWH() + " " + available + " #3 " + needed);
+						//ps.println("   #2 " + teach.getCWWH() + " " + teach.getMWWH() + " " + available + " #3 " + needed);
 						
 						Time t;
 						
 						for (Group group : this.groups)	{
 							
-							//System.out.println("    #4 " + group);
+							//ps.println("    #4 " + group);
 							
 							if (group.classes.containsKey(f))	{
 								
 								t = group.classes.get(f);
 								
-								//System.out.println("     #5 " + t);
+								//ps.println("     #5 " + t);
 								
 								if (t.isLessThan(available) && t.isLessThan(needed))	{
 								
-									//System.out.println("      #6");
+									//ps.println("      #6");
 									
 									teachTimeAttributed.put (f, teachTimeAttributed.get(f).add(t));
 									
@@ -385,7 +390,7 @@ public class Filler	{
 									
 									available = teach.getMWWH().substract(teach.getCWWH());
 								
-									//System.out.println("       #7 : " + f + " " + teachTimeAttributed.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
+									//ps.println("       #7 : " + f + " " + teachTimeAttributed.get(f) + " / " + teachTimeNeeded.get(f) + " #9 " + teach + " #10 " + teach.getCWWH() + " #11 " + available + " #12 " + needed + " #13 " + t);
 								}
 							}
 						}
@@ -396,27 +401,27 @@ public class Filler	{
 		
 		/*
 		for (Field f : teachTimeAttributed)
-			System.out.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f) + teachTimeAttributed.get(f));
+			ps.println("Filler.computeConstraints() #Fields : " + f + " --> " + teachTimeNeeded.get(f) + teachTimeAttributed.get(f));
 		//*/
 		
 		boolean okay = true;
-		//System.out.println("Filler.computeConstraints() #Teachers : ");
+		//ps.println("Filler.computeConstraints() #Teachers : ");
 		
 		for (Object o : teachTimeNeeded)	{
 
 			Field f = (Field) o;
 			
-			//System.out.println("\t" + f + " --> " + teachTimeNeeded.get(f) + " / " + teachTimeAvailable.get(f));
+			//ps.println("\t" + f + " --> " + teachTimeNeeded.get(f) + " / " + teachTimeAvailable.get(f));
 			
 			if (teachTimeNeeded.get(f).isMoreThan(teachTimeAttributed.get(f)))	{
-				System.out.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! ");
-				System.out.println(f + " --> time needed : " + teachTimeNeeded.get(f) + " ; time available : " + teachTimeAttributed.get(f));
+				ps.println("## /!\\ ## : Filler.computeConstraints() says : Not enough teachers ! ");
+				ps.println(f + " --> time needed : " + teachTimeNeeded.get(f) + " ; time available : " + teachTimeAttributed.get(f));
 				okay = false;
 			}
 		}
 		
 		if (okay)
-			System.out.println("Filler.ComputeConstraints() says : There are enough Teachers.");
+			ps.println("Filler.ComputeConstraints() says : There are enough Teachers.");
 		
 	// END : ratio hours / teachers ADVANCED
 		
@@ -446,7 +451,7 @@ public class Filler	{
 		for (Object o : roomTimeNeeded)	{
 			
 			ClassType type = (ClassType) o;
-			//System.out.println("Filler.computeConstraints() #Rooms : " + type + " --> " + roomTimeNeeded.get(type) + " / " + roomTimeAvailable.get(type) + " = " + roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
+			//ps.println("Filler.computeConstraints() #Rooms : " + type + " --> " + roomTimeNeeded.get(type) + " / " + roomTimeAvailable.get(type) + " = " + roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
 			
 			roomConstraints.put(type, roomTimeNeeded.get(type).divideBy(roomTimeAvailable.get(type)));
 		//			constraint =			Needed				  /			Available
@@ -456,11 +461,11 @@ public class Filler	{
 
 			Field field = (Field) o;
 			
-			//System.out.println("Filler.computeConstraints() #Fields : " + field + " --> " + teachTimeNeeded.get(field) + " / " + teachTimeSpare.get(field).add(teachTimeAttributed.get(field)) + " = " + teachTimeNeeded.get(field).divideBy(teachTimeAttributed.get(field).add(teachTimeSpare.get(field))));
+			//ps.println("Filler.computeConstraints() #Fields : " + field + " --> " + teachTimeNeeded.get(field) + " / " + teachTimeSpare.get(field).add(teachTimeAttributed.get(field)) + " = " + teachTimeNeeded.get(field).divideBy(teachTimeAttributed.get(field).add(teachTimeSpare.get(field))));
 			teachingConstraints.put(field, teachTimeNeeded.get(field).divideBy(teachTimeAttributed.get(field).add(teachTimeSpare.get(field))));
 		//			constraint	=				Needed					/		(Available					+		spare)
 		}
-		//System.out.println("Filler.computeConstraints() #orderByValues : " + roomConstraints.size() + " " + teacherConstraints.size());
+		//ps.println("Filler.computeConstraints() #orderByValues : " + roomConstraints.size() + " " + teacherConstraints.size());
 		
 		
 
@@ -474,13 +479,13 @@ public class Filler	{
 				t = t.add(group.classes.get(f));
 			}
 			groupConstraints.put(group, t.divideBy(this.MWWH));
-			//System.out.println("Filler.computeConstraints() #Groups : " + group + " --> " + t + " / " + this.MWWH + " = " + t.divideBy(this.MWWH));
+			//ps.println("Filler.computeConstraints() #Groups : " + group + " --> " + t + " / " + this.MWWH + " = " + t.divideBy(this.MWWH));
 		}
 		
 		HashMap<Constrainable, Double> teachersConstraints = new HashMap<Constrainable, Double>();
 		
 		for (Teacher teach : this.teachers)	{
-			//System.out.println("Filler.computeConstraints() #Teachers : " + teach + " --> " + teach.getCWWH() + " / " + teach.getMWWH() + " = " + teach.getCWWH().divideBy(teach.getMWWH()));
+			//ps.println("Filler.computeConstraints() #Teachers : " + teach + " --> " + teach.getCWWH() + " / " + teach.getMWWH() + " = " + teach.getCWWH().divideBy(teach.getMWWH()));
 			teachersConstraints.put(teach, teach.getCWWH().divideBy(teach.getMWWH()));
 		}
 
@@ -526,14 +531,14 @@ public class Filler	{
 			}
 			
 			if (!this.attributeTeachers(temp))
-				System.out.println("\n\n\t\t##########\n\n\tFiller.attributeTeachers() failed !\n\n\t\t##########\n\n");
+				ps.println("\n\n\t\t##########\n\n\tFiller.attributeTeachers() failed !\n\n\t\t##########\n\n");
 			else
-				System.out.println("Filler.computeConstraints() says : Teachers attributed.");
+				ps.println("Filler.computeConstraints() says : Teachers attributed.");
 			
 			//Maintenant que les profs sont attribués, on peut calculer leur contrainte réelle !
 			for (Teacher teach : this.teachers)	{
 				teachersConstraints.put(teach, teach.getCWWH().divideBy(teach.getMWWH()));
-				//System.out.println("Filler.computeConstraints() #Teachers2 : " + teach + " --> " + teach.getCWWH() + " / " + teach.getMWWH() + " = " + teach.getCWWH().divideBy(teach.getMWWH()));
+				//ps.println("Filler.computeConstraints() #Teachers2 : " + teach + " --> " + teach.getCWWH() + " / " + teach.getMWWH() + " = " + teach.getCWWH().divideBy(teach.getMWWH()));
 			}
 			
 		}
@@ -566,7 +571,7 @@ public class Filler	{
 	 */
 	private HashMap<Constrainable, Double> orderByValues(ArrayList<HashMap<Constrainable, Double>> data){
 		
-		//System.out.print("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : ");
+		//ps.print("Filler.orderByValues(ArrayList<HashMap<Constrainable, Double>>) : ");
 		
 		HashMap<Constrainable, Double> temp = new HashMap<Constrainable, Double>();
 		HashMap<Constrainable, Double> constraints = new HashMap<Constrainable, Double>();
@@ -574,46 +579,46 @@ public class Filler	{
 	//On insère un premier élément pour lancer la boucle.
 		temp.put((Constrainable) data.get(data.size() - 1).getKey(data.get(data.size() - 1).size() - 1), 0.);
 		
-		//System.out.println(temp);
+		//ps.println(temp);
 		
 		for (HashMap<Constrainable, Double> hm : data){
 			
-			//System.out.println("#0 (hashmap) : " + hm.size());
+			//ps.println("#0 (hashmap) : " + hm.size());
 			
 			for (Object o : hm){
 				Constrainable c1 = (Constrainable) o;
 				constraints.put(c1,  hm.get(c1));
-				//System.out.println(" #1 : " + c1 + " --> " + constraints.get(c1));
+				//ps.println(" #1 : " + c1 + " --> " + constraints.get(c1));
 				
 				for (int i = 0 ; i < temp.size(); i++)	{
 					
-					//System.out.print("  #2 : " + i);
+					//ps.print("  #2 : " + i);
 					
 					Constrainable c2 = temp.getKey(i);
 					double con = -1;
 					
-					//System.out.println(" c2 : " + c2 + " # " + con);
+					//ps.println(" c2 : " + c2 + " # " + con);
 					
 					for (HashMap<Constrainable, Double> hmap : data)	{
 						
-						//System.out.print("   #3 (hashmap) : " + hmap.size() + " # " + c2 + "\t");
+						//ps.print("   #3 (hashmap) : " + hmap.size() + " # " + c2 + "\t");
 						
 						con = hmap.get(c2) == null ? - 1 : hmap.get(c2);
 						
-						//System.out.println(" --> " + con);
+						//ps.println(" --> " + con);
 						
 						if (con != -1)
 							break;
 					}
 					
 					if (hm.get(c1) > con)	{
-						//System.out.println("Fits here : " + i);
+						//ps.println("Fits here : " + i);
 						temp.put(i, c1 , con);
 						break;
 					}
 					
 					else if (i == temp.size() - 1)	{
-						//System.out.println("addLast() : " + (temp.size() + 1));
+						//ps.println("addLast() : " + (temp.size() + 1));
 						temp.put(c1, con);
 						break;
 					}
@@ -638,7 +643,7 @@ public class Filler	{
 					break;
 				}
 			
-			System.out.println("Filler.orderByValues() #res : " + c + " \t " + con);
+			ps.println("Filler.orderByValues() #res : " + c + " \t " + con);
 		}
 		//*/
 		return temp;
@@ -713,13 +718,13 @@ public class Filler	{
 	 */
 	private boolean takeCareOf(Group group, Field field) {
 		
-		//System.out.println("\n\n\tFiller.takeCarOf (" + group + ", " + field + ")\n\n");
+		//ps.println("\n\n\tFiller.takeCarOf (" + group + ", " + field + ")\n\n");
 		
 		Time left = group.getClasses().get(field);
 		
 		while (left.isMoreThan(new Time()))	{
 
-			//System.out.println("#0 : time left = " + left);
+			//ps.println("#0 : time left = " + left);
 			//La durée du bloc que l'on va chercher à attribuer
 			Time duration = new Time();
 			
@@ -730,16 +735,16 @@ public class Filler	{
 				duration = left;
 			
 			else	{
-				System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a suitable duration for :\n\t" + group + " ; " + field + " ; " + group.getTeacher(field) + "\n\n");
+				ps.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a suitable duration for :\n\t" + group + " ; " + field + " ; " + group.getTeacher(field) + "\n\n");
 				return false;
 			}
 			
-			//System.out.println("#1 : duration = " + duration);
+			//ps.println("#1 : duration = " + duration);
 			
 			ArrayList<Slot> groupSlots = group.getAllFreeSlots(duration);
 			ArrayList<Slot> teachSlots = group.getTeacher(field).getAllFreeSlots(duration);
 			
-			//System.out.println("#2 : groupSlots.size() = " + groupSlots.size() + " ; teachSlots.size() = " + teachSlots.size());
+			//ps.println("#2 : groupSlots.size() = " + groupSlots.size() + " ; teachSlots.size() = " + teachSlots.size());
 			
 			//Contiendra tous les slots disponibles pour le Teacher et le Group et de durée supérieure à duration.
 			ArrayList<Slot> slots = new ArrayList<Slot>();
@@ -749,7 +754,7 @@ public class Filler	{
 					if (s1.intersects(s2) && s1.intersection(s2).getDuration().isntLessThan(duration))
 						slots.add(s1.intersection(s2));
 			
-			//System.out.println("#3 : slots.size() = " + slots.size());
+			//ps.println("#3 : slots.size() = " + slots.size());
 
 			//On cherche tous les slots de la durée requise inclus dans les slots disponibles à la fois pour le group et le teacher, et on les stocke dans la liste slots
 			for (int i = 0 ; i < slots.size() ; i++)	{
@@ -773,7 +778,7 @@ public class Filler	{
 				}
 			}
 			
-			//System.out.println("#4 : slots.size() = " + slots.size());
+			//ps.println("#4 : slots.size() = " + slots.size());
 			
 			Classroom place = null;
 			Slot slot = null;
@@ -781,15 +786,15 @@ public class Filler	{
 			//On cherche une salle disponible, en vérifiant que le group n'a pas le field dans la même journée, ni la veille ou le lendemain.
 			for (Slot s : slots)	{
 				
-				//System.out.println("#0 (" + slots.size() + ") " + s);
+				//ps.println("#0 (" + slots.size() + ") " + s);
 				
 				if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() - 1)) && !group.getWeekTable().fieldHappensInDay(field, (byte)(s.getBegin().getDay() + 1)))	{
 					
-					//System.out.println(" #0.5 ");
+					//ps.println(" #0.5 ");
 					
 					if (this.findClassRoom(field.getType(), s) != null)	{
 						
-						//System.out.println("  #1");
+						//ps.println("  #1");
 						place = this.findClassRoom(field.getType(), s);
 						slot = s;
 						break;
@@ -799,15 +804,15 @@ public class Filler	{
 			
 			//Si c'était pas possible, on restraint la contrainte au jour même
 			if (place == null || slot == null)	{
-				//System.out.println("#2 : " + place + " " + slot + " " + slots.size());
+				//ps.println("#2 : " + place + " " + slot + " " + slots.size());
 				for (Slot s : slots)	{
-					//System.out.println(" #2.5 : " + s);
+					//ps.println(" #2.5 : " + s);
 					if (!group.getWeekTable().fieldHappensInDay(field, s.getBegin().getDay()))	{
-						//System.out.println("  #2.75");
+						//ps.println("  #2.75");
 						if (this.findClassRoom(field.getType(), s) != null)	{
 							place = this.findClassRoom(field.getType(), s);
 							slot = s;
-							//System.out.println("   #3 : " + place + " " + slot);
+							//ps.println("   #3 : " + place + " " + slot);
 							break;
 						}
 					}
@@ -816,13 +821,13 @@ public class Filler	{
 			
 			//Et encore une fois, en passant cette contrainte à la trappe.
 			if (place == null || slot == null)	{
-				//System.out.println("#4 : " + place + " " + slot + " " + slots.size());
+				//ps.println("#4 : " + place + " " + slot + " " + slots.size());
 				for (Slot s : slots)	{
-					//System.out.println(" #4.5 " + s);
+					//ps.println(" #4.5 " + s);
 					if (this.findClassRoom(field.getType(), s) != null)	{
 						place = this.findClassRoom(field.getType(), s);
 						slot = s;
-						//System.out.println("   #5 : " + place + " " + slot);
+						//ps.println("   #5 : " + place + " " + slot);
 						break;
 					}
 				}
@@ -830,8 +835,8 @@ public class Filler	{
 			
 			
 			if (place == null || slot == null)	{
-				//System.out.println("#5 : groupSlots = " + groupSlots + "\nTeachSlots = " + teachSlots);
-				System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a classroom !\n" + group + " " + field + " " + duration + " " + group.getTeacher(field) + " " + place + " " + slot + "\n\n");
+				//ps.println("#5 : groupSlots = " + groupSlots + "\nTeachSlots = " + teachSlots);
+				ps.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't find a classroom !\n" + group + " " + field + " " + duration + " " + group.getTeacher(field) + " " + place + " " + slot + "\n\n");
 				return false;
 			}
 			
@@ -843,7 +848,7 @@ public class Filler	{
 			failed = place.addLesson(res) ? failed : true;
 			
 			if (failed)	{
-				System.out.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't attribute : " + res + "\n\n");
+				ps.println("\n\n\t/!\\ ### Filler.takeCareOf(Group, Field) couldn't attribute : " + res + "\n\n");
 				return false;
 			}
 			
@@ -866,19 +871,19 @@ public class Filler	{
 	 */
 	private int handleError(int start, HashMap<Constrainable, Double> order) {
 		
-		System.out.print("Filler.handleError() : ==> ");
+		ps.print("Filler.handleError() : ==> ");
 		switch (this.mode)	{
 		case ABORT	:
-			System.out.println("ABORT");
+			ps.println("ABORT");
 			return order.size();
 			
 		case IGNORE	:
-			System.out.println("IGNORE");
+			ps.println("IGNORE");
 			return start;
 			
 		case RETRY	:
 			
-			System.out.println("RETRY : " + start);
+			ps.println("RETRY : " + start);
 			
 			if (start == 0)
 				this.mode = Filler.ABORT;
@@ -889,7 +894,7 @@ public class Filler	{
 				
 				for (i = start ; i > 0 ; i--)	{
 					
-					System.out.println("#0 : i=" + i + " ; constr(i)=" + order.getValue(i) + " ; constr(i - 1)=" + order.getValue(i - 1) + " ; lastErrorIndex=" + this.lastErrorIndex + " ; errorIndexes=" + this.errorsIndexes);
+					ps.println("#0 : i=" + i + " ; constr(i)=" + order.getValue(i) + " ; constr(i - 1)=" + order.getValue(i - 1) + " ; lastErrorIndex=" + this.lastErrorIndex + " ; errorIndexes=" + this.errorsIndexes);
 					
 					if (Math.abs(order.getValue(i - 1) - order.getValue(i)) < 0.05 && i != this.lastErrorIndex && ((this.errorsIndexes.get(i) != null && this.errorsIndexes.get(i) < 5) || this.errorsIndexes.get(i) == null ))	{
 						
@@ -898,33 +903,33 @@ public class Filler	{
 						
 						Constrainable c = order.getKey(i);
 						double constr = order.getValue(i);
-						System.out.println(" #1 : " + c + "(--> " + constr + ") [" + done.size() + "] " + steps.get(i - 1) + " " + steps.get(i) + " " + steps.get(i + 1));
+						ps.println(" #1 : " + c + "(--> " + constr + ") [" + done.size() + "] " + steps.get(i - 1) + " " + steps.get(i) + " " + steps.get(i + 1));
 						
 						order.remove(c);
 						order.put(i - 1, c, constr);
 						
 						for (int j = steps.get(i - 1) ; j < done.size() ; j++)	{
 							Lesson l = done.get(j);
-							System.out.println("  #2 : " + j + " " + l.toString().replaceAll("\n", ""));
+							ps.println("  #2 : " + j + " " + l.toString().replaceAll("\n", ""));
 							l.getPlace().removeLesson(l);
 							l.getStudents().removeLesson(l);
 							l.getTeacher().removeLesson(l);
 							
 							done.remove(j);
 						}
-						System.out.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
-						//System.out.println(done);
+						ps.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
+						//ps.println(done);
 						
 						for (int j = i - 1 ; j < steps.size() ; j++)
 							steps.remove(j);
 						
 						steps.put(i - 1, done.size());
-						System.out.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
+						ps.println("   #3 : " + i + " " + done.size() + " " + steps.get(i - 1) + " " + steps.get(start));
 						
 						return i - 1;
 					}
 					}
-				System.out.println("Filler.handleError()#RETRY : " + done.size() + " " + steps);
+				ps.println("Filler.handleError()#RETRY : " + done.size() + " " + steps);
 				return i - 1;
 			}
 			
@@ -941,17 +946,17 @@ public class Filler	{
 	 */
 	public Classroom findClassRoom(ClassType type, Slot s) {
 		
-		//System.out.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
+		//ps.print("Filler.findClassRoom (" + type.getShortName() + ", " + s + ") --> ");
 		
 		for (Classroom c : this.classrooms)
 			if (c.getType().equals(type))	{
-				//System.out.print(c + " " + c.getAllFreeSlots(s.getDuration()).size() + " // ");
+				//ps.print(c + " " + c.getAllFreeSlots(s.getDuration()).size() + " // ");
 				if (s.canFitIn(c.getAllFreeSlots(s.getDuration())))	{		//On vérifie ici que la salle est libre pendant le slot s
-					//System.out.println(c);
+					//ps.println(c);
 					return c;
 				}
 			}
-		//System.out.println("NULL");
+		//ps.println("NULL");
 		return null;
 	}
 	
@@ -968,5 +973,9 @@ public class Filler	{
 				if (s.canFitIn(c.getAllFreeSlots(s.getDuration())))
 					return c;
 		return null;
+	}
+
+	public void setMode(int mode2) {
+		this.mode = mode2;
 	}
 }

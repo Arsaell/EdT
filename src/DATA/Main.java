@@ -10,7 +10,7 @@ public class Main	{
 
 		DataStore ds = new DataStore();
 		ds.addFixtures();
-		Filler filler = new Filler(ds);
+		Filler filler = new Filler(System.out, ds);
 		//System.out.println("Main.main() : Filler built.");
 		
 		HashMap<Constrainable, Double> constraints = filler.computeConstraints(true);
