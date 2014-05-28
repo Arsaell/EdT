@@ -106,10 +106,9 @@ public class FillFrame extends JFrame {
 					PrintStream ps = new PrintStream(log);
 					Filler fill = new Filler(new TextAreaPrintStream(txtrResultats, ps), ds);
 					fill.setMode(mode);
+					System.out.println("FillFrame.startFilling()");
 					fill.fill(fill.computeConstraints(true), Filler.RETRY);
-					
-					
-				
+					System.out.println("FillFrame.endFilling()");
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}

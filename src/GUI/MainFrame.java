@@ -73,16 +73,14 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPanel EdTPanel;
 	private JLabel teacherLabel;
 	
-	private Filler filler;
-	
 	public MainFrame(Filler filler, DataStore ds) {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		this.dataStore = ds;
-		filler = new Filler(null, ds);
-		filler.fill(filler.computeConstraints(true), Filler.IGNORE);
+		//filler = new Filler(null, ds);
+		//filler.fill(filler.computeConstraints(true), Filler.IGNORE);
 		
 		contentPane = new ContentPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
