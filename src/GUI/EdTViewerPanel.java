@@ -22,6 +22,7 @@ public class EdTViewerPanel extends JPanel {
 	}
 	
 	private void initialize(WeekTable wt) {
+		this.setVisible(true);
 		this.setLayout(new BorderLayout(0, 0));
 		
 		JPanel classSelectorPanel = new JPanel();

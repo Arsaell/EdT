@@ -68,6 +68,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton btnFields;
 	private JButton btnWeekTable;
 	private JButton btnLancer;
+	private JButton btnFillFrame;
 	private JPanel listPanel;
 	private JPanel EdTPanel;
 	private JLabel teacherLabel;
@@ -80,6 +81,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		setBounds(100, 100, 450, 300);
 		
 		this.dataStore = ds;
+		filler = new Filler(null, ds);
+		filler.fill(filler.computeConstraints(true), Filler.IGNORE);
 		
 		contentPane = new ContentPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -168,6 +171,19 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 				
 			});
+			
+			btnFillFrame = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/book_open.png"))));
+			btnFillFrame.setText("Construire l'emploi du temps");
+			btnFillFrame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					/*JFrame frame = new 
+					frame.setBounds(100, 100, 750, 550);
+					frame.getContentPane().add(new FieldPanel(dataStore));
+					frame.setVisible(true);*/
+				}
+			});
+			
+
 
 			btnLancer = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/accept.png"))));
 			btnLancer.setText("Lancer");
@@ -217,8 +233,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		listPanel.setVisible(false);
 		teacherLabel.setVisible(false);
 		
-		getContentPane().add(EdTPanel);
-		EdTPanel.setVisible(false);
 		
 	}
 	public void actionPerformed(ActionEvent e) {
@@ -336,7 +350,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				
 				// On y place les bonnes infos.
 				selectedTeacher = teacherList.getSelectedValue();
-
+				System.out.println(selectedTeacher);
 				// On affiche l'emploi du temps du prof
 				JFrame frame = new JFrame(selectedTeacher.getName());
 				frame.setContentPane(new EdTViewerPanel(selectedTeacher.getWeekTable()));
