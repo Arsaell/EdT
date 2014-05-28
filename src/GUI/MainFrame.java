@@ -67,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton btnGroups;
 	private JButton btnFields;
 	private JButton btnWeekTable;
+	private JButton btnLancer;
 	private JPanel listPanel;
 	private JPanel EdTPanel;
 	private JLabel teacherLabel;
@@ -168,6 +169,15 @@ public class MainFrame extends JFrame implements ActionListener {
 				
 			});
 
+			btnLancer = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/accept.png"))));
+			btnLancer.setText("Lancer");
+			btnLancer.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					new FillFrame(dataStore);
+				}
+			});
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -185,14 +195,17 @@ public class MainFrame extends JFrame implements ActionListener {
 		toolBar.add(btnClassrooms);
 		toolBar.add(btnGroups);
 		toolBar.add(btnFields);
-		JSeparator separator_1 = new JSeparator(JSeparator.VERTICAL);
-		separator_1.setMaximumSize(size);
-		toolBar.add(separator_1);
+//		JSeparator separator_1 = new JSeparator(JSeparator.VERTICAL);
+//		separator_1.setMaximumSize(size);
+		toolBar.add(separator);
 		toolBar.add(btnWeekTable);
+		toolBar.add(separator);
+		toolBar.add(btnLancer);
 		
 		
 		JPanel leftContainer = new JPanel();
 		
+		EdTPanel = new JPanel();
 		listPanel = new ListPanel(dataStore, this.EdTPanel);
 		leftContainer.add(listPanel);
 		FlowLayout fl_leftContainer = new FlowLayout(FlowLayout.LEFT, 5, 5);
@@ -204,7 +217,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		listPanel.setVisible(false);
 		teacherLabel.setVisible(false);
 		
-		EdTPanel = new JPanel();
 		getContentPane().add(EdTPanel);
 		EdTPanel.setVisible(false);
 		
@@ -326,7 +338,11 @@ public class MainFrame extends JFrame implements ActionListener {
 				selectedTeacher = teacherList.getSelectedValue();
 
 				// On affiche l'emploi du temps du prof
-				EdTPanel.add(new EdTViewerPanel(selectedTeacher.getWeekTable()));
+				JFrame frame = new JFrame(selectedTeacher.getName());
+				frame.setContentPane(new EdTViewerPanel(selectedTeacher.getWeekTable()));
+				frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+				frame.pack();
+				frame.setVisible(true);
 			}
 		}
 	}

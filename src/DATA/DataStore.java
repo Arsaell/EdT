@@ -81,6 +81,7 @@ public class DataStore implements Serializable {
 		Field[] MtPtCt = {mathst, physiquet, concept};
 		Field[] PtCtCp = {physiquet, concept, contrucp};
 		Field[] Mt = {mathst};
+		Field[] Pa = {physiquea};
 		this.fields.add(mathsa);
 		this.fields.add(mathst);
 		this.fields.add(physiquea);
@@ -94,7 +95,7 @@ public class DataStore implements Serializable {
 		this.teachers.add(new Teacher(1, "Rarity", "", PaMtPt, MWWH));
 		this.teachers.add(new Teacher(3, "Rainbow", "Dash", PtCtCp, MWWH));
 		this.teachers.add(new Teacher(2, "Apple", "Jack", MtPtCt, MWWH));
-		//this.teachers.add(new Teacher(4, "Flutter", "Shy", Mt, MWWH));
+		this.teachers.add(new Teacher(4, "Flutter", "Shy", Pa, MWWH));
 		//this.teachers.add(new Teacher(5, "Pinkie", "Pie", Mt, MWWH));
 		//this.teachers.add(new Teacher(6, "Spike", "", Mt, MWWH));
 		//this.teachers.add(new Teacher(7, "Celestia", "", Mt, MWWH));
