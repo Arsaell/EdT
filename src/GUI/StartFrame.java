@@ -10,8 +10,16 @@ import javax.swing.event.ChangeListener;
 
 import DATA.DataStore;
 import DATA.Filler;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import javax.swing.BoxLayout;
 
 public class StartFrame extends JFrame {
@@ -63,8 +71,27 @@ public class StartFrame extends JFrame {
 		btTer.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new MainFrame(new Filler(System.out, ds), ds);
+				// On enregistre le dataStore
+				BufferedReader br;
+				try {
+					br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+					String fileName = "";
+					String sCurrentLine = "";
+					while ((sCurrentLine = br.readLine()) != null) {
+						fileName = sCurrentLine;
+					}
+					File fichier =  new File(fileName) ;
+					 // ouverture d'un flux sur un fichier
+					ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+					 // sérialization de l'objet
+					oos.writeObject(ds) ;
+					setVisible(false);
+					new MainFrame(new Filler(null, ds), ds);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		

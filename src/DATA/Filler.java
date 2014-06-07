@@ -43,8 +43,7 @@ public class Filler	{
 		
 	}
 	
-	/**ps.println("");
-	
+	/**
 	 * Dans l'ordre spécifié par la paramètre,
 	 * cette méthode devra attribuer les Constrainables
 	 * jusqu'à ce que l'emploi du temps soit complet.

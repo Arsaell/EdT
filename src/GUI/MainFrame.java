@@ -8,9 +8,13 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -36,6 +41,7 @@ import javax.swing.ListSelectionModel;
 import DATA.Classroom;
 import DATA.DataStore;
 import DATA.Filler;
+import DATA.Group;
 import DATA.Teacher;
 import DATA.WeekTable;
 import GUI.TeacherPanel.TeacherListModel;
@@ -70,8 +76,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton btnLancer;
 	private JButton btnFillFrame;
 	private JPanel listPanel;
+	private JPanel listPanel2;
 	private JPanel EdTPanel;
-	private JLabel teacherLabel;
 	
 	private Filler filler;
 	
@@ -81,8 +87,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		setBounds(100, 100, 450, 300);
 		
 		this.dataStore = ds;
-		filler = new Filler(null, ds);
-		filler.fill(filler.computeConstraints(true), Filler.IGNORE);
 		
 		contentPane = new ContentPane();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,6 +104,30 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		try {
 			btnSave = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/disk.png"))));
+			btnSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					BufferedReader br;
+					try {
+						br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+						String fileName = "";
+						String sCurrentLine = "";
+						while ((sCurrentLine = br.readLine()) != null) {
+							fileName = sCurrentLine;
+						}
+						File fichier =  new File(fileName) ;
+						 // ouverture d'un flux sur un fichier
+						ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+						 // sérialization de l'objet
+						oos.writeObject(dataStore);
+				    	JOptionPane.showMessageDialog(null, "La sauvegarde a été réalisée avec succès.", "Sauvegarde réussie", JOptionPane.INFORMATION_MESSAGE);
+
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 			btnSave.setText("Enregistrer");
 			
 			btnOpen = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/folder.png"))));
@@ -134,10 +162,23 @@ public class MainFrame extends JFrame implements ActionListener {
 			btnGroups.setText("Groupes");
 			btnGroups.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JFrame frame = new JFrame();
+					final JFrame frame = new JFrame();
 					frame.setBounds(100, 100, 750, 550);
 					frame.getContentPane().add(new GroupPanel(dataStore));
 					frame.setVisible(true);
+					frame.addFocusListener(new FocusListener() {
+						
+						@Override
+						public void focusLost(FocusEvent e) {
+							dataStore.setGroups(((GroupPanel)(frame.getContentPane().getComponent(0))).getGroups());
+						}
+						
+						@Override
+						public void focusGained(FocusEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
 				}
 			});
 			
@@ -159,13 +200,15 @@ public class MainFrame extends JFrame implements ActionListener {
 					if(btnWeekTable.isSelected()) {
 						EdTPanel.setVisible(false);
 						listPanel.setVisible(false);
+						listPanel2.setVisible(false);
 						btnWeekTable.setSelected(false);
-						teacherLabel.setVisible(false);
+
 					} else {
 						EdTPanel.setVisible(true);
 						listPanel.setVisible(true);
+						listPanel2.setVisible(true);
+						listPanel2.repaint();
 						btnWeekTable.setSelected(true);
-						teacherLabel.setVisible(true);
 						
 					}
 				}
@@ -224,14 +267,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		EdTPanel = new JPanel();
 		listPanel = new ListPanel(dataStore, this.EdTPanel);
 		leftContainer.add(listPanel);
+		listPanel2 = new ListPanel2(dataStore, this.EdTPanel);
+		leftContainer.add(listPanel2);
 		FlowLayout fl_leftContainer = new FlowLayout(FlowLayout.LEFT, 5, 5);
 		leftContainer.setLayout(fl_leftContainer);
-		teacherLabel = new JLabel("Enseignants :");
-		leftContainer.add(teacherLabel);
 		
 		getContentPane().add(leftContainer, BorderLayout.WEST);
 		listPanel.setVisible(false);
-		teacherLabel.setVisible(false);
+		listPanel2.setVisible(false);
 		
 		
 	}
@@ -313,6 +356,30 @@ public class MainFrame extends JFrame implements ActionListener {
 			fireContentsChanged(this, 0, classrooms.size());
 		}
 	}
+	
+	public class GroupListModel extends AbstractListModel<Group> {
+
+		private ArrayList<Group> groups;
+		
+		public GroupListModel(ArrayList<Group> groups) {
+			this.groups = groups;
+		}
+		
+		public int getSize() {
+			// TODO Auto-generated method stub
+			return this.groups.size();
+		}
+
+		public Group getElementAt(int index) {
+			// TODO Auto-generated method stub
+			return this.groups.get(index);
+		}
+
+		public void addElement(Group newGroup) {
+			this.groups.add(newGroup);
+			fireContentsChanged(this, 0, groups.size());
+		}
+	}
 
 	class ListPanel extends JPanel implements ListSelectionListener {
 		
@@ -354,6 +421,51 @@ public class MainFrame extends JFrame implements ActionListener {
 				// On affiche l'emploi du temps du prof
 				JFrame frame = new JFrame(selectedTeacher.getName());
 				frame.setContentPane(new EdTViewerPanel(selectedTeacher.getWeekTable()));
+				frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+				frame.pack();
+				frame.setVisible(true);
+			}
+		}
+	}
+	class ListPanel2 extends JPanel implements ListSelectionListener {
+		
+		private ArrayList<Group> groups;
+		private JList<Group> groupList;
+		private GroupListModel groupListModel;
+		private JPanel EdTPanel;
+		private Group selectedGroup;
+		
+		public ListPanel2(DataStore dataStore, JPanel EdTPanel) {
+			
+			this.EdTPanel = EdTPanel;
+			this.groups = dataStore.getGroups();
+			this.groupListModel = new GroupListModel(dataStore.getGroups());
+			
+			groupList = new JList<Group>(this.groupListModel);
+			groupList.setPreferredSize(new Dimension(180, 800));
+			groupList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			groupList.addListSelectionListener(this);
+			GridBagConstraints gbc_list = new GridBagConstraints();
+			gbc_list.insets = new Insets(0, 0, 5, 0);
+			gbc_list.fill = GridBagConstraints.BOTH;
+			gbc_list.gridx = 0;
+			gbc_list.gridy = 1;
+			this.add(new JScrollPane(groupList), BorderLayout.CENTER);
+			
+			this.setPreferredSize(new Dimension(200, 800));
+		}
+
+		public void valueChanged(ListSelectionEvent e) {
+			// Si un élément de la liste est sélectionné.
+			if(!e.getValueIsAdjusting() && groupList.getSelectedValuesList().size() > 0) {
+				// On affiche les champs.
+				
+				// On y place les bonnes infos.
+				selectedGroup = groupList.getSelectedValue();
+				System.out.println(selectedGroup);
+				// On affiche l'emploi du temps du prof
+				JFrame frame = new JFrame(selectedGroup.toString());
+				frame.setContentPane(new EdTViewerPanel(selectedGroup.getWeekTable()));
 				frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
 				frame.pack();
 				frame.setVisible(true);

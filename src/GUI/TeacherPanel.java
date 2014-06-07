@@ -5,8 +5,11 @@ import DATA.Field;
 import DATA.Teacher;
 import DATA.Time;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+
 import javax.swing.JList;
 
 import java.awt.GridBagConstraints;
@@ -31,7 +34,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -39,6 +41,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import java.awt.FlowLayout;
@@ -287,8 +290,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		JTable table = new JTable(model);
 		table.setRowHeight(30);
 		table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
-
-		//System.out.println("tp : " + table.getColumnModel().getColumn(0));
+		table.setGridColor(Color.LIGHT_GRAY);
 		
 		return table;
 	}
@@ -312,6 +314,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 			Object[] data = new Object[]
 		            {comboData[0]};
 		         ((FieldTableModel)table.getModel()).addRow(data);
+		    table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
 		}
 	}
 	
@@ -360,6 +363,8 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		// Si un élément de la liste est sélectionné.
 		if(!e.getValueIsAdjusting() && teacherList.getSelectedValuesList().size() > 0) {
 			// On affiche les champs.
+			System.out.println("Test");
+			infoPanel.remove(disabledPanel);
 			infoPanel.add(infosPanel, BorderLayout.CENTER);
 			// On y place les bonnes infos.
 			selectedTeacher = teacherList.getSelectedValue();
@@ -370,7 +375,8 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 			this.populateTableForTeacher(selectedTeacher);
 		} else {
 			// Sinon, on affiche le message qui prie l'utilisateur de sélectionner un professeur.
-			infoPanel.add(disabledPanel, BorderLayout.CENTER);	
+			infoPanel.remove(infosPanel);
+			infoPanel.add(disabledPanel, BorderLayout.CENTER);
 		}
 	}	
 	

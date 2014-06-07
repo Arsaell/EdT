@@ -70,10 +70,18 @@ public class ClassroomPanel extends JPanel {
 		tree = new JTree(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		
 		for (ClassType ct : dataStore.getTypes())	{
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(ct.getShortName());
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode("[" + ct.getShortName() + "] " + ct.getName());
+			
+			for (Classroom cr : dataStore.getClassrooms()) {
+				if(cr.getType() == ct) {
+					DefaultMutableTreeNode node2 = new DefaultMutableTreeNode(cr.getName());
+					node.add(node2);
+				}
+			}
 			((DefaultMutableTreeNode)(tree.getModel().getRoot())).add(node);
 			treenodes.put(ct, node);
 		}
+		
 		for (int i = 0 ; i < tree.getRowCount() ; i++)
 			tree.expandRow(i);
 		
@@ -240,6 +248,7 @@ public class ClassroomPanel extends JPanel {
 
 	private void checkEnableBtn()	{
 		this.btnAjouter.setEnabled(this.tfName.getText().length() > 0 && this.cbType.getSelectedItem() != null && this.position != null);
+		this.btnPreview.setEnabled(this.tfName.getText().length() > 0 && this.cbType.getSelectedItem() != null && this.position != null);
 	}
 	
 	protected void setPosition(Point p)	{

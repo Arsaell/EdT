@@ -364,4 +364,8 @@ public class GroupPanel extends JPanel {
 		//System.out.println("Class");
 		this.addClass.setEnabled(ds.getFields().size() != 0 && this.fieldsList.getSelectedIndex() != -1 && ((Integer)this.hours.getValue() + (Integer)this.minutes.getValue() > 0));
 	}
+
+	public ArrayList<Group> getGroups() {
+		return this.getGroups();
+	}
 }

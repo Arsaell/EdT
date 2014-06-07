@@ -202,6 +202,15 @@ public class WeekTable implements Serializable {
 		return res;
 	}
 	
+	public static Time getMWWH()	{
+		if (defaultWeek == null)
+			return null;
+		Time res = new Time();
+		for (Slot s : defaultWeek.slots)
+			res = res.add(s.getDuration());
+		return res;
+	}
+	
 	public ArrayList<Slot> getSlots() {
 		return this.slots;
 	}

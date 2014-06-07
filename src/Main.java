@@ -39,12 +39,12 @@ public class Main {
 			    }
 			    catch(ClassNotFoundException e)
 			    {
-			    	JOptionPane.showMessageDialog(null, "Fichier de sauvegarde corrompu", "Erreur. Le fichier de sauvegarde semble corrumpu. Veuillez réessayer ou recréer une nouvelle base de données.", JOptionPane.ERROR_MESSAGE);
+			    	JOptionPane.showMessageDialog(null, "Erreur. Le fichier de sauvegarde semble corrumpu. Veuillez réessayer ou recréer une nouvelle base de données.", "Fichier de sauvegarde corrompu", JOptionPane.ERROR_MESSAGE);
 			    	new WelcomeFrame();
 			    }
 			    catch(IOException i)
 			    {
-			    	JOptionPane.showMessageDialog(null, "Fihcier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
+			    	JOptionPane.showMessageDialog(null, "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", "Fichier de sauvegarde introuvable", JOptionPane.ERROR_MESSAGE);
 			    	new WelcomeFrame();
 			    }
 			    

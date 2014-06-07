@@ -25,7 +25,7 @@ public class DataStore implements Serializable {
 		this.groups = new ArrayList<Group>();
 		this.types = new ArrayList<ClassType>();
 		this.fields = new ArrayList<Field>();
-		
+		this.MWWH = WeekTable.getMWWH();
 		//this.addFixtures();
 	}
 	
@@ -156,6 +156,7 @@ public class DataStore implements Serializable {
 	}
 
 	public Time getMWWH() {
+		this.MWWH = WeekTable.getMWWH();
 		return MWWH;
 	}
 
