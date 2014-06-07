@@ -79,8 +79,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPanel listPanel2;
 	private JPanel EdTPanel;
 	
-	private Filler filler;
-	
 	public MainFrame(Filler filler, DataStore ds) {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
