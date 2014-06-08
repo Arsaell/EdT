@@ -39,6 +39,8 @@ public class WelcomeFrame extends JFrame {
 	private void initialize() {
 		this.setBounds(100, 100, 250, 140);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 		JButton b1 = new JButton("Nouveau");
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -63,8 +65,11 @@ public class WelcomeFrame extends JFrame {
 						JOptionPane.showMessageDialog(null, "Impossible de sauvegarde la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
 					}
 				}
+				setVisible(false);
 			}
 		});
+		
+		
 		JButton b2 = new JButton("Ouvrir");
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -109,6 +114,7 @@ public class WelcomeFrame extends JFrame {
 
 					new MainFrame(new Filler(null, dataStore), dataStore);
 				}
+				setVisible(false);
 			}
 		});
 		JButton b3 = new JButton("À Propos");

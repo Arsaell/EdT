@@ -350,7 +350,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		}
 
 		public void addElement(Teacher newTeacher) {
-			System.out.println("Coucou !");
+			//System.out.println("TeacherPanel.addElement() : " + newTeacher);
 			this.teachers.add(newTeacher);
 			fireContentsChanged(this, 0, teachers.size());
 		}
@@ -363,7 +363,7 @@ public class TeacherPanel extends JPanel implements ActionListener, KeyListener,
 		// Si un élément de la liste est sélectionné.
 		if(!e.getValueIsAdjusting() && teacherList.getSelectedValuesList().size() > 0) {
 			// On affiche les champs.
-			System.out.println("Test");
+			//System.out.println("TeacherPanel.valueChanged() : " + e.getSource());
 			infoPanel.remove(disabledPanel);
 			infoPanel.add(infosPanel, BorderLayout.CENTER);
 			// On y place les bonnes infos.

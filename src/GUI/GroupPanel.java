@@ -335,7 +335,7 @@ public class GroupPanel extends JPanel {
 				Enumeration e = root.breadthFirstEnumeration();
 				while (e.hasMoreElements())	{
 					DefaultMutableTreeNode tn = (DefaultMutableTreeNode) e.nextElement();
-					System.out.println(g + " " + tn + " " + g.getParent());
+					//System.out.println(g + " " + tn + " " + g.getParent());
 					if (tn.getUserObject() == g.getParent())	{
 						insertHere = true;
 						DefaultMutableTreeNode res = new DefaultMutableTreeNode(g);

@@ -15,7 +15,6 @@ public class Classroom extends Timeable implements Serializable{
 		this.type = aType;
 		this.name = aName;
 		this.effectif = aEff;
-		System.out.println("new Classroom() : " + aCoords.x + " " + aCoords.y);
 		this.coords = aCoords;
 	}
 	

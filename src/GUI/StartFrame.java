@@ -37,7 +37,7 @@ public class StartFrame extends JFrame {
 		super();
 
 		this.ds = new DataStore();
-		this.ds.addFixtures();
+		//this.ds.addFixtures();
 		
 		this.fp = new FieldPanel(this.ds);
 		this.wp = new WeekPanel(this);
@@ -67,6 +67,42 @@ public class StartFrame extends JFrame {
 		
 		tabbedPane.setEnabledAt(5, false);
 		
+		JButton btLoad = new JButton("Charger");
+		btLoad.setToolTipText("Charge l'exemple par défaut");
+		
+		btLoad.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ds = new DataStore();
+				ds.addFixtures();
+				
+				// On enregistre le dataStore
+				BufferedReader br;
+				try {
+					br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+					String fileName = "";
+					String sCurrentLine = "";
+					while ((sCurrentLine = br.readLine()) != null) {
+						fileName = sCurrentLine;
+					}
+					File fichier =  new File(fileName) ;
+					 // ouverture d'un flux sur un fichier
+					ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+					 // sérialization de l'objet
+					oos.writeObject(ds);
+					oos.close();
+					
+					setVisible(false);
+					new MainFrame(new Filler(null, ds), ds);
+				
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		JButton btTer = new JButton("Terminer");
 		btTer.addActionListener(new ActionListener() {
 			
@@ -85,11 +121,12 @@ public class StartFrame extends JFrame {
 					ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
 
 					 // sérialization de l'objet
-					oos.writeObject(ds) ;
+					oos.writeObject(ds);
+					oos.close();
+					
 					setVisible(false);
 					new MainFrame(new Filler(null, ds), ds);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -98,6 +135,7 @@ public class StartFrame extends JFrame {
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		getContentPane().add(tabbedPane);
+		getContentPane().add(btLoad);
 		getContentPane().add(btTer);
 		
 		this.setBounds(100, 100, 750, 550);

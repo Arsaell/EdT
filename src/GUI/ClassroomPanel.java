@@ -197,7 +197,7 @@ public class ClassroomPanel extends JPanel {
 				String name = tfName.getText();
 				ClassType type = (ClassType)cbType.getSelectedItem();
 				int eff = (Integer)spEff.getValue();
-				System.out.println("ClassroomPanel.btnAjouter() : " + name + " " + type + " " + eff + " " + position);
+				//System.out.println("ClassroomPanel.btnAjouter() : " + name + " " + type + " " + eff + " " + position);
 				Classroom cr = new Classroom(type, name, eff, position);
 				classrooms.add(cr);
 				
@@ -248,7 +248,7 @@ public class ClassroomPanel extends JPanel {
 
 	private void checkEnableBtn()	{
 		this.btnAjouter.setEnabled(this.tfName.getText().length() > 0 && this.cbType.getSelectedItem() != null && this.position != null);
-		this.btnPreview.setEnabled(this.tfName.getText().length() > 0 && this.cbType.getSelectedItem() != null && this.position != null);
+		//this.btnPreview.setEnabled(this.tfName.getText().length() > 0 && this.cbType.getSelectedItem() != null && this.position != null);
 	}
 	
 	protected void setPosition(Point p)	{

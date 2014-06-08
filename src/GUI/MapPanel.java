@@ -120,7 +120,7 @@ public class MapPanel extends JPanel {
 	private void updateHC()	{
 		if (this.hoveredClassroom != null)	{
 			this.name.setText(this.hoveredClassroom.getName());
-			this.type.setText(this.hoveredClassroom.getType().getShortName());
+			this.type.setText(this.hoveredClassroom.getType().getShortName() + " (" + this.hoveredClassroom.getType().getName() + ")");
 			this.eff.setText(((Integer)(this.hoveredClassroom.getEffectif())).toString());
 		}
 		else 	{

@@ -11,11 +11,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,9 +30,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.AbstractButton;
 import javax.swing.AbstractListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -92,7 +98,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setVisible(true);
-		setResizable(false);
+		setResizable(true);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
@@ -130,9 +136,134 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 			btnOpen = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/folder.png"))));
 			btnOpen.setText("Ouvrir");
+			btnOpen.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en cours ?", "Attention", JOptionPane.YES_NO_CANCEL_OPTION);
+					
+					switch(n)	{
+					case JOptionPane.YES_OPTION :
+						BufferedReader br;
+						try {
+							br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+							String fileName = "";
+							String sCurrentLine = "";
+							while ((sCurrentLine = br.readLine()) != null) {
+								fileName = sCurrentLine;
+							}
+							File fichier =  new File(fileName) ;
+							 // ouverture d'un flux sur un fichier
+							ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+							 // sérialization de l'objet
+							oos.writeObject(dataStore);
+					    	JOptionPane.showMessageDialog(null, "La sauvegarde a été réalisée avec succès.", "Sauvegarde réussie", JOptionPane.INFORMATION_MESSAGE);
+
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						break;
+						
+						
+					case JOptionPane.NO_OPTION :
+						break;
+						
+					case JOptionPane.CANCEL_OPTION :
+						return;
+					}
+					
+					
+					JFileChooser fc = new JFileChooser();
+					fc.setFileFilter(new FileNameExtensionFilter("Emploi du Temps", "EdT"));
+					int res = fc.showOpenDialog(null);
+					File f = null;
+					if (res == JFileChooser.APPROVE_OPTION)	{
+						// On a le fichier.
+						f = fc.getSelectedFile();
+						// On sauvegarde sa localisation pour la prochaine ouverture du programme.
+						File dataStoreLocation = new File(System.getProperty("user.dir") + "/dataStoreLocation.loc");
+						BufferedWriter writer;
+						try {
+							writer = new BufferedWriter(new FileWriter(dataStoreLocation));
+							writer.write (f.getAbsolutePath()); // On écrit le chemin du DataStore
+							writer.close();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, "Impossible de sauvegarde la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
+						}
+
+						// On essaie maintenant de charger le DataStore
+						try
+						{
+							FileInputStream inputFileStream = new FileInputStream(f.getAbsolutePath());
+							ObjectInputStream objectInputStream = new ObjectInputStream(inputFileStream);
+							dataStore = (DataStore)objectInputStream.readObject();
+							objectInputStream.close();
+							inputFileStream.close();
+						}
+						catch(ClassNotFoundException e1)
+						{
+							JOptionPane.showMessageDialog(null, "Erreur. Le fichier de sauvegarde semble corrumpu. Veuillez réessayer ou recréer une nouvelle base de données.", "Fichier de sauvegarde corrompu", JOptionPane.ERROR_MESSAGE);
+							new WelcomeFrame();
+						}
+						catch(IOException i)
+						{
+							JOptionPane.showMessageDialog(null, "Fihcier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
+							new WelcomeFrame();
+						}
+
+						new MainFrame(new Filler(null, dataStore), dataStore);
+					}
+					setVisible(false);
+				}
+			});
 			
 			btnNew = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/table_add.png"))));
 			btnNew.setText("Nouveau");
+			btnNew.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en cours ?", "Attention", JOptionPane.YES_NO_CANCEL_OPTION);
+					
+					switch(n)	{
+					case JOptionPane.YES_OPTION :
+						BufferedReader br;
+						try {
+							br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/dataStoreLocation.loc"));
+							String fileName = "";
+							String sCurrentLine = "";
+							while ((sCurrentLine = br.readLine()) != null) {
+								fileName = sCurrentLine;
+							}
+							File fichier =  new File(fileName) ;
+							 // ouverture d'un flux sur un fichier
+							ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+							 // sérialization de l'objet
+							oos.writeObject(dataStore);
+					    	JOptionPane.showMessageDialog(null, "La sauvegarde a été réalisée avec succès.", "Sauvegarde réussie", JOptionPane.INFORMATION_MESSAGE);
+
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						break;
+						
+						
+					case JOptionPane.NO_OPTION :
+						break;
+						
+					case JOptionPane.CANCEL_OPTION :
+						return;
+					}
+					
+					new StartFrame();
+					setVisible(false);
+				}
+			});
 
 			btnTeachers = new JButton(new ImageIcon(ImageIO.read(new File("img/icons/user_red.png"))));
 			btnTeachers.setText("Enseignants");
@@ -274,7 +405,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		listPanel.setVisible(false);
 		listPanel2.setVisible(false);
 		
-		
+		Dimension s = new Dimension(925, 480);
+		this.setMinimumSize(s);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 	public void actionPerformed(ActionEvent e) {
 //		if(e.getSource() == this.mntmTeachers) {
@@ -288,7 +421,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		private Image img;
 
 		public ContentPane() {
-			this.img = new ImageIcon("edt.png").getImage();
+			this.img = new ImageIcon("edt'.png").getImage();
 			Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
 			setPreferredSize(size);
 			setMinimumSize(size);
