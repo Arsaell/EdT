@@ -197,7 +197,7 @@ public class ClassroomPanel extends JPanel {
 				String name = tfName.getText();
 				ClassType type = (ClassType)cbType.getSelectedItem();
 				int eff = (Integer)spEff.getValue();
-				
+				System.out.println("ClassroomPanel.btnAjouter() : " + name + " " + type + " " + eff + " " + position);
 				Classroom cr = new Classroom(type, name, eff, position);
 				classrooms.add(cr);
 				

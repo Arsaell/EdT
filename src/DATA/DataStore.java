@@ -58,16 +58,16 @@ public class DataStore implements Serializable {
 		this.types.add(6, new ClassType("TD Info", "TD", new Slot(new Time(200), new Time(200))));
 		this.types.add(7, new ClassType("Sport", "Gymnase", new Slot(new Time(200), new Time(200))));
 		
-		this.classrooms.add(new Classroom(types.get(1), "C9", 25, new Point(0, 0)));
-		this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(0, 1)));
-		this.classrooms.add(new Classroom(types.get(0), "Vannier", 100, new Point(1, 0)));
+		this.classrooms.add(new Classroom(types.get(1), "C9", 25, new Point(100, 100)));
+		this.classrooms.add(new Classroom(types.get(1), "2.10", 25, new Point(110, 100)));
+		this.classrooms.add(new Classroom(types.get(0), "Vannier", 100, new Point(100, 110)));
 		//this.classrooms.add(new Classroom(types.get(0), "Turing", 100, new Point(1, 1)));
-		this.classrooms.add(new Classroom(types.get(2), "Optique", 16, new Point(0, 2)));
-		this.classrooms.add(new Classroom(types.get(3), "1", 16, new Point(2, 0)));
-		this.classrooms.add(new Classroom(types.get(4), "Usinage", 32, new Point(2, 2)));
-		this.classrooms.add(new Classroom(types.get(5), "Est", 25, new Point(0, 3)));
-		this.classrooms.add(new Classroom(types.get(6), "Archie", 25, new Point(3, 0)));
-		this.classrooms.add(new Classroom(types.get(7), "Piscine", 150, new Point(0, 3)));
+		this.classrooms.add(new Classroom(types.get(2), "Optique", 16, new Point(100, 120)));
+		this.classrooms.add(new Classroom(types.get(3), "1", 16, new Point(120, 100)));
+		this.classrooms.add(new Classroom(types.get(4), "Usinage", 32, new Point(120, 120)));
+		this.classrooms.add(new Classroom(types.get(5), "Est", 25, new Point(100, 130)));
+		this.classrooms.add(new Classroom(types.get(6), "Archie", 25, new Point(130, 100)));
+		this.classrooms.add(new Classroom(types.get(7), "Piscine", 150, new Point(140, 100)));
 		
 		Field mathsa = (new Field(types.get(0), "Maths"));
 		Field physiquea = (new Field(types.get(0), "Physique"));
