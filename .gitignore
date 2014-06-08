@@ -1,7 +1,7 @@
 .project
 .classpath
 .metadata/
-*.class
+
 *.save
 bin/
 .metadata/
