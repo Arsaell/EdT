@@ -95,7 +95,7 @@ public class StartFrame extends JFrame {
 					oos.close();
 					
 					setVisible(false);
-					new MainFrame(new Filler(null, ds), ds);
+					new MainFrame(ds);
 				
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -125,7 +125,7 @@ public class StartFrame extends JFrame {
 					oos.close();
 					
 					setVisible(false);
-					new MainFrame(new Filler(null, ds), ds);
+					new MainFrame(ds);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

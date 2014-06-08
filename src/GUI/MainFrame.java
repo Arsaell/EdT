@@ -1,7 +1,9 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
@@ -14,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,47 +26,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
+import javax.swing.AbstractListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.AbstractButton;
-import javax.swing.AbstractListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 import DATA.Classroom;
 import DATA.DataStore;
-import DATA.Filler;
 import DATA.Group;
 import DATA.Teacher;
-import DATA.WeekTable;
-import GUI.TeacherPanel.TeacherListModel;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
-
-import java.awt.Color;
-
-import javax.swing.JToolBar;
-
-import java.awt.Component;
-
-import javax.swing.Box;
-import javax.swing.JSeparator;
-import javax.swing.JLabel;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -85,7 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPanel listPanel2;
 	private JPanel EdTPanel;
 	
-	public MainFrame(Filler filler, DataStore ds) {
+	public MainFrame(DataStore ds) {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -210,11 +192,11 @@ int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en co
 						}
 						catch(IOException i)
 						{
-							JOptionPane.showMessageDialog(null, "Fihcier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Fichier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
 							new WelcomeFrame();
 						}
 
-						new MainFrame(new Filler(null, dataStore), dataStore);
+						new MainFrame(dataStore);
 					}
 					setVisible(false);
 				}
@@ -421,7 +403,7 @@ int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en co
 		private Image img;
 
 		public ContentPane() {
-			this.img = new ImageIcon("edt'.png").getImage();
+			this.img = new ImageIcon("img/edt.png").getImage();
 			Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
 			setPreferredSize(size);
 			setMinimumSize(size);
@@ -548,7 +530,7 @@ int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en co
 				
 				// On y place les bonnes infos.
 				selectedTeacher = teacherList.getSelectedValue();
-				System.out.println(selectedTeacher);
+				//System.out.println(selectedTeacher);
 				// On affiche l'emploi du temps du prof
 				JFrame frame = new JFrame(selectedTeacher.getName());
 				frame.setContentPane(new EdTViewerPanel(selectedTeacher.getWeekTable()));
@@ -593,7 +575,7 @@ int n = JOptionPane.showConfirmDialog(null, "Voulez sauvegarder la session en co
 				
 				// On y place les bonnes infos.
 				selectedGroup = groupList.getSelectedValue();
-				System.out.println(selectedGroup);
+				//System.out.println(selectedGroup);
 				// On affiche l'emploi du temps du prof
 				JFrame frame = new JFrame(selectedGroup.toString());
 				frame.setContentPane(new EdTViewerPanel(selectedGroup.getWeekTable()));

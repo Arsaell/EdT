@@ -181,7 +181,7 @@ public class ClassroomPanel extends JPanel {
 		btnPosition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try	{
-					new PositionFrame(ImageIO.read(new File("Plan Campus.jpg")), cp);
+					new PositionFrame(ImageIO.read(new File("img/Plan Campus.jpg")), cp);
 				} catch(Exception e){
 					e.printStackTrace();
 				}

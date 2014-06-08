@@ -22,6 +22,7 @@ public class Main {
 		
 		// On cherche le datastore enregistré précédemment.
 		String workingDir = System.getProperty("user.dir");
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(workingDir + "/dataStoreLocation.loc"));
 			String sCurrentLine;
@@ -48,7 +49,7 @@ public class Main {
 			    	new WelcomeFrame();
 			    }
 			    
-			    new MainFrame(new Filler(null, dataStore), dataStore);
+			    //new MainFrame(dataStore);
 			}
 		} catch (FileNotFoundException e) {
 			// On n'arrive pas à localiser le DataStore précédent, on affiche donc la welcome frame.

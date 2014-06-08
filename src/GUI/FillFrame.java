@@ -88,6 +88,7 @@ public class FillFrame extends JFrame {
 		btnGroup.add(rdbtnArrter);
 		btnGroup.add(rdbtnIgnorer);
 		btnGroup.add(rdbtnRsoudre);
+		btnGroup.setSelected(rdbtnRsoudre.getModel(), true);
 		
 		panel.add(rdbtnIgnorer);
 		panel.add(rdbtnArrter);

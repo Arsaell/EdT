@@ -37,7 +37,7 @@ public class MapPanel extends JPanel {
 		
 		BufferedImage img = null;
 		try	{
-			img = ImageIO.read(new File("Plan Campus.jpg"));
+			img = ImageIO.read(new File("img/Plan Campus.jpg"));
 		} catch (Exception e)	{e.printStackTrace();}
 		
 

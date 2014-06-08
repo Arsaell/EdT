@@ -28,6 +28,7 @@ public class WelcomeFrame extends JFrame {
 	 */
 	public WelcomeFrame() {
 		super();
+		System.out.println("new WelcomeFrame()");
 		setTitle("EdT");
 		initialize();
 		this.setVisible(true);
@@ -62,10 +63,10 @@ public class WelcomeFrame extends JFrame {
 						new StartFrame();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
-						JOptionPane.showMessageDialog(null, "Impossible de sauvegarde la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Impossible de sauvegarder la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
 					}
+					setVisible(false);
 				}
-				setVisible(false);
 			}
 		});
 		
@@ -89,7 +90,7 @@ public class WelcomeFrame extends JFrame {
 						writer.close();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
-						JOptionPane.showMessageDialog(null, "Impossible de sauvegarde la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Impossible de sauvegarder la localisation du fichier de sauvegarde.", "Erreur de sauvegarde", JOptionPane.ERROR_MESSAGE);
 					}
 
 					// On essaie maintenant de charger le DataStore
@@ -108,13 +109,13 @@ public class WelcomeFrame extends JFrame {
 					}
 					catch(IOException i)
 					{
-						JOptionPane.showMessageDialog(null, "Fihcier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Fichier de sauvegarde introuvable", "Le fichier de sauvegarde est introuvable ; merci de le localiser à nouveau.", JOptionPane.ERROR_MESSAGE);
 						new WelcomeFrame();
 					}
 
-					new MainFrame(new Filler(null, dataStore), dataStore);
+					new MainFrame(dataStore);
+					setVisible(false);
 				}
-				setVisible(false);
 			}
 		});
 		JButton b3 = new JButton("À Propos");
